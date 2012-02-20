@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+BIN=`dirname $0`
+TEMPLATE_PATH=/tmp/deploy/project_template
+PROJECT=$1
+
+echo 'cloning project template from git://github.com/Proteus-tech/deploy.git -b develop'
+
+# clone project
+git clone git://github.com/Proteus-tech/deploy.git -b develop /tmp/deploy
+
+# move runtests into a python module so that it's rendered properly
+mkdir $TEMPLATE_PATH/build/
+touch $TEMPLATE_PATH/build/__init__.py
+mkdir $TEMPLATE_PATH/build/buildbot
+touch $TEMPLATE_PATH/build/buildbot/__init__.py
+#runtests
+mv $TEMPLATE_PATH/runtests  $TEMPLATE_PATH/build/runtests.py
+#master.cfb
+mv $TEMPLATE_PATH/buildbot/master.cfg $TEMPLATE_PATH/build/buildbot/master.cfg.py
+
+$BIN/python $BIN/django-admin.py startproject $1 --template=$TEMPLATE_PATH
+
+mv $PROJECT/build/runtests.py $PROJECT/runtests
+mv $PROJECT/build/buildbot/master.cfg.py $PROJECT/build/master.cfg
+rm -rf $PROJECT/build 
+
+echo 'cleanup..'
+rm -rf /tmp/deploy
+echo 'success!'
+
