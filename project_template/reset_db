@@ -1,3 +1,5 @@
 #!/usr/bin/env bash
+cd `dirname $0`
 rm {{ project_name }}.sqlite3
 python manage.py syncdb $*
+
