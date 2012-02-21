@@ -35,11 +35,11 @@ def pythonify(file_name, src_dir, dst_dir):
     dst = os.path.join(template_path, *dst_dir)
     shutil.move(src, dst)
 
-def unpythonify(file_name, src_dir, dst_dir):
+def unpythonify(project_dir, file_name, src_dir, dst_dir):
     src_dir = src_dir + [file_name + '.py']
     dst_dir = dst_dir + [file_name]
-    src = os.path.join(template_path, *src_dir)
-    dst = os.path.join(template_path, *dst_dir)
+    src = os.path.join(project_dir, *src_dir)
+    dst = os.path.join(project_dir, *dst_dir)
     shutil.move(src, dst)
     
 def move_files_into_build():
@@ -62,10 +62,10 @@ def create_project(project_name, template_path):
     template_option = "--template=%s" % template_path
     management.execute_from_command_line(["django-admin.py", "startproject", project_name, template_option])
     
-def move_files_out_of_build():
-    unpythonify('runtests', ['build'], [])
-    unpythonify('master.cfg', ['build', 'buildbot'], ['bulidbot'])
-    build_root = os.path.join(template_path, 'build')
+def move_files_out_of_build(project_dir):
+    unpythonify(project_dir, 'runtests', ['build'], [])
+    unpythonify(project_dir, 'master.cfg', ['build', 'buildbot'], ['buildbot'])
+    build_root = os.path.join(project_dir, 'build')
     shutil.rmtree(build_root)
 
 def cleanup():
@@ -85,7 +85,7 @@ if __name__ == '__main__':
     project_name = sys.argv[1]
     template_path = os.path.join(temp_dir, 'project_template')
     create_project(project_name, template_path)
-    move_files_out_of_build()
+    move_files_out_of_build(project_name)
     print 'cleanup..'
     cleanup()
     print 'success!'
