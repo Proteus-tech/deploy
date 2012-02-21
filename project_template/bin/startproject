@@ -1,18 +1,46 @@
-#!/usr/bin/python
+#!/usr/bin/env python
+from django.core import management
 import os, shutil, sys
 from subprocess import call
 
-#BIN=`dirname $0`
-#TEMPLATE_PATH=/tmp/deploy/project_template
 #PROJECT=$1
 
 temp_dir = '/tmp/deploy'
 repository_url = 'git://github.com/Proteus-tech/deploy.git' 
+template_path = '/tmp/deploy/project_template'
 
 def clone_project():
     if os.path.exists(temp_dir):
         shutil.rmtree(temp_dir)
     call(["git", "clone", repository_url, "-b", "develop", temp_dir])
+    
+def create_python_package(path):
+    os.makedirs(path)
+    call(["touch", os.path.join(path, '__init__.py')])
+    
+def pythonify(file_name, src_dir, dst_dir):
+    """
+    Try to fool django that this is a python file by moving it
+    into a python library.
+    Parameters:
+    - file_name
+    - src_dir*, the folder that contains the file
+    - dst_dir*, the destination folder 
+    
+    * src_dir and dst_dir are collection of folder name to os.path.join
+    """
+    src_dir = src_dir + [file_name]
+    dst_dir = dst_dir + [file_name + '.py']
+    src = os.path.join(template_path, *src_dir)
+    dst = os.path.join(template_path, *dst_dir)
+    shutil.move(src, dst)
+
+def unpythonify(file_name, src_dir, dst_dir):
+    src_dir = src_dir + [file_name + '.py']
+    dst_dir = dst_dir + [file_name]
+    src = os.path.join(template_path, *src_dir)
+    dst = os.path.join(template_path, *dst_dir)
+    shutil.move(src, dst)
     
 def move_files_into_build():
     """
@@ -21,38 +49,35 @@ def move_files_into_build():
     scripts such as runtests also be rendered, we need to create
     a temporary `build` package to trick django to render them.
     """
-    template_path = os.path.join('/', 'tmp', 'deploy', 'project_template')
     build_root = os.path.join(template_path, 'build')
-    build_buildbot = os.path.join(build_root, 'buildbot')
-    os.makedirs(build_root)
-    os.makedirs(build_buildbot)
-    call(["touch", os.path.join(build_root, '__init__.py')])
-    call(["touch", os.path.join(build_buildbot, '__init__.py')])
+    create_python_package(build_root)
 
-    src = os.path.join(template_path, 'runtests')
-    dst = os.path.join(build_root, 'runtests.py')
-    shutil.move(src, dst)
-    
-    src = os.path.join(template_path, 'buildbot', 'master.cfg')
-    dst = os.path.join(build_root, 'buildbot', 'master.cfg.py')
-    shutil.move(src, dst)
+    build_buildbot = os.path.join(template_path, 'build', 'buildbot')
+    create_python_package(build_buildbot)
+
+    pythonify('runtests', [], ['build']) 
+    pythonify('master.cfg', ['buildbot'], ['build', 'buildbot']) 
 
 def create_project(project_name, template_path):
     template_option = "--template=%s" % template_path
-    print 'template_option = ', template_option
-    #$BIN/python $BIN/django-admin.py startproject $1 --template=$TEMPLATE_PATH
-    django.core.management.execute_from_command_line(["django-admin.py", "startproject", project_name, template_option])
+    management.execute_from_command_line(["django-admin.py", "startproject", project_name, template_option])
     
 def move_files_out_of_build():
-    #mv $PROJECT/build/runtests.py $PROJECT/runtests
-    #mv $PROJECT/build/buildbot/master.cfg.py $PROJECT/build/master.cfg
-    #rm -rf $PROJECT/build 
-    pass
+    unpythonify('runtests', ['build'], [])
+    unpythonify('master.cfg', ['build', 'buildbot'], ['bulidbot'])
+    build_root = os.path.join(template_path, 'build')
+    shutil.rmtree(build_root)
 
 def cleanup():
     shutil.rmtree(temp_dir)
     
 if __name__ == '__main__':
+    if len(sys.argv) < 2:
+        msg = '''[Error, Bad input] please specify project_name. 
+
+        Usage: startproject <project_name>'''
+        print msg
+        sys.exit(1)
     print 'cloning project template from %s (develop)' % repository_url
     clone_project()
     move_files_into_build()
@@ -64,4 +89,5 @@ if __name__ == '__main__':
     print 'cleanup..'
     cleanup()
     print 'success!'
+    sys.exit(0)
 

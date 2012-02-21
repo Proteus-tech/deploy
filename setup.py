@@ -7,5 +7,4 @@ setup(
     author = "Proteus Technologies",
     author_email = "dev-team@proteus-tech.com",
     scripts = ["project_template/bin/startproject"],
-    packages = ["project_template"],
 )
