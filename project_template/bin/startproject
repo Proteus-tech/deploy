@@ -1,24 +1,14 @@
 #!/usr/bin/env python
 from django.core import management
-import os, shutil, sys
 from subprocess import call
 
-#PROJECT=$1
+import os, project_template, shutil, sys
 
-temp_dir = '/tmp/deploy'
-repository_url = 'git://github.com/Proteus-tech/deploy.git' 
-template_path = '/tmp/deploy/project_template'
-
-def clone_project():
-    if os.path.exists(temp_dir):
-        shutil.rmtree(temp_dir)
-    call(["git", "clone", repository_url, "-b", "develop", temp_dir])
-    
 def create_python_package(path):
     os.makedirs(path)
     call(["touch", os.path.join(path, '__init__.py')])
     
-def pythonify(file_name, src_dir, dst_dir):
+def pythonify(template_path, file_name, src_dir, dst_dir):
     """
     Try to fool django that this is a python file by moving it
     into a python library.
@@ -42,7 +32,7 @@ def unpythonify(project_dir, file_name, src_dir, dst_dir):
     dst = os.path.join(project_dir, *dst_dir)
     shutil.move(src, dst)
     
-def move_files_into_build():
+def move_files_into_build(template_path):
     """
     When Django is starting project, file *.py which contains 
     {{ project_name }} would be rendered. In order to make others
@@ -50,13 +40,17 @@ def move_files_into_build():
     a temporary `build` package to trick django to render them.
     """
     build_root = os.path.join(template_path, 'build')
+
+    if os.path.exists(build_root):
+        return
+
     create_python_package(build_root)
 
     build_buildbot = os.path.join(template_path, 'build', 'buildbot')
     create_python_package(build_buildbot)
 
-    pythonify('runtests', [], ['build']) 
-    pythonify('master.cfg', ['buildbot'], ['build', 'buildbot']) 
+    pythonify(template_path, 'runtests', [], ['build']) 
+    pythonify(template_path, 'master.cfg', ['buildbot'], ['build', 'buildbot']) 
 
 def create_project(project_name, template_path):
     template_option = "--template=%s" % template_path
@@ -65,11 +59,18 @@ def create_project(project_name, template_path):
 def move_files_out_of_build(project_dir):
     unpythonify(project_dir, 'runtests', ['build'], [])
     unpythonify(project_dir, 'master.cfg', ['build', 'buildbot'], ['buildbot'])
+
+def cleanup(project_dir):
     build_root = os.path.join(project_dir, 'build')
     shutil.rmtree(build_root)
+    project_init = os.path.join(project_dir, '__init__.py')
+    os.remove(project_init)
 
-def cleanup():
-    shutil.rmtree(temp_dir)
+def chmod_scripts(project_dir):
+    scripts = ['runtests', 'runserver', 'reset_db']
+    for script in scripts:
+        script_path = os.path.join(project_dir, script)
+        os.chmod(script_path, 0744)
     
 if __name__ == '__main__':
     if len(sys.argv) < 2:
@@ -78,16 +79,16 @@ if __name__ == '__main__':
         Usage: startproject <project_name>'''
         print msg
         sys.exit(1)
-    print 'cloning project template from %s (develop)' % repository_url
-    clone_project()
-    move_files_into_build()
+    template_path = project_template.__path__[0]
+    move_files_into_build(template_path)
     print 'creating project %s' % sys.argv[1]
     project_name = sys.argv[1]
-    template_path = os.path.join(temp_dir, 'project_template')
     create_project(project_name, template_path)
     move_files_out_of_build(project_name)
+    print 'chmod scripts'
+    chmod_scripts(project_name)
     print 'cleanup..'
-    cleanup()
+    cleanup(project_name)
     print 'success!'
     sys.exit(0)
 
