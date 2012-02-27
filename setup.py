@@ -20,5 +20,8 @@ setup(
             ,'runserver'
             ,'reset_db' 
         ],
-    }
+    },
+    install_requires = [
+        'profab'
+    ],
 )
