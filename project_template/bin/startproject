@@ -1,17 +1,9 @@
 #!/usr/bin/env python
-from django.core import management
-
-from startproject import create_python_package, pythonify
+from startproject import (create_python_package, pythonify, unpythonify, 
+    create_project, chmod_scripts, cleanup)
 
 import os, project_template, shutil, sys
 
-def unpythonify(project_dir, file_name, src_dir, dst_dir):
-    src_dir = src_dir + [file_name + '.py']
-    dst_dir = dst_dir + [file_name]
-    src = os.path.join(project_dir, *src_dir)
-    dst = os.path.join(project_dir, *dst_dir)
-    shutil.move(src, dst)
-    
 def move_files_into_build(template_path):
     """
     When Django is starting project, file *.py which contains 
@@ -32,26 +24,10 @@ def move_files_into_build(template_path):
     pythonify(template_path, 'runtests', [], ['build']) 
     pythonify(template_path, 'master.cfg', ['buildbot'], ['build', 'buildbot']) 
 
-def create_project(project_name, template_path):
-    template_option = "--template=%s" % template_path
-    management.execute_from_command_line(["django-admin.py", "startproject", project_name, template_option])
-    
 def move_files_out_of_build(project_dir):
     unpythonify(project_dir, 'runtests', ['build'], [])
     unpythonify(project_dir, 'master.cfg', ['build', 'buildbot'], ['buildbot'])
 
-def cleanup(project_dir):
-    build_root = os.path.join(project_dir, 'build')
-    shutil.rmtree(build_root)
-    project_init = os.path.join(project_dir, '__init__.py')
-    os.remove(project_init)
-
-def chmod_scripts(project_dir):
-    scripts = ['runtests', 'runserver', 'reset_db']
-    for script in scripts:
-        script_path = os.path.join(project_dir, script)
-        os.chmod(script_path, 0744)
-    
 if __name__ == '__main__':
     if len(sys.argv) < 2:
         msg = '''[Error, Bad input] please specify project_name. 
