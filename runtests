@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 cd `dirname $0`
-touch project_template/__init__.py
 touch project_template/bin/__init__.py
 nosetests
-rm project_template/__init__.py project_template/__init__.pyc
 rm project_template/bin/__init__.py project_template/bin/__init__.pyc
 

@@ -7,7 +7,7 @@ from subprocess import call
 
 from unittest import TestCase
 
-import os, shutil, stat
+import os, project_template, shutil, stat
 
 class TestStartProjectScript(TestCase):
     """
@@ -22,6 +22,17 @@ class TestStartProjectScript(TestCase):
             shutil.rmtree('sample_project')
         if os.path.exists('tests/sample_file_to_pythonify.tmp'):
             os.remove('tests/sample_file_to_pythonify.tmp')
+
+    def test_project_template_module(self):
+        msg = """
+        project_template needs to be a module or the startproject script
+        would not work as it uses project_template.__path__ to find the
+        template location
+
+        Don't worry about the created project, the cleanup step would
+        removes the __init__.py from the project after created
+        """
+        self.assertTrue(os.path.isfile('project_template/__init__.py'), msg)
 
     def test_create_python_package(self):
         # Act
