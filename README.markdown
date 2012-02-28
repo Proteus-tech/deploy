@@ -1,27 +1,18 @@
 # Installation
-As Django 1.4 has not been released, it's not yet put in dependencies in `setup.py`.
+User installation:
+    As Django 1.4 has not been released, it's not yet included as dependencies in `setup.py`. So you need to install it separately.
 
-## Install Django 1.4-Beta
-Follow the instructions at https://www.djangoproject.com/download/
-
-## Install Proteus-deployment
+    pip install http://www.djangoproject.com/download/1.4-beta-1/tarball/
     pip install git+git://github.com/Proteus-tech/deploy.git@develop
-
-## Check pip freeze
-Check `pip freeze` and you should find `Django==1.4b1` and `proteus-deploy==0.0.1` in your environment
     pip freeze
 
-Done! Now you can start a new project (See Create a project section).
+    If you find `Django==1.4b1` and `proteus-deploy==0.0.1` in your environment, then everything is good! Now you can start a new project (See Create a project section).
 
-# Setup Development Environment
+Development installation:
+    First, clone the project, then follow the steps below:
 
-## Create Virtual Environment
     mkvirtualenv --no-site-packages proteus-deploy
-
-## Install dependency packages
     pip install -r setup/requirements.txt
-    
-## Run Tests
     ./runtests
 
 If all tests pass, you are good to go.
