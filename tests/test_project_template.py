@@ -1,5 +1,5 @@
 from project_template.project_name_project import settings
-from project_template.startproject import (create_python_package, pythonify,
+from startproject import (create_python_package, pythonify,
     unpythonify, create_project, cleanup, chmod_scripts, move_files_into_build, 
     move_files_out_of_build)
 
