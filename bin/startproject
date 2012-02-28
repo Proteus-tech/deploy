@@ -1,0 +1,27 @@
+#!/usr/bin/env python
+from startproject import (create_python_package, pythonify, unpythonify, 
+                          create_project, chmod_scripts, cleanup, 
+                          move_files_into_build, move_files_out_of_build)
+
+import os, project_template, shutil, sys
+
+if __name__ == '__main__':
+    if len(sys.argv) < 2:
+        msg = '''[Error, Bad input] please specify project_name. 
+
+        Usage: startproject <project_name>'''
+        print msg
+        sys.exit(1)
+    template_path = project_template.__path__[0]
+    move_files_into_build(template_path)
+    print 'creating project %s' % sys.argv[1]
+    project_name = sys.argv[1]
+    create_project(project_name, template_path)
+    move_files_out_of_build(project_name)
+    print 'chmod scripts'
+    chmod_scripts(project_name)
+    print 'cleanup..'
+    cleanup(project_name)
+    print 'success!'
+    sys.exit(0)
+
