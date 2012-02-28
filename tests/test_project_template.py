@@ -1,6 +1,7 @@
 from project_template.project_name_project import settings
 from project_template.bin.startproject import (create_python_package, pythonify,
-    unpythonify, create_project, cleanup, chmod_scripts)
+    unpythonify, create_project, cleanup, chmod_scripts, move_files_into_build, 
+    move_files_out_of_build)
 
 from subprocess import call
 
@@ -114,8 +115,52 @@ class TestStartProjectScript(TestCase):
         self.assertTrue(st.st_mode & owner_can_execute)
         st = os.stat('sample_project/reset_db')
         self.assertTrue(st.st_mode & owner_can_execute)
-        
 
+    def test_move_files_into_build(self):
+        """
+        Scenario:
+        1. create sample project which contains: 
+           - runtests
+           - reset_db
+           - buildbot/master.cfg
+        2. move files in sample project into build
+        3. startproject using the sample project as template
+        4. move files in created project out of build
+        Expected:
+        - runtests is rendered
+        - reset_db is rendered
+        - buildbot/master.cfg is rendered
+        """
+        # Arrange
+        os.makedirs('sample_project')
+        os.makedirs('sample_project/buildbot')
+        shutil.copyfile('tests/sample_file_to_pythonify', 
+                        'sample_project/runtests')
+        shutil.copyfile('tests/sample_file_to_pythonify', 
+                        'sample_project/reset_db')
+        shutil.copyfile('tests/sample_file_to_pythonify', 
+                        'sample_project/buildbot/master.cfg')
+        # Act
+        move_files_into_build('sample_project')
+        create_project('teddy', 'sample_project')
+        move_files_out_of_build('teddy')
+        # Assert
+        try:
+            with open('teddy/runtests') as stream:
+                content = stream.read()
+                self.assertIn('teddy', content, 'teddy not found in runtests')
+                self.assertFalse('{{ project_name }}' in content)
+            with open('teddy/reset_db') as stream:
+                content = stream.read()
+                self.assertIn('teddy', content, 'teddy not found in reset_db')
+                self.assertFalse('{{ project_name }}' in content)
+            with open('teddy/buildbot/master.cfg') as stream:
+                content = stream.read()
+                self.assertIn('teddy', content, 'teddy not found in master.cfg')
+                self.assertFalse('{{ project_name }}' in content)
+        except IOError:
+            self.fail('some files are missing, render failed')
+        
 class TestTransactionMiddleWare(TestCase):
     def test_transaction_middleware_exist(self):
         """

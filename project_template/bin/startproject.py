@@ -52,3 +52,34 @@ def chmod_scripts(project_dir):
         script_path = os.path.join(project_dir, script)
         os.chmod(script_path, 0744)
 
+def move_files_into_build(template_path):
+    """
+    1. create build and build/buildbot package
+    2. pythonify
+       - runtests -> build/runtests.py
+       - buildbot/master.cfg -> build/buildbot/master.cfg
+
+    When Django is starting project, file *.py which contains 
+    {{ project_name }} would be rendered. In order to make others
+    scripts such as runtests also be rendered, we need to create
+    a temporary `build` package to trick django to render them.
+    """
+    build_root = os.path.join(template_path, 'build')
+
+    if os.path.exists(build_root):
+        return
+
+    create_python_package(build_root)
+
+    build_buildbot = os.path.join(template_path, 'build', 'buildbot')
+    create_python_package(build_buildbot)
+
+    pythonify(template_path, 'runtests', [], ['build']) 
+    pythonify(template_path, 'reset_db', [], ['build']) 
+    pythonify(template_path, 'master.cfg', ['buildbot'], ['build', 'buildbot']) 
+
+def move_files_out_of_build(project_dir):
+    unpythonify(project_dir, 'runtests', ['build'], [])
+    unpythonify(project_dir, 'reset_db', ['build'], [])
+    unpythonify(project_dir, 'master.cfg', ['build', 'buildbot'], ['buildbot'])
+
