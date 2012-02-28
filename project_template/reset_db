@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
 cd `dirname $0`
-rm {{ project_name }}.sqlite3
-python manage.py syncdb $*
+python manage.py reset --noinput {{ project_name }} auth contenttypes sessions sites messages staticfiles admin $*
 
