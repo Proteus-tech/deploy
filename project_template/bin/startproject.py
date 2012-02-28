@@ -7,8 +7,10 @@ def create_python_package(path):
 
 def pythonify(template_path, file_name, src_dir, dst_dir):
     """
-    Try to fool django that this is a python file by moving it
-    into a python library.
+    Try to fool django that this is a python file by 
+    - moving it into a python library.
+    - append .py after file_name
+
     Parameters:
     - file_name
     - src_dir*, the folder that contains the file

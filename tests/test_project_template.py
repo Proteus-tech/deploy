@@ -8,27 +8,32 @@ class TestStartProjectScript(TestCase):
     bin/startproject
     """
     def tearDown(self):
-        if os.path.exists('teddy'):
-            shutil.rmtree('teddy')
+        if os.path.exists('build'):
+            shutil.rmtree('build')
 
     def test_create_python_package(self):
         # Act
-        create_python_package('teddy') 
+        create_python_package('build') 
         # Assert
-        self.assertTrue(os.path.exists('teddy'))
-        self.assertTrue(os.path.exists('teddy/__init__.py'))
+        self.assertTrue(os.path.exists('build'))
+        self.assertTrue(os.path.exists('build/__init__.py'))
 
     def test_pythonify(self):
         # Arrange
         shutil.copyfile('tests/sample_file_to_pythonify', 
                         'tests/sample_file_to_pythonify.tmp')
-        self.test_create_python_package() # create teddy
+        self.test_create_python_package() # create build
         template_path = '.'
         file_name = 'sample_file_to_pythonify.tmp'
         source = ['tests']
-        destination = ['teddy']
+        destination = ['build']
+        # Act
         pythonify(template_path, file_name, source, destination)
-        
+        # Assert
+        with open('build/sample_file_to_pythonify.tmp.py') as stream:
+            content = stream.read()
+            # check that {{ project_name }} is not missing after copied
+            self.assertIn('{{ project_name }}', content)
         
 class TestTransactionMiddleWare(TestCase):
     def test_transaction_middleware_exist(self):
