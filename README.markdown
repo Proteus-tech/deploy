@@ -6,7 +6,7 @@ User installation:
     pip install git+git://github.com/Proteus-tech/deploy.git@develop
     pip freeze
 
-    If you find `Django==1.4b1` and `proteus-deploy==0.0.1` in your environment, then everything is good! Now you can start a new project (See Create a project section).
+If you find `Django==1.4b1` and `proteus-deploy==0.0.1` in your environment, then everything is good! Now you can start a new project (See Create a project section).
 
 Development installation:
     First, clone the project, then follow the steps below:
