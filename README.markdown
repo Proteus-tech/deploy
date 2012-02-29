@@ -17,7 +17,7 @@ Development installation:
 
 If all tests pass, you are good to go.
 
-# Create a project
+### Create a project
 Once you have installed proteus-deploy, you will have startproject command in your environment.
 
 For example, if you want to create a project name `student`.
@@ -26,8 +26,32 @@ For example, if you want to create a project name `student`.
 
 A Django 1.4 project named student would be created at your current directory.
 
-# proteus
+### start-simple-server
+Starts a new server.
+
+    start-simple-server client-name
+
+Required parameter:
+- *client-name*
+
+Optional parameters (defaults are in bold):
+- *bits* 32 | 64 (default: 64)
+- *region* us-west-1, us-west-2 or ap-southeast-1 (default: us-west-1)
+- *ami* any AMI ID (default: ami-4d580408)
+
+### setup-buildbot-on-server
+Setups buildbot on an existing EC2 instance.
+
+    setup-buildbot-on-server client-name ec2-host project-name repository-url 
+
+Required parameter:
+- *client-name*
+- *ec2-host* the public domain of the EC2 instance (i.e ec2-184-169-247-45.us-west-1.compute.amazonaws.com)
+- *project-name* the name of the project
+- *repository-url*
+
+##### proteus
 `proteus` is a package which contains profab roles.
 
-# project template
-`project_template` is a template for creating a project according to standardized layout.
+##### project template
+`project_template` contains a template for creating a project according to standardized layout.
