@@ -1,0 +1,25 @@
+#!/usr/bin/env python
+import fabric.network, logging, sys
+import simpleserver
+
+def main(using_client, *args):
+    logging.basicConfig(level=logging.INFO)
+    simpleserver.start(using_client, *args)
+
+if __name__=="__main__":
+    msg = """Usage: start-simple-server CLIENT [BITS] [REGION] [AMI]
+    CLIENT: is profab client
+    BITS: could be either 32 or 64* 
+    REGION: could be us-west-1*, us-west-2 or ap-southeast-1
+    AMI: is AMI ID (default is ami-4d580408 which is Ubuntu Natty) 
+
+    * is default
+    """
+    try:
+        if len(sys.argv) <= 1:
+            print msg 
+            sys.exit(-1)
+        main(*sys.argv[1:])
+    finally:
+        fabric.network.disconnect_all()
+
