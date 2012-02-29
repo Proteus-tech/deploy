@@ -1,30 +1,5 @@
-#!/usr/bin/env python
-import fabric.network, logging, sys
-import buildbot, simpleserver
-
-def main(using_client, project_name, repository, *args):
-    logging.basicConfig(level=logging.INFO)
-    server = simpleserver.start(using_client, *args)
-    ec2_host = server.instance.public_dns_name 
-    buildbot.setup(using_client, ec2_host, project_name, repository)
-    
-
-if __name__=="__main__":
-    msg = """Usage: start-simple-server CLIENT PROJECT_NAME REPOSITORY [BITS] [REGION] [AMI]
-    CLIENT: is profab client
-    PROJECT_NAME: name of the project that buildbot run against
-    REPOSITORY: URL to the repository
-    BITS: could be either 32 or 64* 
-    REGION: could be us-west-1*, us-west-2 or ap-southeast-1
-    AMI: is AMI ID (default is ami-4d580408 which is Ubuntu Natty) 
-
-    * is default
-    """
-    try:
-        if len(sys.argv) <= 3:
-            print msg 
-            sys.exit(-1)
-        main(*sys.argv[1:])
-    finally:
-        fabric.network.disconnect_all()
-
+#!/home/juacompe/virtualenvs/proteus-deploy-dev/bin/python
+# EASY-INSTALL-SCRIPT: 'proteus-deploy==0.0.3','start-buildbot-server'
+__requires__ = 'proteus-deploy==0.0.3'
+import pkg_resources
+pkg_resources.run_script('proteus-deploy==0.0.3', 'start-buildbot-server')
