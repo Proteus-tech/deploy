@@ -29,13 +29,13 @@ class TestStart(TestCase):
         client = 'bmf'
         project = 'fluffy'
         repository = 'git://github.com/juacompe/fluffy.git'
-        bits = 32
+        bits = '32'
         region = 'us-west-2'
         ami = 'ami-4d5'
         # Act
         buildbot.start(client, project, repository, bits, region, ami)
         # Assert
-        self.mock_start.assert_called_once_with('bmf', 32, 'us-west-2', 'ami-4d5')
+        self.mock_start.assert_called_once_with('bmf', '32', 'us-west-2', 'ami-4d5')
         params = ('proteus.buildbot','fluffy,git://github.com/juacompe/fluffy.git')
         self.mock_adders.assert_called_once_with(params)
 
