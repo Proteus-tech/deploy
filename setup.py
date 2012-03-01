@@ -8,6 +8,7 @@ setup(
     zip_safe = False, # for project_template
     scripts = ['bin/startproject'
         , 'bin/start-simple-server'
+        , 'bin/start-buildbot-server'
         , 'bin/setup-buildbot-on-server'
     ],
     packages = ['project_template'

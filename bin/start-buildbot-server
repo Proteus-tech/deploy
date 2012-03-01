@@ -1,0 +1,5 @@
+#!/home/juacompe/virtualenvs/proteus-deploy-dev/bin/python
+# EASY-INSTALL-SCRIPT: 'proteus-deploy==0.0.3','start-buildbot-server'
+__requires__ = 'proteus-deploy==0.0.3'
+import pkg_resources
+pkg_resources.run_script('proteus-deploy==0.0.3', 'start-buildbot-server')
