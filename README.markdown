@@ -28,7 +28,7 @@ For example, if you want to create a project name `student`.
 
 A Django 1.4 project named student would be created at your current directory.
 
-### start-simple-server
+### Start simple server
 Starts a new server.
 
     start-simple-server client-name
@@ -43,7 +43,7 @@ Optional parameter(s):
 - **region** us-west-1, us-west-2 or ap-southeast-1 (default: us-west-1)
 - **ami** any AMI ID (default: ami-4d580408)
 
-### setup-buildbot-on-server
+### Setup buildbot on server
 Setups buildbot on an existing EC2 instance.
 
     setup-buildbot-on-server client-name ec2-host project-name repository-url 
@@ -59,7 +59,7 @@ Optional parameter(s):
 
 - **privacy** repository is public or private (public|private, default: public)
 
-### start-simple-server
+### Start buildbot server
 Starts a new server and setup buildbot on it.
 
     start-buildbot-server client-name project-name repository-url privacy
