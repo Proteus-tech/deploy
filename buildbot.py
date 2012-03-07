@@ -1,15 +1,22 @@
 from profab.server import Server
 import simpleserver
 
+def split_private_git_url(git_url):
+    user, remains = git_url.rsplit('@')
+    host, path = remains.rsplit(':')
+    return (user, host, path)
+
 def add_buildbot(server, project_name, repository, privacy):
     role_tuple_list = [
         ('proteus.www_home',''),
     ]
     if privacy == 'private':
-        print 'add ssh key-gen into the roles'
+        print 'do hand shaking for private repository'
+        user, host, path = split_private_git_url(repository)
         role_tuple_list += [
             ('proteus.ssh_key_gen', ''),
             ('proteus.authorize_key', repository),
+            ('proteus.trust_host', host),
         ]
     role_tuple_list += [
         ('proteus.buildbot','%s,%s' % (project_name, repository) ),

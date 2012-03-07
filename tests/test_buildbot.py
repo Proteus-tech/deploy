@@ -14,19 +14,19 @@ class TestStart(TestCase):
 
     def test_simple_start(self):
         # Arrange
-        client = 'bmf'
+        client = 'proteus'
         project = 'fluffy'
         repository = 'git://github.com/juacompe/fluffy.git'
         # Act
         buildbot.start(client, project, repository)
         # Assert
-        self.mock_start.assert_called_once_with('bmf')
+        self.mock_start.assert_called_once_with('proteus')
         params = [('proteus.www_home',''), ('proteus.buildbot','fluffy,git://github.com/juacompe/fluffy.git')]
         self.mock_adders.assert_called_once_with(*params)
 
     def test_start_with_optional_parameters(self):
         # Arrange
-        client = 'bmf'
+        client = 'proteus'
         project = 'fluffy'
         repository = 'git://github.com/juacompe/fluffy.git'
         privacy = 'public'
@@ -36,7 +36,7 @@ class TestStart(TestCase):
         # Act
         buildbot.start(client, project, repository, privacy, bits, region, ami)
         # Assert
-        self.mock_start.assert_called_once_with('bmf', '32', 'us-west-2', 'ami-4d5')
+        self.mock_start.assert_called_once_with('proteus', '32', 'us-west-2', 'ami-4d5')
         params = [('proteus.www_home',''), ('proteus.buildbot','fluffy,git://github.com/juacompe/fluffy.git')]
         self.mock_adders.assert_called_once_with(*params)
 
@@ -53,7 +53,7 @@ class TestSetup(TestCase):
     
     def test_setup_with_public_git(self):
         # Arrange
-        client = 'bmf'
+        client = 'proteus'
         ec2_host = 'ec2-50-18-236-118.us-west-1.compute.amazonaws.com' 
         project_name = 'fluffy'
         repository = 'git://github.com/juacompe/fluffy.git'
@@ -65,10 +65,10 @@ class TestSetup(TestCase):
         self.mock_adders.assert_called_once_with(*params)
         
     def test_setup_with_private_git(self):
-        client = 'bmf'
+        client = 'proteus'
         ec2_host = 'ec2-50-18-236-118.us-west-1.compute.amazonaws.com' 
         project_name = 'fluffy'
-        repository = 'git://github.com/juacompe/fluffy.git'
+        repository = 'git@git.private.net:/home/git/project/projectlib.git'
         privacy = 'private'
         # Act
         buildbot.setup(client, ec2_host, project_name, repository, privacy)
@@ -76,8 +76,18 @@ class TestSetup(TestCase):
         self.mock_connect.assert_called_once_with(client=client, hostname=ec2_host)
         params = [('proteus.www_home','')
             , ('proteus.ssh_key_gen', '')
-            , ('proteus.authorize_key', repository)
-            , ('proteus.buildbot','fluffy,git://github.com/juacompe/fluffy.git')
+            , ('proteus.authorize_key', 'git@git.private.net:/home/git/project/projectlib.git')
+            , ('proteus.trust_host', 'git.private.net')
+            , ('proteus.buildbot','fluffy,git@git.private.net:/home/git/project/projectlib.git')
         ]
         self.mock_adders.assert_called_once_with(*params)
  
+
+class TestSplitPrivateGitUrl(TestCase):
+    def test_ssh_url(self):
+        url = 'git@git.private.net:/home/git/project/projectlib.git'
+        user, host, path = buildbot.split_private_git_url(url)
+        self.assertEqual('git', user)
+        self.assertEqual('git.private.net', host)
+        self.assertEqual('/home/git/project/projectlib.git', path)
+
