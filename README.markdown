@@ -31,10 +31,10 @@ Starts a new server.
 
     start-simple-server client-name
 
-Required parameter:
+Required parameter(s):
 - *client-name*
 
-Optional parameters (defaults are in bold):
+Optional parameter(s):
 - *bits* 32 | 64 (default: 64)
 - *region* us-west-1, us-west-2 or ap-southeast-1 (default: us-west-1)
 - *ami* any AMI ID (default: ami-4d580408)
@@ -44,11 +44,27 @@ Setups buildbot on an existing EC2 instance.
 
     setup-buildbot-on-server client-name ec2-host project-name repository-url 
 
-Required parameter:
+Required parameter(s):
 - *client-name*
 - *ec2-host* the public domain of the EC2 instance (i.e ec2-184-169-247-45.us-west-1.compute.amazonaws.com)
 - *project-name* the name of the project
 - *repository-url*
+
+Optional parameter(s):
+- *privacy* repository is public or private (public|private, default: public)
+
+### start-simple-server
+Starts a new server and setup buildbot on it.
+
+    start-buildbot-server client-name project-name repository-url privacy
+
+Required parameter(s):
+- *client-name*
+- *project-name* the name of the project
+- *repository-url*
+
+Optional parameter(s):
+- *privacy* repository is public or private (public|private, default: public)
 
 ##### proteus
 `proteus` is a package which contains profab roles.
