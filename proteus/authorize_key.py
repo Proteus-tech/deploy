@@ -1,6 +1,6 @@
-from profab.role import Role
 from fabric.api import settings
 from fabric.operations import run, sudo
+from profab.role import Role
 
 class Configure(Role):
     def configure(self, server):
