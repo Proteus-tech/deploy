@@ -1,6 +1,7 @@
 # Installation
-User installation:
-    As Django 1.4 has not been released, it's not yet included as dependencies in `setup.py`. So you need to install it separately.
+### User installation:
+
+As Django 1.4 has not been released, it's not yet included as dependencies in `setup.py`. So you need to install it separately.
 
     pip install http://www.djangoproject.com/download/1.4-beta-1/tarball/
     pip install git+git://github.com/Proteus-tech/deploy.git@develop
@@ -8,8 +9,9 @@ User installation:
 
 If you find `Django==1.4b1` and `proteus-deploy==0.0.1` in your environment, then everything is good! Now you can start a new project (See Create a project section).
 
-Development installation:
-    First, clone the project, then follow the steps below:
+### Development installation:
+
+First, clone the project, then follow the steps below:
 
     mkvirtualenv --no-site-packages proteus-deploy
     pip install -r setup/requirements.txt
