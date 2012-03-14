@@ -39,7 +39,6 @@ Required parameter(s):
 
 Optional parameter(s):
 
-Optional parameter(s):
 - **bits** 32 | 64 (default: 64)
 - **region** us-west-1, us-west-2 or ap-southeast-1 (default: us-west-1)
 - **size** size of the instance (default: t1.micro)
