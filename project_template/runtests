@@ -1,4 +1,3 @@
 #!/usr/bin/env bash
 cd `dirname $0`
-python manage.py test {{ project_name }} $*
-
+python manage.py test --cover-erase --with-coverage --cover-package={{ project_name }} $*
