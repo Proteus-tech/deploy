@@ -37,6 +37,7 @@ Required parameter:
 Optional parameters (defaults are in bold):
 - *bits* 32 | 64 (default: 64)
 - *region* us-west-1, us-west-2 or ap-southeast-1 (default: us-west-1)
+- *size* size of the instance (default: t1.micro)
 - *ami* any AMI ID (default: ami-4d580408)
 
 ### setup-buildbot-on-server

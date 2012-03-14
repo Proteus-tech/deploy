@@ -11,6 +11,7 @@ def start(
     using_client,
     bits='64',
     region='us-west-1',
+    size='t1.micro',
     ami='ami-4d580408',
     base_roles=BASE_ROLES
 ):
@@ -20,6 +21,7 @@ def start(
     role_tuple_list = [
         ('bits',bits),
         ('region',region),
+        ('size',size),
         ('ami',ami),
     ]
 
