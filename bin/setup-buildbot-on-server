@@ -7,11 +7,12 @@ def main(using_client, *args):
     buildbot.setup(using_client, *args)
 
 if __name__=="__main__":
-    msg = """Usage: setup-buildbot-on-server CLIENT EC2_HOST PROJECT_NAME REPOSITORY
-    CLIENT: is profab client
-    EC2_HOST: public host of EC2 instance
-    PROJECT_NAME: name of the project that buildbot run against
-    REPOSITORY: URL to the repository
+    msg = """Usage: setup-buildbot-on-server client ec2_host project_name repository privacy
+    client: is profab client
+    ec2_host: public host of EC2 instance
+    project_name: name of the project that buildbot run against
+    repository: URL to the repository
+    privacy: privacy of repository (public|private)
     """
     try:
         if len(sys.argv) <= 4:

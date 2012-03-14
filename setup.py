@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name = 'proteus-deploy',
-    version = '0.0.3',
+    version = '0.0.5',
     author = 'Proteus Technologies',
     author_email = 'dev-team@proteus-tech.com',
     zip_safe = False, # for project_template

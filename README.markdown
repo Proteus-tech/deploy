@@ -1,6 +1,7 @@
 # Installation
-User installation:
-    As Django 1.4 has not been released, it's not yet included as dependencies in `setup.py`. So you need to install it separately.
+### User installation:
+
+As Django 1.4 has not been released, it's not yet included as dependencies in `setup.py`. So you need to install it separately.
 
     pip install http://www.djangoproject.com/download/1.4-beta-1/tarball/
     pip install git+git://github.com/Proteus-tech/deploy.git@develop
@@ -8,8 +9,9 @@ User installation:
 
 If you find `Django==1.4b1` and `proteus-deploy==0.0.1` in your environment, then everything is good! Now you can start a new project (See Create a project section).
 
-Development installation:
-    First, clone the project, then follow the steps below:
+### Development installation:
+
+First, clone the project, then follow the steps below:
 
     mkvirtualenv --no-site-packages proteus-deploy
     pip install -r setup/requirements.txt
@@ -26,30 +28,53 @@ For example, if you want to create a project name `student`.
 
 A Django 1.4 project named student would be created at your current directory.
 
-### start-simple-server
+### Start new simple server
 Starts a new server.
 
     start-simple-server client-name
 
-Required parameter:
-- *client-name*
+Required parameter(s):
 
-Optional parameters (defaults are in bold):
-- *bits* 32 | 64 (default: 64)
-- *region* us-west-1, us-west-2 or ap-southeast-1 (default: us-west-1)
-- *size* size of the instance (default: t1.micro)
-- *ami* any AMI ID (default: ami-4d580408)
+- **client-name**
 
-### setup-buildbot-on-server
+Optional parameter(s):
+
+Optional parameter(s):
+- **bits** 32 | 64 (default: 64)
+- **region** us-west-1, us-west-2 or ap-southeast-1 (default: us-west-1)
+- **size** size of the instance (default: t1.micro)
+- **ami** any AMI ID (default: ami-4d580408)
+
+### Setup buildbot on an existing server
 Setups buildbot on an existing EC2 instance.
 
-    setup-buildbot-on-server client-name ec2-host project-name repository-url 
+    setup-buildbot-on-server client-name ec2-host project-name repository-url privacy
 
-Required parameter:
-- *client-name*
-- *ec2-host* the public domain of the EC2 instance (i.e ec2-184-169-247-45.us-west-1.compute.amazonaws.com)
-- *project-name* the name of the project
-- *repository-url*
+Required parameter(s):
+
+- **client-name**
+- **ec2-host** the public domain of the EC2 instance (i.e ec2-184-169-247-45.us-west-1.compute.amazonaws.com)
+- **project-name** the name of the project
+- **repository-url**
+
+Optional parameter(s):
+
+- **privacy** repository is public or private (public|private, default: public)
+
+### Start new buildbot server
+Starts a new server and setup buildbot on it.
+
+    start-buildbot-server client-name project-name repository-url privacy
+
+Required parameter(s):
+
+- **client-name**
+- **project-name** the name of the project
+- **repository-url**
+
+Optional parameter(s):
+
+- **privacy** repository is public or private (public|private, default: public)
 
 ##### proteus
 `proteus` is a package which contains profab roles.

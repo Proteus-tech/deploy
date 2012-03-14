@@ -16,9 +16,6 @@ class Configure(Role):
     ]
     def configure(self, server):
         server.cnx.create_tags([server.instance.id], {'buildbot':''})
-        sudo("/etc/init.d/apache2 stop")
-        sudo("usermod www-data --home /home/www-data --shell /bin/bash")
-        sudo("/etc/init.d/apache2 start")
         project_name, git_url = self.parameter.split(',')
         sudo('easy_install pip')
         sudo('easy_install virtualenv')
@@ -34,7 +31,7 @@ class Configure(Role):
             # Assume that we already have buildslave1/builder-sqlite for checkout code.
             sudo("mkdir -p /home/www-data/Buildbot/%s/buildslave1/builder-sqlite" % (project_name), user="www-data")
             with cd("/home/www-data/Buildbot/%s/buildslave1/builder-sqlite" % (project_name)):
-                sudo("git clone %s" % (git_url), user="www-data")
+                sudo("git clone -q %s" % (git_url), user="www-data")
                 # Point to develop branch
                 git_folder = git_url.split('/')[-1]
                 git_folder = git_folder.split('.')[0]
@@ -42,11 +39,9 @@ class Configure(Role):
                     sudo("git checkout -b develop", user="www-data")
                     sudo("git pull origin develop", user="www-data")
                     sudo("git checkout develop", user="www-data")
-            sudo('cp /home/www-data/Buildbot/%s/buildslave1/builder-sqlite/%s/buildbot/master.cfg /home/www-data/Buildbot/%s/buildbot-master' % (
-                    project_name, 
-                    git_folder,
-                    project_name
-                ), 
+            sudo('cp' 
+                 ' /home/www-data/Buildbot/%s/buildslave1/builder-sqlite/%s/buildbot/master.cfg' 
+                 ' /home/www-data/Buildbot/%s/buildbot-master' % (project_name, git_folder, project_name), 
                 user="www-data"
             )
         # Doing modify master.cfg.
@@ -64,5 +59,4 @@ class Configure(Role):
                 sudo("buildslave start buildslave1", user="www-data")
 
         server.cnx.create_tags([server.instance.id], {'buildbot':'installed'})
-
 

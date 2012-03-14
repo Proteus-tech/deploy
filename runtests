@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 cd `dirname $0`
-nosetests
-
+COVER_OPTS="--cover-erase --with-coverage --cover-package={{ project_name }}"
+nosetests $COVER_OPTS && pylint --rcfile=pylintrc --output-format=colorized profab
