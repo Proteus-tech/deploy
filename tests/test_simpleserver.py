@@ -23,6 +23,7 @@ class TestStart(TestCase):
             , ('wsgi', None)
             , ('bits', '64')
             , ('region', 'us-west-1')
+            , ('size', 't1.micro')
             , ('ami', 'ami-4d580408')
         )
 
@@ -31,9 +32,10 @@ class TestStart(TestCase):
         client = 'bmf'
         bits = '32'
         region = 'ap-south'
+        size = 'm1.small'
         ami = 'ami-4d'
         # Act
-        simpleserver.start(client, bits, region, ami)
+        simpleserver.start(client, bits, region, size, ami)
         # Assert
         self.mock_start.assert_called_once_with('bmf'
             , ('security_group', 'ssh')
@@ -42,6 +44,7 @@ class TestStart(TestCase):
             , ('wsgi', None)
             , ('bits', '32')
             , ('region', 'ap-south')
+            , ('size', 'm1.small')
             , ('ami', 'ami-4d')
         )
 
