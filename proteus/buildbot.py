@@ -22,7 +22,7 @@ class Configure(Role):
         virtenv_path = "/home/www-data/Buildbot/%s/virtenv" % (project_name)
         sudo("virtualenv --no-site-packages %s" % (virtenv_path), user="www-data")
         with prefix("source %s/bin/activate" % (virtenv_path)):
-            sudo("pip install buildbot", user="www-data")
+            sudo("pip install buildbot==0.8.4", user="www-data")
             sudo("pip install buildbot-slave", user="www-data")
             # Create buildbot-master and buildslave1.
             with cd("/home/www-data/Buildbot/%s" % (project_name)):
