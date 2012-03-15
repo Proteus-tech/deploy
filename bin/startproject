@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from startproject import (create_python_package, pythonify, unpythonify, 
                           create_project, chmod_scripts, cleanup, 
-                          move_files_into_build, move_files_out_of_build)
+                          move_files_into_build, move_files_out_of_build, replace_secret_key)
 
 import os, project_template, shutil, sys
 
@@ -19,7 +19,9 @@ if __name__ == '__main__':
     create_project(project_name, template_path)
     move_files_out_of_build(project_name)
     print 'chmod scripts'
-    chmod_scripts(project_name)
+    chmod_scripts(project_name) 
+    replace_secret_key(os.path.join(template_path, project_name + '_project', 'settings', '__init__.py'))
+    print 'secret key generated'
     print 'cleanup..'
     cleanup(project_name)
     print 'success!'

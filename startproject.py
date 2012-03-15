@@ -1,6 +1,6 @@
 from django.core import management
 from subprocess import call
-import os, shutil
+import os, shutil, string, random
 
 def create_project(project_name, template_path):
     template_option = "--template=%s" % template_path
@@ -82,4 +82,10 @@ def move_files_out_of_build(project_dir):
     unpythonify(project_dir, 'runtests', ['build'], [])
     unpythonify(project_dir, 'reset_db', ['build'], [])
     unpythonify(project_dir, 'master.cfg', ['build', 'buildbot'], ['buildbot'])
+
+def replace_secret_key(path_to_init):
+    random.seed(14)
+    tmp_key = [random.choice(string.letters + string.digits) for x in xrange(50)]
+    skey = "".join(tmp_key)
+    os.system('sed -i \"s/^SECRET_KEY = .*/SECRET_KEY = \'%s\'/g\" %s' % (skey, path_to_init))
 
