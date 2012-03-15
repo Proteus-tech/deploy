@@ -20,7 +20,7 @@ if __name__ == '__main__':
     move_files_out_of_build(project_name)
     print 'chmod scripts'
     chmod_scripts(project_name) 
-    replace_secret_key(os.path.join(template_path, project_name + '_project', 'settings', '__init__.py'))
+    replace_secret_key(os.path.join(project_name, project_name + '_project', 'settings', '__init__.py'))
     print 'secret key generated'
     print 'cleanup..'
     cleanup(project_name)
