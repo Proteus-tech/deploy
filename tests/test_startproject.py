@@ -66,7 +66,7 @@ class TestStartProjectScript(TestCase):
             with open('build/sample_file_to_pythonify.tmp.py') as stream:
                 content = stream.read()
                 # check that {{ project_name }} is not missing after copied
-                self.assertIn('{{ project_name }}', content)
+                self.assertTrue('{{ project_name }}' in content)
         except IOError:
             self.fail('build/sample_file_to_pythonify.tmp.py not found')
         
@@ -99,7 +99,7 @@ class TestStartProjectScript(TestCase):
         create_project('teddy', 'build')
         with open('teddy/sample_file_to_pythonify.tmp.py') as stream:
             content = stream.read()
-            self.assertIn('teddy', content)
+            self.assertTrue('teddy' in content)
             self.assertFalse('{{ project_name }}' in content)
 
     def test_cleanup(self):
@@ -158,15 +158,15 @@ class TestStartProjectScript(TestCase):
         try:
             with open('teddy/runtests') as stream:
                 content = stream.read()
-                self.assertIn('teddy', content, 'teddy not found in runtests')
+                self.assertTrue('teddy' in content, 'teddy not found in runtests')
                 self.assertFalse('{{ project_name }}' in content)
             with open('teddy/reset_db') as stream:
                 content = stream.read()
-                self.assertIn('teddy', content, 'teddy not found in reset_db')
+                self.assertTrue('teddy' in content, 'teddy not found in reset_db')
                 self.assertFalse('{{ project_name }}' in content)
             with open('teddy/buildbot/master.cfg') as stream:
                 content = stream.read()
-                self.assertIn('teddy', content, 'teddy not found in master.cfg')
+                self.assertTrue('teddy' in content, 'teddy not found in master.cfg')
                 self.assertFalse('{{ project_name }}' in content)
         except IOError:
             self.fail('some files are missing, render failed')
