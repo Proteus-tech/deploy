@@ -31,7 +31,10 @@ A Django 1.4 project named student would be created at your current directory.
 ### Start new simple server
 Starts a new server.
 
-    start-simple-server client-name
+#### Prerequisites
+The target region of the server must have 2 security groups prepared (`ssh` and `http`).
+
+    start-simple-server client-name bits region size ami
 
 Required parameter(s):
 
@@ -42,10 +45,13 @@ Optional parameter(s):
 - **bits** 32 | 64 (default: 64)
 - **region** us-west-1, us-west-2 or ap-southeast-1 (default: us-west-1)
 - **size** size of the instance (default: t1.micro)
-- **ami** any AMI ID (default: ami-4d580408)
+- **ami** an AMI ID that consistent with other parameters (default: ami-4d580408)
 
 ### Setup buildbot on an existing server
 Setups buildbot on an existing EC2 instance.
+
+#### Prerequisites
+The root folder of the repository must contain `buildbot/master.cfg`.
 
     setup-buildbot-on-server client-name ec2-host project-name repository-url privacy
 
@@ -63,7 +69,7 @@ Optional parameter(s):
 ### Start new buildbot server
 Starts a new server and setup buildbot on it.
 
-    start-buildbot-server client-name project-name repository-url privacy
+    start-buildbot-server client-name project-name repository-url privacy bits region size ami
 
 Required parameter(s):
 
@@ -74,6 +80,10 @@ Required parameter(s):
 Optional parameter(s):
 
 - **privacy** repository is public or private (public|private, default: public)
+- **bits** 32 | 64 (default: 64)
+- **region** us-west-1, us-west-2 or ap-southeast-1 (default: us-west-1)
+- **size** size of the instance (default: t1.micro)
+- **ami** an AMI ID that consistent with other parameters (default: ami-4d580408)
 
 ##### proteus
 `proteus` is a package which contains profab roles.

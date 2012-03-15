@@ -7,11 +7,15 @@ def main(using_client, *args):
     buildbot.start(using_client, *args)
 
 if __name__=="__main__":
-    msg = """Usage: setup-buildbot-on-server client ec2_host project_name repository privacy
+    msg = """Usage: setup-buildbot-on-server client ec2_host project_name repository privacy bits region size ami
     client: is profab client
     project_name: name of the project that buildbot run against
     repository: URL to the repository
     privacy: privacy of repository (public|private)
+    bits: could be either 32 or 64* 
+    region: could be us-west-1*, us-west-2 or ap-southeast-1
+    size: size of the instance (default is t1.micro)
+    ami: is AMI ID (default is ami-4d580408 which is Ubuntu Natty) 
     """
     try:
         if len(sys.argv) <= 4:
