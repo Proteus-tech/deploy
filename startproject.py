@@ -84,7 +84,10 @@ def move_files_out_of_build(project_dir):
     unpythonify(project_dir, 'master.cfg', ['build', 'buildbot'], ['buildbot'])
 
 def replace_secret_key(path_to_replace):
-    tmp_key = [random.choice(string.letters + string.digits) for x in xrange(50)]
-    skey = "".join(tmp_key)
+    skey = random_secret_key()
     os.system('sed -i \"s/^SECRET_KEY = .*/SECRET_KEY = \'%s\'/g\" %s' % (skey, path_to_replace))
 
+def random_secret_key():
+    tmp_key = [random.choice(string.letters + string.digits) for x in xrange(50)]
+    skey = "".join(tmp_key)
+    return skey
