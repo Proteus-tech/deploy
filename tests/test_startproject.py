@@ -1,6 +1,6 @@
 from startproject import (create_python_package, pythonify,
     unpythonify, create_project, cleanup, chmod_scripts, move_files_into_build, 
-    move_files_out_of_build)
+    move_files_out_of_build, replace_secret_key)
 
 from subprocess import call
 
@@ -21,6 +21,8 @@ class TestStartProjectScript(TestCase):
             shutil.rmtree('sample_project')
         if os.path.exists('tests/sample_file_to_pythonify.tmp'):
             os.remove('tests/sample_file_to_pythonify.tmp')
+        if os.path.exists('tests/settings.tmp'):
+            os.remove('tests/settings.tmp')
 
     def test_project_template_module(self):
         msg = """
@@ -171,3 +173,17 @@ class TestStartProjectScript(TestCase):
         except IOError:
             self.fail('some files are missing, render failed')
  
+    def test_replace_secret_key(self):
+        # Arrange
+        shutil.copyfile('tests/sample_settings.py', 
+                        'tests/settings.tmp')
+        # Act
+        replace_secret_key('tests/settings.tmp')
+        # Assert
+        try:
+            with open('tests/settings.tmp') as stream:
+                content = stream.read()
+                self.assertTrue("SECRET_KEY = 'qlk7-=42izclvvp3ihue1z+1*d!z@-syarviv6rod^p1cv$j*2'" not in content)
+        except IOError:
+            self.fail('temp_settings is missing, replace secret failed')
+
