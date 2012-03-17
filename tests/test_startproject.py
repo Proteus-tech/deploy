@@ -1,6 +1,6 @@
 from startproject import (create_python_package, pythonify,
     unpythonify, create_project, cleanup, chmod_scripts, move_files_into_build, 
-    move_files_out_of_build)
+    move_files_out_of_build,random_secret_key,replace_secret_key)
 
 from subprocess import call
 
@@ -144,16 +144,21 @@ class TestStartProjectScript(TestCase):
         # Arrange
         os.makedirs('sample_project')
         os.makedirs('sample_project/buildbot')
+        os.makedirs('sample_project/project_name_project/settings')
         shutil.copyfile('tests/sample_file_to_pythonify', 
                         'sample_project/runtests')
         shutil.copyfile('tests/sample_file_to_pythonify', 
                         'sample_project/reset_db')
         shutil.copyfile('tests/sample_file_to_pythonify', 
                         'sample_project/buildbot/master.cfg')
-        # Act
+        shutil.copyfile('tests/sample_file_to_pythonify',
+                        'sample_project/project_name_project/settings/__init__.py')
+
+        #Act
         move_files_into_build('sample_project')
         create_project('teddy', 'sample_project')
         move_files_out_of_build('teddy')
+        replace_secret_key('sample_project/project_name_project/settings/__init__.py')
         # Assert
         try:
             with open('teddy/runtests') as stream:
@@ -168,6 +173,27 @@ class TestStartProjectScript(TestCase):
                 content = stream.read()
                 self.assertTrue('teddy' in content, 'teddy not found in master.cfg')
                 self.assertFalse('{{ project_name }}' in content)
+            with open('teddy/teddy_project/settings/__init__.py') as stream:
+                content = stream.read()
+                self.assertTrue('qlk7-=42izclvvp3ihue1z+1*d!z@-syarviv6rod^p1cv$j*2' not in content, 'teddy not found old secret_key')
+                #self.assertTrue('SECRET_KEY =' in content, 'teddy have secret_key')
+                self.assertFalse('{{ project_name }}' in content)
         except IOError:
             self.fail('some files are missing, render failed')
- 
+
+    def test_random_secret_key(self):
+        #Arragne
+        check = True
+        tmp_skey = random_secret_key()
+
+        #Act
+        for i in range(len(tmp_skey)):
+            if(tmp_skey[i] == '"' or tmp_skey[i] ==  '\''):
+                check = check and False
+        
+        #Assert
+        self.assertEquals(50,len(tmp_skey))
+        self.assertEquals(True,check)
+
+
+
