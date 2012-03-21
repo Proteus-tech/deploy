@@ -7,7 +7,7 @@ def main(using_client, *args):
     buildbot.start(using_client, *args)
 
 if __name__=="__main__":
-    msg = """Usage: setup-buildbot-on-server client ec2_host project_name repository privacy bits region size ami
+    msg = """Usage: setup-buildbot-on-server client project_name repository privacy bits region size ami
     client: is profab client
     project_name: name of the project that buildbot run against
     repository: URL to the repository
