@@ -20,6 +20,7 @@ def add_buildbot(server, project_name, repository, privacy):
         ]
     role_tuple_list += [
         ('proteus.buildbot','%s,%s' % (project_name, repository) ),
+        ('smarthost',None),
     ]
     server.add_roles( server.get_role_adders(*role_tuple_list) )
 
