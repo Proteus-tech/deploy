@@ -1,6 +1,6 @@
 from startproject import (create_python_package, pythonify,
     unpythonify, create_project, cleanup, chmod_scripts, move_files_into_build, 
-    move_files_out_of_build)
+    move_files_out_of_build, random_secret_key, replace_secret_key)
 
 from subprocess import call
 
@@ -21,6 +21,8 @@ class TestStartProjectScript(TestCase):
             shutil.rmtree('sample_project')
         if os.path.exists('tests/sample_file_to_pythonify.tmp'):
             os.remove('tests/sample_file_to_pythonify.tmp')
+        if os.path.exists('tests/settings.tmp'):
+            os.remove('tests/settings.tmp')
 
     def test_project_template_module(self):
         msg = """
@@ -66,7 +68,7 @@ class TestStartProjectScript(TestCase):
             with open('build/sample_file_to_pythonify.tmp.py') as stream:
                 content = stream.read()
                 # check that {{ project_name }} is not missing after copied
-                self.assertIn('{{ project_name }}', content)
+                self.assertTrue('{{ project_name }}' in content)
         except IOError:
             self.fail('build/sample_file_to_pythonify.tmp.py not found')
         
@@ -99,7 +101,7 @@ class TestStartProjectScript(TestCase):
         create_project('teddy', 'build')
         with open('teddy/sample_file_to_pythonify.tmp.py') as stream:
             content = stream.read()
-            self.assertIn('teddy', content)
+            self.assertTrue('teddy' in content)
             self.assertFalse('{{ project_name }}' in content)
 
     def test_cleanup(self):
@@ -158,16 +160,42 @@ class TestStartProjectScript(TestCase):
         try:
             with open('teddy/runtests') as stream:
                 content = stream.read()
-                self.assertIn('teddy', content, 'teddy not found in runtests')
+                self.assertTrue('teddy' in content, 'teddy not found in runtests')
                 self.assertFalse('{{ project_name }}' in content)
             with open('teddy/reset_db') as stream:
                 content = stream.read()
-                self.assertIn('teddy', content, 'teddy not found in reset_db')
+                self.assertTrue('teddy' in content, 'teddy not found in reset_db')
                 self.assertFalse('{{ project_name }}' in content)
             with open('teddy/buildbot/master.cfg') as stream:
                 content = stream.read()
-                self.assertIn('teddy', content, 'teddy not found in master.cfg')
+                self.assertTrue('teddy' in content, 'teddy not found in master.cfg')
                 self.assertFalse('{{ project_name }}' in content)
         except IOError:
             self.fail('some files are missing, render failed')
  
+    def test_replace_secret_key(self):
+        # Arrange
+        shutil.copyfile('tests/sample_settings.py', 
+                        'tests/settings.tmp')
+        # Act
+        replace_secret_key('tests/settings.tmp')
+        # Assert
+        try:
+            with open('tests/settings.tmp') as stream:
+                content = stream.read()
+                self.assertTrue("SECRET_KEY = 'qlk7-=42izclvvp3ihue1z+1*d!z@-syarviv6rod^p1cv$j*2'" not in content)
+        except IOError:
+            self.fail('temp_settings is missing, replace secret failed')
+
+    def test_random_secret_key(self):
+        #Arrange
+        check = True
+        #Act
+        tmp_skey = random_secret_key()
+        #Assert
+        for i in range(len(tmp_skey)):
+            if(tmp_skey[i] == '"' or tmp_skey[i] ==  '\''):
+                check = check and False
+        self.assertEquals(50,len(tmp_skey))
+        self.assertEquals(True,check)
+
