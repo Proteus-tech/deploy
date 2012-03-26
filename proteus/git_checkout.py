@@ -16,7 +16,7 @@ class Configure(Role):
     def configure(self, server):
         path, git_url = buildbot.splitter(self.parameter)
         with cd(path):
-            git_folder = 'master-src'
+            git_folder = 'src'
             sudo("git clone -q %s %s" % (git_url, git_folder), user="www-data")
             # Point to develop branch
             with cd(git_folder):                   

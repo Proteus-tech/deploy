@@ -23,13 +23,16 @@ class TestStart(TestCase):
         # Assert
         self.mock_start.assert_called_once_with('proteus')
         checkout_parameters = '%s,%s' % (self.master_src_path % project, repository)
-        master_cfg_params = '/home/www-data/Buildbot/fluffy/master-src/buildbot/master.cfg' \
+        master_cfg_params = '/home/www-data/Buildbot/fluffy/src/buildbot/master.cfg' \
             ',/home/www-data/Buildbot/fluffy/buildbot-master/master.cfg'
+        complete_params = '/home/www-data/Buildbot/fluffy/buildbot-master/master.cfg' \
+            ',git://github.com/juacompe/fluffy.git'
         params = [('proteus.www_home','')
             , ('proteus.install_buildbot_master_env','/home/www-data/Buildbot/fluffy/virtenv')
             , ('proteus.setup_buildbot_master','fluffy')
             , ('proteus.git_checkout', checkout_parameters)
             , ('proteus.create_symlink', master_cfg_params)
+            , ('proteus.complete_master_config', complete_params)
             , ('proteus.buildbot' ,'fluffy,git://github.com/juacompe/fluffy.git')
             , ('smarthost',None)]
         self.mock_adders.assert_called_once_with(*params)
@@ -47,14 +50,17 @@ class TestStart(TestCase):
         buildbot.start(client, project, repository, privacy, bits, region, ami)
         # Assert
         checkout_parameters = '%s,%s' % (self.master_src_path % project, repository)
-        master_cfg_params = '/home/www-data/Buildbot/fluffy/master-src/buildbot/master.cfg' \
+        master_cfg_params = '/home/www-data/Buildbot/fluffy/src/buildbot/master.cfg' \
             ',/home/www-data/Buildbot/fluffy/buildbot-master/master.cfg'
+        complete_params = '/home/www-data/Buildbot/fluffy/buildbot-master/master.cfg' \
+            ',git://github.com/juacompe/fluffy.git'
         self.mock_start.assert_called_once_with('proteus', '32', 'us-west-2', 'ami-4d5')
         params = [('proteus.www_home','')
             , ('proteus.install_buildbot_master_env','/home/www-data/Buildbot/fluffy/virtenv')
             , ('proteus.setup_buildbot_master','fluffy')
             , ('proteus.git_checkout', checkout_parameters)
             , ('proteus.create_symlink', master_cfg_params)
+            , ('proteus.complete_master_config', complete_params)
             , ('proteus.buildbot','fluffy,git://github.com/juacompe/fluffy.git')
             , ('smarthost',None)]
         self.mock_adders.assert_called_once_with(*params)
@@ -82,13 +88,16 @@ class TestSetup(TestCase):
         # Assert
         self.mock_connect.assert_called_once_with(client=client, hostname=ec2_host)
         checkout_parameters = '%s,%s' % (self.master_src_path % project, repository)
-        master_cfg_params = '/home/www-data/Buildbot/fluffy/master-src/buildbot/master.cfg' \
+        master_cfg_params = '/home/www-data/Buildbot/fluffy/src/buildbot/master.cfg' \
             ',/home/www-data/Buildbot/fluffy/buildbot-master/master.cfg'
+        complete_params = '/home/www-data/Buildbot/fluffy/buildbot-master/master.cfg' \
+            ',git://github.com/juacompe/fluffy.git'
         params = [('proteus.www_home','')
             , ('proteus.install_buildbot_master_env','/home/www-data/Buildbot/fluffy/virtenv')
             , ('proteus.setup_buildbot_master','fluffy')
             , ('proteus.git_checkout', checkout_parameters)
             , ('proteus.create_symlink', master_cfg_params)
+            , ('proteus.complete_master_config', complete_params)
             , ('proteus.buildbot','fluffy,git://github.com/juacompe/fluffy.git')
             , ('smarthost',None) ]
         self.mock_adders.assert_called_once_with(*params)
@@ -104,8 +113,9 @@ class TestSetup(TestCase):
         # Assert
         self.mock_connect.assert_called_once_with(client=client, hostname=ec2_host)
         checkout_parameters = '%s,%s' % (self.master_src_path % project, repository)
-        master_cfg_params = '/home/www-data/Buildbot/fluffy/master-src/buildbot/master.cfg' \
+        master_cfg_params = '/home/www-data/Buildbot/fluffy/src/buildbot/master.cfg' \
             ',/home/www-data/Buildbot/fluffy/buildbot-master/master.cfg'
+        complete_params = '/home/www-data/Buildbot/fluffy/buildbot-master/master.cfg,%s' % repository
         params = [('proteus.www_home','')
             , ('proteus.ssh_key_gen', '')
             , ('proteus.authorize_key', 'git@git.private.net:/home/git/project/projectlib.git')
@@ -114,6 +124,7 @@ class TestSetup(TestCase):
             , ('proteus.setup_buildbot_master','fluffy')
             , ('proteus.git_checkout', checkout_parameters)
             , ('proteus.create_symlink', master_cfg_params)
+            , ('proteus.complete_master_config', complete_params)
             , ('proteus.buildbot','fluffy,git@git.private.net:/home/git/project/projectlib.git')
             , ('smarthost', None)
         ]

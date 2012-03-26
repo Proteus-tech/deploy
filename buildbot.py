@@ -23,15 +23,17 @@ def add_buildbot(server, project_name, repository, privacy):
     master_checkout_path = "/home/www-data/Buildbot/%s" % (project_name)
     master_checkout_parameters = '%s,%s' % (master_checkout_path, repository)
     slave_checkout_path = "/home/www-data/Buildbot/%s/buildslave1/builder-sqlite" % (project_name)
-    master_cfg_src = '/home/www-data/Buildbot/%s/master-src/buildbot/master.cfg' % (project_name)
+    master_cfg_src = '/home/www-data/Buildbot/%s/src/buildbot/master.cfg' % (project_name)
     master_cfg_dest = '/home/www-data/Buildbot/%s/buildbot-master/master.cfg' % (project_name)
+    complete_params = '%s,%s' % (master_cfg_dest, repository)
     role_tuple_list += [
-        ('proteus.install_buildbot_master_env', virtenv_path),
-        ('proteus.setup_buildbot_master', project_name),
-        ('proteus.git_checkout', master_checkout_parameters),
-        ('proteus.create_symlink', '%s,%s' % (master_cfg_src, master_cfg_dest)),
-        ('proteus.buildbot','%s,%s' % (project_name, repository) ),
-        ('smarthost',None),
+        ('proteus.install_buildbot_master_env', virtenv_path)
+        ,('proteus.setup_buildbot_master', project_name)
+        ,('proteus.git_checkout', master_checkout_parameters)
+        ,('proteus.create_symlink', '%s,%s' % (master_cfg_src, master_cfg_dest))
+        ,('proteus.complete_master_config', complete_params)
+        ,('proteus.buildbot','%s,%s' % (project_name, repository) )
+        ,('smarthost',None)
     ]
     server.add_roles( server.get_role_adders(*role_tuple_list) )
 
