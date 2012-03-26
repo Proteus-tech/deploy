@@ -1,6 +1,9 @@
 from profab.server import Server
 import simpleserver
 
+def virtual_env_path(project_name):
+    return "/home/www-data/Buildbot/%s/virtenv" % (project_name)
+    
 def split_private_git_url(git_url):
     user, remains = git_url.rsplit('@')
     host, path = remains.rsplit(':')
@@ -18,6 +21,7 @@ def add_buildbot(server, project_name, repository, privacy):
             ('proteus.authorize_key', repository),
             ('proteus.trust_host', host),
         ]
+    virtenv_path = virtual_env_path(project_name)
     role_tuple_list += [
         ('proteus.buildbot','%s,%s' % (project_name, repository) ),
         ('smarthost',None),
