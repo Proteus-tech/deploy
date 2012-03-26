@@ -21,7 +21,7 @@ class TestStart(TestCase):
         buildbot.start(client, project, repository)
         # Assert
         self.mock_start.assert_called_once_with('proteus')
-        params = [('proteus.www_home',''), ('proteus.buildbot','fluffy,git://github.com/juacompe/fluffy.git')]
+        params = [('proteus.www_home',''), ('proteus.buildbot','fluffy,git://github.com/juacompe/fluffy.git'), ('smarthost',None)]
         self.mock_adders.assert_called_once_with(*params)
 
     def test_start_with_optional_parameters(self):
@@ -37,7 +37,7 @@ class TestStart(TestCase):
         buildbot.start(client, project, repository, privacy, bits, region, ami)
         # Assert
         self.mock_start.assert_called_once_with('proteus', '32', 'us-west-2', 'ami-4d5')
-        params = [('proteus.www_home',''), ('proteus.buildbot','fluffy,git://github.com/juacompe/fluffy.git')]
+        params = [('proteus.www_home',''), ('proteus.buildbot','fluffy,git://github.com/juacompe/fluffy.git'), ('smarthost',None)]
         self.mock_adders.assert_called_once_with(*params)
 
 
@@ -61,7 +61,7 @@ class TestSetup(TestCase):
         buildbot.setup(client, ec2_host, project_name, repository)
         # Assert
         self.mock_connect.assert_called_once_with(client=client, hostname=ec2_host)
-        params = [('proteus.www_home',''), ('proteus.buildbot','fluffy,git://github.com/juacompe/fluffy.git')]
+        params = [('proteus.www_home',''), ('proteus.buildbot','fluffy,git://github.com/juacompe/fluffy.git'), ('smarthost',None) ]
         self.mock_adders.assert_called_once_with(*params)
         
     def test_setup_with_private_git(self):
@@ -79,6 +79,7 @@ class TestSetup(TestCase):
             , ('proteus.authorize_key', 'git@git.private.net:/home/git/project/projectlib.git')
             , ('proteus.trust_host', 'git.private.net')
             , ('proteus.buildbot','fluffy,git@git.private.net:/home/git/project/projectlib.git')
+            , ('smarthost', None)
         ]
         self.mock_adders.assert_called_once_with(*params)
  
