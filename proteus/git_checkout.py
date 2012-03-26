@@ -1,14 +1,24 @@
+from profab.role import Role
+
+def root_folder(git_url):
+    git_folder = git_url.split('/')[-1]
+    return git_folder.split('.git')[0]
+
 class Configure(Role):
+    """
+    Checkout code from git_url to a path with parameters (git_url, path)
+    """
     def configure(self, server):
-            with cd("/home/www-data/Buildbot/%s/buildslave1/builder-sqlite" % (project_name)):
-                sudo("git clone -q %s" % (git_url), user="www-data")
-                # Point to develop branch
-                git_folder = git_url.split('/')[-1]
-                git_folder = git_folder.split('.')[0]
-                with cd(git_folder):                   
-                    sudo("git checkout -b develop", user="www-data")
-                    sudo("git pull origin develop", user="www-data")
-                    sudo("git checkout develop", user="www-data")
+        path = "/home/www-data/Buildbot/%s/buildslave1/builder-sqlite" % (project_name)
+        git_url = ''
+        with cd(path):
+            sudo("git clone -q %s" % (git_url), user="www-data")
+            # Point to develop branch
+            git_folder = root_folder(git_url)
+            with cd(git_folder):                   
+                sudo("git checkout -b develop", user="www-data")
+                sudo("git pull origin develop", user="www-data")
+                sudo("git checkout develop", user="www-data")
 
 
             sudo('cp' 
