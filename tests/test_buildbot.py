@@ -21,7 +21,11 @@ class TestStart(TestCase):
         buildbot.start(client, project, repository)
         # Assert
         self.mock_start.assert_called_once_with('proteus')
-        params = [('proteus.www_home',''), ('proteus.buildbot','fluffy,git://github.com/juacompe/fluffy.git'), ('smarthost',None)]
+        params = [('proteus.www_home','')
+            , ('proteus.install_buildbot_master_env','/home/www-data/Buildbot/fluffy/virtenv')
+            , ('proteus.setup_buildbot_master','fluffy')
+            , ('proteus.buildbot' ,'fluffy,git://github.com/juacompe/fluffy.git')
+            , ('smarthost',None)]
         self.mock_adders.assert_called_once_with(*params)
 
     def test_start_with_optional_parameters(self):
@@ -37,7 +41,11 @@ class TestStart(TestCase):
         buildbot.start(client, project, repository, privacy, bits, region, ami)
         # Assert
         self.mock_start.assert_called_once_with('proteus', '32', 'us-west-2', 'ami-4d5')
-        params = [('proteus.www_home',''), ('proteus.buildbot','fluffy,git://github.com/juacompe/fluffy.git'), ('smarthost',None)]
+        params = [('proteus.www_home','')
+            , ('proteus.install_buildbot_master_env','/home/www-data/Buildbot/fluffy/virtenv')
+            , ('proteus.setup_buildbot_master','fluffy')
+            , ('proteus.buildbot','fluffy,git://github.com/juacompe/fluffy.git')
+            , ('smarthost',None)]
         self.mock_adders.assert_called_once_with(*params)
 
 
@@ -61,7 +69,11 @@ class TestSetup(TestCase):
         buildbot.setup(client, ec2_host, project_name, repository)
         # Assert
         self.mock_connect.assert_called_once_with(client=client, hostname=ec2_host)
-        params = [('proteus.www_home',''), ('proteus.buildbot','fluffy,git://github.com/juacompe/fluffy.git'), ('smarthost',None) ]
+        params = [('proteus.www_home','')
+            , ('proteus.install_buildbot_master_env','/home/www-data/Buildbot/fluffy/virtenv')
+            , ('proteus.setup_buildbot_master','fluffy')
+            , ('proteus.buildbot','fluffy,git://github.com/juacompe/fluffy.git')
+            , ('smarthost',None) ]
         self.mock_adders.assert_called_once_with(*params)
         
     def test_setup_with_private_git(self):
@@ -78,6 +90,8 @@ class TestSetup(TestCase):
             , ('proteus.ssh_key_gen', '')
             , ('proteus.authorize_key', 'git@git.private.net:/home/git/project/projectlib.git')
             , ('proteus.trust_host', 'git.private.net')
+            , ('proteus.install_buildbot_master_env','/home/www-data/Buildbot/fluffy/virtenv')
+            , ('proteus.setup_buildbot_master','fluffy')
             , ('proteus.buildbot','fluffy,git@git.private.net:/home/git/project/projectlib.git')
             , ('smarthost', None)
         ]
@@ -91,9 +105,4 @@ class TestSplitPrivateGitUrl(TestCase):
         self.assertEqual('git', user)
         self.assertEqual('git.private.net', host)
         self.assertEqual('/home/git/project/projectlib.git', path)
-
-class TestVirtualEnvPath(TestCase):
-    def test_virtual_env_path(self):
-        project_name = 'fluffy'
-        self.assertEqual('/home/www-data/Buildbot/fluffy/virtenv', buildbot.virtual_env_path(project_name))
 

@@ -4,6 +4,9 @@ from fabric.contrib.files import sed, exists
 from fabric.context_managers import prefix
 from profab.role import Role
 
+def virtual_env_path(project_name):
+    return "/home/www-data/Buildbot/%s/virtenv" % (project_name)
+
 class Configure(Role):
     """
     Create Buildbot with parameter "project_name,git_url"
