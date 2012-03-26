@@ -8,7 +8,7 @@ def virtual_env_path(project_name):
     return "/home/www-data/Buildbot/%s/virtenv" % (project_name)
 
 def splitter(parameters):
-    return self.parameter.split(',')
+    return parameters.split(',')
 
 
 class Configure(Role):
