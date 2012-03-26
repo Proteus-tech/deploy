@@ -27,11 +27,13 @@ def add_buildbot(server, project_name, repository, privacy):
     master_cfg_dest = '/home/www-data/Buildbot/%s/buildbot-master/master.cfg' % (project_name)
     complete_params = '%s,%s' % (master_cfg_dest, repository)
     role_tuple_list += [
-        ('proteus.install_buildbot_master_env', virtenv_path)
+        ('proteus.install_buildbot_master_env', '%s-master' % virtenv_path)
         ,('proteus.setup_buildbot_master', project_name)
         ,('proteus.git_checkout', master_checkout_parameters)
         ,('proteus.create_symlink', '%s,%s' % (master_cfg_src, master_cfg_dest))
         ,('proteus.complete_master_config', complete_params)
+        ,('proteus.install_buildbot_slave_env', '%s-slave' % virtenv_path)
+        ,('proteus.check_config','%s,%s' % (master_cfg_dest,'%s-master' % (virtenv_path)))
         ,('proteus.buildbot','%s,%s' % (project_name, repository) )
         ,('smarthost',None)
     ]
