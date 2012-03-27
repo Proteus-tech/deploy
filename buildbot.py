@@ -33,9 +33,9 @@ def add_buildbot(server, project_name, repository, privacy):
         ,('proteus.git_checkout', master_checkout_parameters)
         ,('proteus.create_symlink', '%s,%s' % (master_cfg_src, master_cfg_dest))
         ,('proteus.complete_master_config', complete_params)
+        ,('proteus.check_config','%s,%s' % (master_cfg_dest,'%s-master' % (virtenv_path)))
         ,('proteus.install_buildbot_slave_env', '%s-slave' % virtenv_path)
         ,('proteus.setup_buildbot_slave', slave_params)
-        ,('proteus.check_config','%s,%s' % (master_cfg_dest,'%s-master' % (virtenv_path)))
         ,('proteus.buildbot','%s,%s' % (project_name, repository) )
         ,('smarthost',None)
     ]
