@@ -1,0 +1,24 @@
+#!/usr/bin/env python
+import buildbot
+import fabric.network, logging, sys
+
+def main(using_client, *args):
+    logging.basicConfig(level=logging.INFO)
+    buildbot.setup(using_client, *args)
+
+if __name__=="__main__":
+    msg = """Usage: setup-buildbot-slave-on-server client ec2_host project_name repository privacy
+    client: is profab client
+    ec2_host: public host of EC2 instance
+    project_name: name of the project that buildbot run against
+    repository: URL to the repository
+    privacy: privacy of repository (public|private)
+    """
+    try:
+        if len(sys.argv) <= 4:
+            print msg 
+            sys.exit(-1)
+        main(*sys.argv[1:])
+    finally:
+        fabric.network.disconnect_all()
+
