@@ -3,7 +3,6 @@
 
 As Django 1.4 has not been released, it's not yet included as dependencies in `setup.py`. So you need to install it separately.
 
-    pip install http://www.djangoproject.com/download/1.4-beta-1/tarball/
     pip install git+git://github.com/Proteus-tech/deploy.git@develop
     pip freeze
 

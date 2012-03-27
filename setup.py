@@ -29,5 +29,6 @@ setup(
     },
     install_requires = [
         'profab'
+        'django'
     ],
 )
