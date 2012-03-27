@@ -39,6 +39,7 @@ class TestStart(TestCase):
             , ('proteus.install_buildbot_slave_env','/home/www-data/Buildbot/fluffy/virtenv-slave')
             , ('proteus.setup_buildbot_slave','fluffy,slave1,localhost')
             , ('proteus.start_buildbot_master','/home/www-data/Buildbot/fluffy/buildbot-master,/home/www-data/Buildbot/fluffy/virtenv-master')
+            , ('proteus.start_buildbot_slave','/home/www-data/Buildbot/fluffy/buildslave1,/home/www-data/Buildbot/fluffy/virtenv-slave')
             , ('proteus.buildbot' ,'fluffy,git://github.com/juacompe/fluffy.git')
             , ('smarthost',None)]
         self.mock_adders.assert_called_once_with(*params)
@@ -73,6 +74,7 @@ class TestStart(TestCase):
             , ('proteus.install_buildbot_slave_env','/home/www-data/Buildbot/fluffy/virtenv-slave')
             , ('proteus.setup_buildbot_slave','fluffy,slave1,localhost')
             , ('proteus.start_buildbot_master','/home/www-data/Buildbot/fluffy/buildbot-master,/home/www-data/Buildbot/fluffy/virtenv-master')
+            , ('proteus.start_buildbot_slave','/home/www-data/Buildbot/fluffy/buildslave1,/home/www-data/Buildbot/fluffy/virtenv-slave')
             , ('proteus.buildbot','fluffy,git://github.com/juacompe/fluffy.git')
             , ('smarthost',None)]
         self.mock_adders.assert_called_once_with(*params)
@@ -116,6 +118,7 @@ class TestSetup(TestCase):
             , ('proteus.install_buildbot_slave_env','/home/www-data/Buildbot/fluffy/virtenv-slave')
             , ('proteus.setup_buildbot_slave','fluffy,slave1,localhost')
             , ('proteus.start_buildbot_master','/home/www-data/Buildbot/fluffy/buildbot-master,/home/www-data/Buildbot/fluffy/virtenv-master')
+            , ('proteus.start_buildbot_slave','/home/www-data/Buildbot/fluffy/buildslave1,/home/www-data/Buildbot/fluffy/virtenv-slave')
             , ('proteus.buildbot','fluffy,git://github.com/juacompe/fluffy.git')
             , ('smarthost',None) ]
         self.mock_adders.assert_called_once_with(*params)
@@ -149,6 +152,7 @@ class TestSetup(TestCase):
             , ('proteus.install_buildbot_slave_env','/home/www-data/Buildbot/fluffy/virtenv-slave')
             , ('proteus.setup_buildbot_slave','fluffy,slave1,localhost')
             , ('proteus.start_buildbot_master','/home/www-data/Buildbot/fluffy/buildbot-master,/home/www-data/Buildbot/fluffy/virtenv-master')
+            , ('proteus.start_buildbot_slave','/home/www-data/Buildbot/fluffy/buildslave1,/home/www-data/Buildbot/fluffy/virtenv-slave')
             , ('proteus.buildbot','fluffy,git@git.private.net:/home/git/project/projectlib.git')
             , ('smarthost', None)
         ]

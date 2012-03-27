@@ -24,7 +24,8 @@ def add_buildbot(server, project_name, repository, privacy):
     buildbot_slave_virtenv = '%s-slave' % virtenv_path
     master_checkout_path = "/home/www-data/Buildbot/%s" % (project_name)
     master_checkout_parameters = '%s,%s' % (master_checkout_path, repository)
-    slave_checkout_path = "/home/www-data/Buildbot/%s/buildslave1/builder-sqlite" % (project_name)
+    buildbot_slave_path = '/home/www-data/Buildbot/%s/buildslave1' % (project_name)
+    slave_checkout_path = "%s/builder-sqlite" % (buildbot_slave_path)
     buildbot_master_path = '/home/www-data/Buildbot/%s/buildbot-master' % (project_name) 
     master_cfg_src = '/home/www-data/Buildbot/%s/src/buildbot/master.cfg' % (project_name)
     master_cfg_dest = '%s/master.cfg' % (buildbot_master_path)
@@ -40,6 +41,7 @@ def add_buildbot(server, project_name, repository, privacy):
         ,('proteus.install_buildbot_slave_env', buildbot_slave_virtenv)
         ,('proteus.setup_buildbot_slave', slave_params)
         ,('proteus.start_buildbot_master', '%s,%s' % (buildbot_master_path, buildbot_master_virtenv))
+        ,('proteus.start_buildbot_slave', '%s,%s' % (buildbot_slave_path, buildbot_slave_virtenv))
         ,('proteus.buildbot','%s,%s' % (project_name, repository) )
         ,('smarthost',None)
     ]

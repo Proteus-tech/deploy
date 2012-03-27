@@ -6,12 +6,12 @@ from proteus.buildbot import splitter
 
 class Configure(Role):
     '''
-    Start Buildbot Slave 
+    Start Buildbot Slave with parameters "buildbot_slave_path,buildbot_slave_virtenv" 
     '''
     def configure(self, server):
-        buildbot_master_path, buildbot_master_virtenv = splitter(self.parameter)
-        if exists(buildbot_master_path):
-            if exists(buildbot_master_virtenv):
-                with prefix('source %s/bin/activate' % (buildbot_master_virtenv)):
-                    sudo('buildslave start %s' % (buildbot_master_path), user='www-data')
+        buildbot_slave_path, buildbot_slave_virtenv = splitter(self.parameter)
+        if exists(buildbot_slave_path):
+            if exists(buildbot_slave_virtenv):
+                with prefix('source %s/bin/activate' % (buildbot_slave_virtenv)):
+                    sudo('buildslave start %s' % (buildbot_slave_path), user='www-data')
       
