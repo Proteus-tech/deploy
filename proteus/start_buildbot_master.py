@@ -6,7 +6,7 @@ from proteus.buildbot import splitter
 
 class Configure(Role):
     '''
-    Start Buildbot Master
+    Start Buildbot Master with parameters "buildbot_master_path,buildbot_master_virtenv" 
     '''
     def configure(self, server):
         buildbot_master_path, buildbot_master_virtenv = splitter(self.parameter)

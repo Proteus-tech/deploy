@@ -20,22 +20,26 @@ def add_buildbot(server, project_name, repository, privacy):
             ('proteus.trust_host', host),
         ]
     virtenv_path = virtual_env_path(project_name)
+    buildbot_master_virtenv = '%s-master' % virtenv_path
+    buildbot_slave_virtenv = '%s-slave' % virtenv_path
     master_checkout_path = "/home/www-data/Buildbot/%s" % (project_name)
     master_checkout_parameters = '%s,%s' % (master_checkout_path, repository)
     slave_checkout_path = "/home/www-data/Buildbot/%s/buildslave1/builder-sqlite" % (project_name)
+    buildbot_master_path = '/home/www-data/Buildbot/%s/buildbot-master' % (project_name) 
     master_cfg_src = '/home/www-data/Buildbot/%s/src/buildbot/master.cfg' % (project_name)
-    master_cfg_dest = '/home/www-data/Buildbot/%s/buildbot-master/master.cfg' % (project_name)
+    master_cfg_dest = '%s/master.cfg' % (buildbot_master_path)
     complete_params = '%s,%s' % (master_cfg_dest, repository)
     slave_params = '%s,%s,%s' % (project_name,'slave1','localhost')
     role_tuple_list += [
-        ('proteus.install_buildbot_master_env', '%s-master' % virtenv_path)
+        ('proteus.install_buildbot_master_env', buildbot_master_virtenv)
         ,('proteus.setup_buildbot_master', project_name)
         ,('proteus.git_checkout', master_checkout_parameters)
         ,('proteus.create_symlink', '%s,%s' % (master_cfg_src, master_cfg_dest))
         ,('proteus.complete_master_config', complete_params)
-        ,('proteus.check_config','%s,%s' % (master_cfg_dest,'%s-master' % (virtenv_path)))
-        ,('proteus.install_buildbot_slave_env', '%s-slave' % virtenv_path)
+        ,('proteus.check_config','%s,%s' % (master_cfg_dest, buildbot_master_virtenv))
+        ,('proteus.install_buildbot_slave_env', buildbot_slave_virtenv)
         ,('proteus.setup_buildbot_slave', slave_params)
+        ,('proteus.start_buildbot_master', '%s,%s' % (buildbot_master_path, buildbot_master_virtenv))
         ,('proteus.buildbot','%s,%s' % (project_name, repository) )
         ,('smarthost',None)
     ]
