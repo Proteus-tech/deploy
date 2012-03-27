@@ -1,6 +1,7 @@
 from django.core import management
 from subprocess import call
-import os, shutil, string, random
+import os, shutil, string
+from base64 import urlsafe_b64encode as encode
 
 def create_project(project_name, template_path):
     template_option = "--template=%s" % template_path
@@ -88,6 +89,6 @@ def replace_secret_key(path_to_replace):
     os.system('sed -i \"s/^SECRET_KEY = .*/SECRET_KEY = \'%s\'/g\" %s' % (skey, path_to_replace))
 
 def random_secret_key():
-    tmp_key = [random.choice(string.letters + string.digits) for x in xrange(50)]
-    skey = "".join(tmp_key)
+    tmp_skey = os.urandom(50)
+    skey = encode(tmp_skey)[:50]
     return skey
