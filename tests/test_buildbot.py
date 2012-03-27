@@ -36,6 +36,7 @@ class TestStart(TestCase):
             , ('proteus.create_symlink', master_cfg_params)
             , ('proteus.complete_master_config', complete_params)
             , ('proteus.install_buildbot_slave_env','/home/www-data/Buildbot/fluffy/virtenv-slave')
+            , ('proteus.setup_buildbot_slave','fluffy,slave1,localhost')
             , ('proteus.check_config',check_config_params)
             , ('proteus.buildbot' ,'fluffy,git://github.com/juacompe/fluffy.git')
             , ('smarthost',None)]
@@ -68,6 +69,7 @@ class TestStart(TestCase):
             , ('proteus.create_symlink', master_cfg_params)
             , ('proteus.complete_master_config', complete_params)
             , ('proteus.install_buildbot_slave_env','/home/www-data/Buildbot/fluffy/virtenv-slave')
+            , ('proteus.setup_buildbot_slave','fluffy,slave1,localhost')
             , ('proteus.check_config',check_config_params)
             , ('proteus.buildbot','fluffy,git://github.com/juacompe/fluffy.git')
             , ('smarthost',None)]
@@ -109,6 +111,7 @@ class TestSetup(TestCase):
             , ('proteus.create_symlink', master_cfg_params)
             , ('proteus.complete_master_config', complete_params)
             , ('proteus.install_buildbot_slave_env','/home/www-data/Buildbot/fluffy/virtenv-slave')
+            , ('proteus.setup_buildbot_slave','fluffy,slave1,localhost')
             , ('proteus.check_config',check_config_params)
             , ('proteus.buildbot','fluffy,git://github.com/juacompe/fluffy.git')
             , ('smarthost',None) ]
@@ -140,6 +143,7 @@ class TestSetup(TestCase):
             , ('proteus.create_symlink', master_cfg_params)
             , ('proteus.complete_master_config', complete_params)
             , ('proteus.install_buildbot_slave_env','/home/www-data/Buildbot/fluffy/virtenv-slave')
+            , ('proteus.setup_buildbot_slave','fluffy,slave1,localhost')
             , ('proteus.check_config',check_config_params)
             , ('proteus.buildbot','fluffy,git@git.private.net:/home/git/project/projectlib.git')
             , ('smarthost', None)
