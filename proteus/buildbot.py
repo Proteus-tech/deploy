@@ -4,6 +4,13 @@ from fabric.contrib.files import sed, exists
 from fabric.context_managers import prefix
 from profab.role import Role
 
+def virtual_env_path(project_name):
+    return "/home/www-data/Buildbot/%s/virtenv" % (project_name)
+
+def splitter(parameters):
+    return parameters.split(',')
+
+
 class Configure(Role):
     """
     Create Buildbot with parameter "project_name,git_url"
@@ -16,7 +23,7 @@ class Configure(Role):
     ]
     def configure(self, server):
         server.cnx.create_tags([server.instance.id], {'buildbot':''})
-        project_name, git_url = self.parameter.split(',')
+        project_name, git_url = splitter(self.parameter)
         sudo('easy_install pip')
         sudo('easy_install virtualenv')
         virtenv_path = "/home/www-data/Buildbot/%s/virtenv" % (project_name)
