@@ -1,4 +1,5 @@
 from profab.server import Server
+import buildbot 
 import simpleserver
 
 def split_private_git_url(git_url):
@@ -31,8 +32,15 @@ def setup(using_client, ec2_host, project_name, repository, privacy='public'):
     server = Server.connect( client=using_client, hostname=ec2_host )
     if server:
         add_buildbot(server, project_name, repository, privacy)
-    
+
 def start(using_client, project_name, repository, privacy='public', *args):
     server = simpleserver.start(using_client, *args)
     add_buildbot(server, project_name, repository, privacy)
+
+def restart_buildbot_master(using_client, ec2_host, client_name, project_name):
+    server = Server.connect( client=using_client, hostname=ec2_host )
+    role_tuple_list += [
+         ('proteus.restart_buildbot_master','%s,%s' % (buildbot.virtual_env_path(client_name)),project_name)
+    ]
+    server.add_roles( server.get_role_adders(*role_tuple_list) )
 
