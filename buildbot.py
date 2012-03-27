@@ -37,8 +37,7 @@ def add_buildbot(server, project_name, repository, privacy):
     slave_checkout_parameters = '%s,%s' % (slave_checkout_path, repository)
     slave_setup_params = '%s,%s,%s' % (root,'slave1','localhost')
     role_tuple_list += [
-         ('proteus.install_buildbot_master_env', master_virtenv)
-        ,('proteus.tag', 'master,env-installed')
+         ('proteus.buildbot_master', repository)
         ,('proteus.setup_buildbot_master', root)
         ,('proteus.git_checkout', master_checkout_parameters)
         ,('proteus.create_symlink', '%s,%s' % (master_cfg_src, master_cfg_dest))
