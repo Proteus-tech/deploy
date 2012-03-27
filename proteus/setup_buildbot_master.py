@@ -5,12 +5,12 @@ from profab.role import Role
 
 class Configure(Role):
     """
-    Setup Buildbot Master with parameter "project_name"
+    Setup Buildbot Master with parameter "root"
     """
     def configure(self, server):
-        project_name = self.parameter
-        virtenv_path = virtual_env_path(project_name)
+        root = self.parameter
+        virtenv_path = '%s-master' % virtual_env_path(root)
         with prefix("source %s/bin/activate" % (virtenv_path)):
-            with cd("/home/www-data/Buildbot/%s" % (project_name)):
+            with cd(root):
                 sudo("buildbot create-master buildbot-master", user="www-data")
 

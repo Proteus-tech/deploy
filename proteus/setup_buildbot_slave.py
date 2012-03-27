@@ -6,15 +6,16 @@ from proteus import buildbot
 
 class Configure(Role):
     """
-    Setup Buildbot Slave with parameter "project_name,name,master_host"
+    Setup Buildbot Slave with parameter "root,name,master_host"
     """
     def configure(self, server):
-        project_name, name, master_host = buildbot.splitter(self.parameter)
-        virtenv_path = '%s-slave' % virtual_env_path(project_name)
+        root, name, master_host = buildbot.splitter(self.parameter)
+        virtenv_path = '%s-slave' % virtual_env_path(root)
         base_dir = 'build%s' % name
         password = '%spassword' % name 
         parameters = "%s %s %s %s" % (base_dir, master_host, name, password)
         with prefix("source %s/bin/activate" % (virtenv_path)):
-            with cd("/home/www-data/Buildbot/%s" % (project_name)):
+            with cd(root):
                 sudo("buildslave create-slave %s" % parameters, user="www-data")
+                sudo("mkdir -p %s/buildslave1/builder-sqlite" % (root), user="www-data")
 

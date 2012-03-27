@@ -4,8 +4,8 @@ from fabric.contrib.files import sed, exists
 from fabric.context_managers import prefix
 from profab.role import Role
 
-def virtual_env_path(project_name):
-    return "/home/www-data/Buildbot/%s/virtenv" % (project_name)
+def virtual_env_path(root):
+    return "%s/virtenv" % (root)
 
 def splitter(parameters):
     return parameters.split(',')
