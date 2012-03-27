@@ -3,7 +3,7 @@ from fabric.context_managers import cd, prefix
 from fabric.operations import run, sudo
 from profab.role import Role
 
-def setup_buildbot_master(server, root)
+def setup_buildbot_master(server, root):
     virtenv_path = '%s-master' % virtual_env_path(root)
     with prefix("source %s/bin/activate" % (virtenv_path)):
         with cd(root):
