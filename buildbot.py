@@ -39,7 +39,6 @@ def add_buildbot(server, project_name, repository, privacy):
     role_tuple_list += [
          ('proteus.buildbot_master', repository)
         ,('proteus.setup_buildbot_master', root)
-        ,('proteus.git_checkout', master_checkout_parameters)
         ,('proteus.create_symlink', '%s,%s' % (master_cfg_src, master_cfg_dest))
         ,('proteus.complete_master_config', complete_params)
         ,('proteus.check_config','%s,%s' % (master_cfg_dest, master_virtenv))
