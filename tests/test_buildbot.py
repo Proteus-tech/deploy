@@ -193,7 +193,33 @@ class TestSetup(TestCase):
             , ('proteus.tag','Name,buildbot-fluffy')
         ]
         self.mock_adders.assert_called_once_with(*params)
- 
+    
+    def test_setup_buildbot_slave(self):
+        # Arrange
+        client = 'proteus'
+        ec2_host = 'ec2-50-18-236-118.us-west-1.compute.amazonaws.com'
+        ec2_master_host = 'ec2-50-18-236-119.us-west-1.compute.amazonaws.com' 
+        project = 'fluffy'
+        repository = 'git://github.com/juacompe/fluffy.git'
+        # Act
+        buildbot.setup_buildbot_slave(client, ec2_host, ec2_master_host, project, repository)
+        # Assert
+        root = self.master_src_path % project
+        self.mock_connect.assert_called_once_with(client=client, hostname=ec2_host)
+
+        slave_virtenv = '%s/virtenv-slave' % (root)
+        slave_path = '%s/buildslave1' % (root)
+        slave_checkout_parameters = '%s/builder-sqlite,%s' % (slave_path, repository)
+        slave_setup_params = '%s,%s,%s' % (root, 'slave1', ec2_master_host)
+        
+        params = [ ('proteus.www_home','')
+            , ('proteus.install_buildbot_slave_env',slave_virtenv)
+            , ('proteus.tag', 'slave,env-installed')
+            , ('proteus.setup_buildbot_slave', slave_setup_params)
+            , ('proteus.git_checkout', slave_checkout_parameters)
+            , ('proteus.tag', 'slave,ready')
+        ]
+        self.mock_adders.assert_called_once_with(*params) 
 
 class TestSplitPrivateGitUrl(TestCase):
     def test_ssh_url(self):
