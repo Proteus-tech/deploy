@@ -30,7 +30,7 @@ def add_buildbot(server, project_name, repository, privacy):
     master_path = '%s/buildbot-master' % (root) 
     master_cfg_src = '%s/src/buildbot/master.cfg' % (root)
     master_cfg_dest = '%s/master.cfg' % (master_path)
-    complete_params = '%s,%s' % (master_cfg_dest, repository)
+    complete_params = '%s,%s' % (master_cfg_src, repository)
     # slave parameters
     slave_path = '%s/buildslave1' % (root)
     slave_checkout_path = "%s/builder-sqlite" % (slave_path)
