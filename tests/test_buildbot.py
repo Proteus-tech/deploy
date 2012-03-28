@@ -194,7 +194,7 @@ class TestSetup(TestCase):
         ]
         self.mock_adders.assert_called_once_with(*params)
     
-    def test_setup_buildbot_slave(self):
+    def test_setup_buildbot_slave_with_public_git(self):
         # Arrange
         client = 'proteus'
         ec2_host = 'ec2-50-18-236-118.us-west-1.compute.amazonaws.com'
@@ -213,6 +213,37 @@ class TestSetup(TestCase):
         slave_setup_params = '%s,%s,%s' % (root, 'slave1', ec2_master_host)
         
         params = [ ('proteus.www_home','')
+            , ('proteus.install_buildbot_slave_env',slave_virtenv)
+            , ('proteus.tag', 'slave,env-installed')
+            , ('proteus.setup_buildbot_slave', slave_setup_params)
+            , ('proteus.git_checkout', slave_checkout_parameters)
+            , ('proteus.tag', 'slave,ready')
+        ]
+        self.mock_adders.assert_called_once_with(*params) 
+
+    def test_setup_buildbot_slave_with_private_git(self):
+        # Arrange
+        client = 'proteus'
+        ec2_host = 'ec2-50-18-236-118.us-west-1.compute.amazonaws.com'
+        ec2_master_host = 'ec2-50-18-236-119.us-west-1.compute.amazonaws.com' 
+        project = 'fluffy'
+        repository = 'git@git.private.net:/home/git/project/projectlib.git'
+        privacy = 'private'
+        # Act
+        buildbot.setup_buildbot_slave(client, ec2_host, ec2_master_host, project, repository, privacy)
+        # Assert
+        root = self.master_src_path % project
+        self.mock_connect.assert_called_once_with(client=client, hostname=ec2_host)
+
+        slave_virtenv = '%s/virtenv-slave' % (root)
+        slave_path = '%s/buildslave1' % (root)
+        slave_checkout_parameters = '%s/builder-sqlite,%s' % (slave_path, repository)
+        slave_setup_params = '%s,%s,%s' % (root, 'slave1', ec2_master_host)
+        
+        params = [ ('proteus.www_home','')
+            , ('proteus.ssh_key_gen', '')
+            , ('proteus.authorize_key', 'git@git.private.net:/home/git/project/projectlib.git')
+            , ('proteus.trust_host', 'git.private.net')
             , ('proteus.install_buildbot_slave_env',slave_virtenv)
             , ('proteus.tag', 'slave,env-installed')
             , ('proteus.setup_buildbot_slave', slave_setup_params)
