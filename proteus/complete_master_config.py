@@ -11,4 +11,5 @@ class Configure(Role):
         master_config_file, git_url = splitter(self.parameter)
         sed(master_config_file,'/path/to/repo', git_url, use_sudo=True)
         sed(master_config_file,'project_dirname', 'src', use_sudo=True)
+	sed(master_config_file,'buildbot_master_host', server.instance.dns_name, use_sudo=True)
 
