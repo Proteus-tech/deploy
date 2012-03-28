@@ -99,6 +99,9 @@ Required parameter(s):
 - **ec2-master-host** the public domain of the buildbot master EC2 instance ( Use "localhost" for same instance )
 - **project-name** the name of the project
 - **repository-url**
+
+Optional parameter(s):
+
 - **privacy** repository is public or private (public|private, default: public)
 
 ##### proteus
