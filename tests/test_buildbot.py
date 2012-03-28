@@ -26,7 +26,7 @@ class TestStart(TestCase):
         master_checkout_parameters = '%s,%s' % (root, repository)
         master_cfg_params = '/home/www-data/Buildbot/fluffy/src/buildbot/master.cfg' \
             ',/home/www-data/Buildbot/fluffy/buildbot-master/master.cfg'
-        complete_params = '/home/www-data/Buildbot/fluffy/buildbot-master/master.cfg' \
+        complete_params = '/home/www-data/Buildbot/fluffy/src/buildbot/master.cfg' \
             ',git://github.com/juacompe/fluffy.git'
         check_config_params = '/home/www-data/Buildbot/fluffy/buildbot-master/master.cfg' \
             ',/home/www-data/Buildbot/fluffy/virtenv-master'
@@ -69,7 +69,7 @@ class TestStart(TestCase):
         master_checkout_parameters = '%s,%s' % (root, repository)
         master_cfg_params = '/home/www-data/Buildbot/fluffy/src/buildbot/master.cfg' \
             ',/home/www-data/Buildbot/fluffy/buildbot-master/master.cfg'
-        complete_params = '/home/www-data/Buildbot/fluffy/buildbot-master/master.cfg' \
+        complete_params = '/home/www-data/Buildbot/fluffy/src/buildbot/master.cfg' \
             ',git://github.com/juacompe/fluffy.git'
         check_config_params = '/home/www-data/Buildbot/fluffy/buildbot-master/master.cfg' \
             ',/home/www-data/Buildbot/fluffy/virtenv-master'
@@ -123,7 +123,7 @@ class TestSetup(TestCase):
         master_checkout_parameters = '%s,%s' % (root, repository)
         master_cfg_params = '/home/www-data/Buildbot/fluffy/src/buildbot/master.cfg' \
             ',/home/www-data/Buildbot/fluffy/buildbot-master/master.cfg'
-        complete_params = '/home/www-data/Buildbot/fluffy/buildbot-master/master.cfg' \
+        complete_params = '/home/www-data/Buildbot/fluffy/src/buildbot/master.cfg' \
             ',git://github.com/juacompe/fluffy.git'
         check_config_params = '/home/www-data/Buildbot/fluffy/buildbot-master/master.cfg' \
             ',/home/www-data/Buildbot/fluffy/virtenv-master'
@@ -164,7 +164,7 @@ class TestSetup(TestCase):
         master_checkout_parameters = '%s,%s' % (root, repository)
         master_cfg_params = '/home/www-data/Buildbot/fluffy/src/buildbot/master.cfg' \
             ',/home/www-data/Buildbot/fluffy/buildbot-master/master.cfg'
-        complete_params = '/home/www-data/Buildbot/fluffy/buildbot-master/master.cfg,%s' % repository
+        complete_params = '/home/www-data/Buildbot/fluffy/src/buildbot/master.cfg,%s' % repository
         check_config_params = '/home/www-data/Buildbot/fluffy/buildbot-master/master.cfg' \
             ',/home/www-data/Buildbot/fluffy/virtenv-master'
         slave_checkout_parameters = '%s/buildslave1/builder-sqlite,%s' % (self.master_src_path % project, repository)
