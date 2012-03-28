@@ -30,7 +30,7 @@ def add_buildbot(server, project_name, repository, privacy):
     master_path = '%s/buildbot-master' % (root) 
     master_cfg_src = '%s/src/buildbot/master.cfg' % (root)
     master_cfg_dest = '%s/master.cfg' % (master_path)
-    complete_params = '%s,%s' % (master_cfg_dest, repository)
+    complete_params = '%s,%s' % (master_cfg_src, repository)
     # slave parameters
     slave_path = '%s/buildslave1' % (root)
     slave_checkout_path = "%s/builder-sqlite" % (slave_path)
@@ -58,6 +58,45 @@ def add_buildbot(server, project_name, repository, privacy):
         ,('proteus.tag', 'Name,buildbot-%s' % project_name)
     ]
     server.add_roles( server.get_role_adders(*role_tuple_list) )
+
+def add_buildbot_slave(server, project_name, ec2_master_host, repository, privacy):
+    role_tuple_list = [
+        ('proteus.www_home',''),
+    ]
+    if privacy == 'private':
+        print 'do hand shaking for private repository'
+        user, host, path = split_private_git_url(repository)
+        role_tuple_list += [
+            ('proteus.ssh_key_gen', ''),
+            ('proteus.authorize_key', repository),
+            ('proteus.trust_host', host),
+        ]
+    root = "/home/www-data/Buildbot/%s" % (project_name)
+    # virtual environment
+    virtenv_path = virtual_env_path(root)
+    slave_virtenv = '%s-slave' % virtenv_path
+    # slave parameters
+    slave_path = '%s/buildslave1' % (root)
+    slave_checkout_path = "%s/builder-sqlite" % (slave_path)
+    slave_checkout_parameters = '%s,%s' % (slave_checkout_path, repository)
+    slave_setup_params = '%s,%s,%s' % (root,'slave1', ec2_master_host)
+
+    role_tuple_list += [
+        ('proteus.install_buildbot_slave_env', slave_virtenv)
+        ,('proteus.tag', 'slave,env-installed')
+        ,('proteus.setup_buildbot_slave', slave_setup_params)
+        ,('proteus.git_checkout', slave_checkout_parameters)
+        ,('proteus.tag', 'slave,ready')
+    ]  
+    server.add_roles( server.get_role_adders(*role_tuple_list) )
+
+def setup_buildbot_slave(using_client, ec2_host, ec2_master_host, project_name, repository, privacy='public'):
+    '''
+    Adding buildbot slave role : using_client, ec2_host, ec2_master_host, project_name, repository
+    '''
+    server = Server.connect( client=using_client, hostname=ec2_host )
+    if server:
+        add_buildbot_slave( server, project_name, ec2_master_host, repository, privacy )
 
 def setup(using_client, ec2_host, project_name, repository, privacy='public'):
     '''
