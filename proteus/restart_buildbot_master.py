@@ -12,5 +12,6 @@ class Configure(Role):
         buildbot_master_path, buildbot_master_virtenv = splitter(self.parameter)
         if exists(buildbot_master_path):
             if exists(buildbot_master_virtenv):
+                print buildbot_master_virtenv
                 with prefix('source %s/bin/activate' % (buildbot_master_virtenv)):
                     sudo('buildbot restart %s' % (buildbot_master_path), user='www-data')
