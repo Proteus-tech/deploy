@@ -59,9 +59,10 @@ def add_buildbot_slave(server, project_name, ec2_master_host, repository, privac
     slave_virtenv = '%s-slave' % virtenv_path
     # slave parameters
     slave_path = '%s/buildslave1' % (root)
+    slave_params = '%s,%s' % (repository, ec2_master_host)
 
     role_tuple_list += [
-        ('proteus.buildbot_slave', repository)
+        ('proteus.buildbot_slave', slave_params)
     ]  
     server.add_roles( server.get_role_adders(*role_tuple_list) )
 

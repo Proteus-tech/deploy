@@ -195,14 +195,9 @@ class TestSetup(TestCase):
         # Assert
         root = self.master_src_path % project
         self.mock_connect.assert_called_once_with(client=client, hostname=ec2_host)
-
-        slave_virtenv = '%s/virtenv-slave' % (root)
-        slave_path = '%s/buildslave1' % (root)
-        slave_checkout_parameters = '%s/builder-sqlite,%s' % (slave_path, repository)
-        slave_setup_params = '%s,%s,%s' % (root, 'slave1', ec2_master_host)
-        
+        slave_params = '%s,%s' % (repository, ec2_master_host)
         params = [ ('proteus.www_home','')
-            , ('proteus.buildbot_slave', repository)
+            , ('proteus.buildbot_slave', slave_params)
         ]
         self.mock_adders.assert_called_once_with(*params) 
 
@@ -219,19 +214,15 @@ class TestSetup(TestCase):
         # Assert
         root = self.master_src_path % project
         self.mock_connect.assert_called_once_with(client=client, hostname=ec2_host)
-
-        slave_virtenv = '%s/virtenv-slave' % (root)
-        slave_path = '%s/buildslave1' % (root)
-        slave_checkout_parameters = '%s/builder-sqlite,%s' % (slave_path, repository)
-        slave_setup_params = '%s,%s,%s' % (root, 'slave1', ec2_master_host)
-        
+        slave_params = '%s,%s' % (repository, ec2_master_host)
         params = [ ('proteus.www_home','')
             , ('proteus.ssh_key_gen', '')
             , ('proteus.authorize_key', 'git@git.private.net:/home/git/project/projectlib.git')
             , ('proteus.trust_host', 'git.private.net')
-            , ('proteus.buildbot_slave', repository)
+            , ('proteus.buildbot_slave', slave_params)
         ]
         self.mock_adders.assert_called_once_with(*params) 
+
 
 class TestSplitPrivateGitUrl(TestCase):
     def test_ssh_url(self):

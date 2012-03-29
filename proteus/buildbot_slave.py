@@ -1,5 +1,5 @@
 from profab.role import Role
-from proteus.buildbot import virtual_env_path, home
+from proteus.buildbot import virtual_env_path, home, splitter
 from proteus.git_checkout import root_folder, git_checkout
 from proteus.install_buildbot_slave_env import install_buildbot_slave_env
 from proteus.setup_buildbot_slave import setup_buildbot_slave
@@ -24,7 +24,12 @@ class Configure(Role):
     ]
 
     def configure(self, server):
-        repository = self.parameter 
+        try:
+            repository, ec2_master_host = splitter(self.parameter)
+        except ValueError:
+            repository = self.parameter 
+            ec2_master_host = 'localhost'
+
         project_name = root_folder(repository)
         root = home(project_name) 
 
@@ -32,7 +37,7 @@ class Configure(Role):
         install_buildbot_slave_env(server, slave_virtenv)
         tag(server, 'slave', 'env-installed')
 
-        setup_buildbot_slave(server, root, 'slave1', 'localhost')
+        setup_buildbot_slave(server, root, 'slave1', ec2_master_host)
 
         slave_path = slave_location(root)
         slave_checkout_path = "%s/builder-sqlite" % (slave_path)
