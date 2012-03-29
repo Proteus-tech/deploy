@@ -202,11 +202,7 @@ class TestSetup(TestCase):
         slave_setup_params = '%s,%s,%s' % (root, 'slave1', ec2_master_host)
         
         params = [ ('proteus.www_home','')
-            , ('proteus.install_buildbot_slave_env',slave_virtenv)
-            , ('proteus.tag', 'slave,env-installed')
-            , ('proteus.setup_buildbot_slave', slave_setup_params)
-            , ('proteus.git_checkout', slave_checkout_parameters)
-            , ('proteus.tag', 'slave,ready')
+            , ('proteus.buildbot_slave', repository)
         ]
         self.mock_adders.assert_called_once_with(*params) 
 
@@ -233,11 +229,7 @@ class TestSetup(TestCase):
             , ('proteus.ssh_key_gen', '')
             , ('proteus.authorize_key', 'git@git.private.net:/home/git/project/projectlib.git')
             , ('proteus.trust_host', 'git.private.net')
-            , ('proteus.install_buildbot_slave_env',slave_virtenv)
-            , ('proteus.tag', 'slave,env-installed')
-            , ('proteus.setup_buildbot_slave', slave_setup_params)
-            , ('proteus.git_checkout', slave_checkout_parameters)
-            , ('proteus.tag', 'slave,ready')
+            , ('proteus.buildbot_slave', repository)
         ]
         self.mock_adders.assert_called_once_with(*params) 
 

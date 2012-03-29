@@ -29,9 +29,6 @@ def add_buildbot(server, project_name, repository, privacy):
     master_path = '%s/buildbot-master' % (root) 
     # slave parameters
     slave_path = '%s/buildslave1' % (root)
-    slave_checkout_path = "%s/builder-sqlite" % (slave_path)
-    slave_checkout_parameters = '%s,%s' % (slave_checkout_path, repository)
-    slave_setup_params = '%s,%s,%s' % (root,'slave1','localhost')
     role_tuple_list += [
          ('proteus.buildbot_master', repository)
         ,('proteus.buildbot_slave', repository)
@@ -62,16 +59,9 @@ def add_buildbot_slave(server, project_name, ec2_master_host, repository, privac
     slave_virtenv = '%s-slave' % virtenv_path
     # slave parameters
     slave_path = '%s/buildslave1' % (root)
-    slave_checkout_path = "%s/builder-sqlite" % (slave_path)
-    slave_checkout_parameters = '%s,%s' % (slave_checkout_path, repository)
-    slave_setup_params = '%s,%s,%s' % (root,'slave1', ec2_master_host)
 
     role_tuple_list += [
-        ('proteus.install_buildbot_slave_env', slave_virtenv)
-        ,('proteus.tag', 'slave,env-installed')
-        ,('proteus.setup_buildbot_slave', slave_setup_params)
-        ,('proteus.git_checkout', slave_checkout_parameters)
-        ,('proteus.tag', 'slave,ready')
+        ('proteus.buildbot_slave', repository)
     ]  
     server.add_roles( server.get_role_adders(*role_tuple_list) )
 
