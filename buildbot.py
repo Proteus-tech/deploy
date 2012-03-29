@@ -34,9 +34,7 @@ def add_buildbot(server, project_name, repository, privacy):
     slave_setup_params = '%s,%s,%s' % (root,'slave1','localhost')
     role_tuple_list += [
          ('proteus.buildbot_master', repository)
-        ,('proteus.install_buildbot_slave_env', slave_virtenv)
-        ,('proteus.tag', 'slave,env-installed')
-        ,('proteus.setup_buildbot_slave', slave_setup_params)
+        ,('proteus.buildbot_slave', repository)
         ,('proteus.git_checkout', slave_checkout_parameters)
         ,('proteus.tag', 'slave,ready')
         ,('proteus.start_buildbot_master', '%s,%s' % (master_path, master_virtenv))
