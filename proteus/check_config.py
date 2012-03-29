@@ -20,5 +20,5 @@ class Configure(Role):
     '''
     def configure(self, server):
         master_config_file, buildbot_master_virtenv = splitter(self.parameter)
-        check_config(master_config_file, buildbot_master_virtenv)
+        check_config(server, master_config_file, buildbot_master_virtenv)
 

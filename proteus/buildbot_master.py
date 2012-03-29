@@ -1,7 +1,8 @@
 from profab.role import Role
 from proteus.buildbot import virtual_env_path 
-from proteus.create_symlink import create_symlink
+from proteus.check_config import check_config
 from proteus.complete_master_config import complete_master_config 
+from proteus.create_symlink import create_symlink
 from proteus.git_checkout import root_folder, git_checkout
 from proteus.install_buildbot_master_env import install_buildbot_master_env
 from proteus.setup_buildbot_master import setup_buildbot_master
@@ -35,4 +36,7 @@ class Configure(Role):
         create_symlink(server, master_cfg_src, master_cfg_dest)
 
         complete_master_config(server, master_cfg_dest, repository)
+        check_config(server, master_cfg_dest, master_virtenv)
+        tag(server, 'master', 'ready')
+
 
