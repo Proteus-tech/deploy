@@ -15,6 +15,7 @@ class Configure(Role):
     packages = [ 'build-essential'
         , 'python-dev'
         , 'python-setuptools'
+        , 'git-core'
     ]
 
     def configure(self, server):
@@ -38,5 +39,4 @@ class Configure(Role):
         complete_master_config(server, master_cfg_dest, repository)
         check_config(server, master_cfg_dest, master_virtenv)
         tag(server, 'master', 'ready')
-
 
