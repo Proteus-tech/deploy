@@ -7,15 +7,10 @@ def main(using_client, *args):
     buildbot.restart_slave_buildbot(using_client, *args)
 
 if __name__=="__main__":
-    msg = """Usage: reset-buildbot-slave-on-server client project_name repository privacy bits region size ami
+    msg = """Usage: reset-buildbot-slave-on-server client ec2host project_name
     client: is profab client
+    ec2_host: public host of EC2 instance
     project_name: name of the project that buildbot run against
-    repository: URL to the repository
-    privacy: privacy of repository (public|private)
-    bits: could be either 32 or 64*
-    region: could be us-west-1*, us-west-2 or ap-southeast-1
-    size: size of the instance (default is t1.micro)
-    ami: is AMI ID (default is ami-4d580408 which is Ubuntu Natty)
     """
     try:
         if len(sys.argv) <= 4:
