@@ -4,7 +4,7 @@ import fabric.network, logging, sys
 
 def main(using_client, *args):
     logging.basicConfig(level=logging.INFO)
-    buildbot.restart_master_buildbot(using_client, *args)
+    buildbot.restart_buildbot_master(using_client, *args)
 
 if __name__=="__main__":
     msg = """Usage: reset-buildbot-master-on-server client ec2host project_name
