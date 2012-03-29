@@ -29,6 +29,6 @@ class Configure(Role):
 
         slave_path = '%s/buildslave1' % (root)
         slave_checkout_path = "%s/builder-sqlite" % (slave_path)
-        slave_checkout_parameters = '%s,%s' % (slave_checkout_path, repository)
-
+        git_checkout(server, slave_checkout_path, repository)
+        tag(server, 'slave', 'ready')
 
