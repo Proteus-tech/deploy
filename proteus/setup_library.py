@@ -1,15 +1,15 @@
 from fabric.operations import sudo
-from fabric.api import cd
+from fabric.api import cd, run
 from fabric.contrib.files import exists
 from profab.role import Role
 from profab import _logger
 
 class Configure(Role):
     """
-    Install packages from "project_root_path", e.g. '/home/www-data/<project-name>'
+    Install packages from "project_root_path", e.g. '/home/www-data/Buildbot/<project-name>'
 
     - require
-        Folder '/home/www-data/<project-name>/src' must valid before use this role and
+        Folder '/home/www-data/Buildbot/<project-name>/src' must valid before use this role and
         src folder contains project code.
     """
     def configure(self, server):
@@ -24,7 +24,11 @@ class Configure(Role):
                     if pkg != '':
                         sudo('apt-get install -y %s' % (pkg))
             else:
-                _logger.info('%s/%s not found!', project_root_path, lib_file_path)
+                info = '%s/%s not found!' % (project_root_path, lib_file_path)
+                _logger.info(info)
+                print info
+
+                 
 
 
                      
