@@ -6,22 +6,25 @@ from profab import _logger
 
 class Configure(Role):
     """
-    Install packages from "project_root_path"
-    e.g.
-        project_root_path = '/home/www-data/project-name'
+    Install packages from "project_root_path", e.g. '/home/www-data/<project-name>'
+
+    - require
+        Folder '/home/www-data/<project-name>/src' must valid before use this role and
+        src folder contains project code.
     """
     def configure(self, server):
         project_root_path = self.parameter
+        lib_file_path = 'src/setup/requirelibs.txt'
         with cd(project_root_path):
-            if exists('setup/requirelibs.txt'):
-                list_pkg = run('cat setup/requirelibs.txt')
+            if exists(lib_file_path):
+                list_pkg = run('cat %s' % (lib_file_path))
                 # This split should be work for linux
                 pkgs = list_pkg.split('\r\n')
                 for pkg in pkgs:
                     if pkg != '':
                         sudo('apt-get install -y %s' % (pkg))
             else:
-                _logger.info('setup/requirelibs.txt not found!')
+                _logger.info('%s/%s not found!', project_root_path, lib_file_path)
 
 
                      
