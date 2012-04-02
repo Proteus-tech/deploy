@@ -43,7 +43,7 @@ class Configure(Role):
         master_cfg_dest = '%s/master.cfg' % (master_path)
         create_symlink(server, master_cfg_src, master_cfg_dest)
 
-        complete_master_config(server, master_cfg_dest, repository)
+        complete_master_config(server, master_cfg_src, repository)
         check_config(server, master_cfg_dest, master_virtenv)
         tag(server, 'master', 'ready')
 
