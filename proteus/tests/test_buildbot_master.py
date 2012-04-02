@@ -33,6 +33,16 @@ class TestMasterConfig(TestCase):
         self.patch_setup.start()
         self.patch_tag = patch('proteus.buildbot_master.tag')
         self.patch_tag.start()
+
+    def tearDown(self):
+        self.patch_check.stop()
+        self.mock_complete.stop()
+        self.patch_symlink.stop()
+        self.patch_install_env.stop()
+        self.patch_checkout.stop()
+        self.patch_setup.stop()
+        self.patch_tag.stop()
+
         
     def test_master_config_is_symlink(self):
         """
