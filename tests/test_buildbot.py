@@ -118,22 +118,6 @@ class TestSetup(TestCase):
             ]
         self.mock_adders.assert_called_once_with(*params)
 
-    def test_restart_build_bot_master_with_public_git(self):
-        # Arrange
-        client = 'proteus'
-        ec2_host = 'ec2-50-18-236-118.us-west-1.compute.amazonaws.com' 
-        project = 'fluffy'
-        # Act
-        buildbot.restart_buildbot_master(client, ec2_host, project)
-        # Assert
-        root = self.master_src_path % project
-        buildbot_master_path = '%s/buildbot-master' % (root)
-        buildbot_virtenv = buildbot.virtual_env_path(root)
-        buildbot_master_virtenv = '%s-master' % (buildbot_virtenv)
-        self.mock_connect.assert_called_once_with(client=client, hostname=ec2_host)
-        params = [('proteus.restart_buildbot_master', project)]
-        self.mock_adders.assert_called_once_with(*params)
-
     def test_restart_build_bot_slave_with_public_git(self):
         # Arrange
         client = 'proteus'

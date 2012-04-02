@@ -54,6 +54,14 @@ class TestMasterConfig(TestCase):
         
     def test_complete_config_with_master_in_repository(self):
         """
+        Scenario: execute role proteus.buildbot_master with parameter
+        https://juacompe@github.com/juacompe/fluffy.git
+
+        Expected:
+        - complete_master_config is called with 
+          /home/www-data/Buildbot/fluffy/src/buildbot/master.cfg 
+          as parameter
+
         sed command overrides the file with a new one; therefore, we
         cannot use sed command on the symlink file 
         (i.e. /home/www-data/Buildbot/fluffy/buildbot-master/master.cfg) 
