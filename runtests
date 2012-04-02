@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 cd `dirname $0`
-COVER_OPTS="--cover-erase --with-coverage --cover-package=buildbot,simpleserver,startproject"
+COVER_OPTS="--cover-erase --with-coverage --cover-package=buildbot,simpleserver,startproject,proteus"
 nosetests $COVER_OPTS
