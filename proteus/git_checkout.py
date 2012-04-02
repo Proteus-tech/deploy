@@ -20,7 +20,7 @@ def git_checkout(server, path, git_url):
 
 class Configure(Role):
     """
-    Checkout code from git_url to a path with parameters (git_url, path)
+    Checkout code from git_url to a path with parameters (path, git_url)
     """
     packages = ['git-core']
 
