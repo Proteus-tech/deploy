@@ -33,7 +33,7 @@ def add_buildbot(server, project_name, repository, privacy):
          ('proteus.buildbot_master', repository)
         ,('proteus.buildbot_slave', repository)
         ,('proteus.start_buildbot_master', project_name)
-        ,('proteus.start_buildbot_slave', '%s,%s' % (slave_path, slave_virtenv))
+        ,('proteus.start_buildbot_slave', project_name)
         ,('smarthost',None)
         ,('proteus.tag', 'mta,exim4')
         ,('proteus.tag', 'buildbot,combo-%s' % project_name)
