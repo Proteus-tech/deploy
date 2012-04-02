@@ -13,3 +13,9 @@ def home(project_name):
 def splitter(parameters):
     return parameters.split(',')
 
+def split_private_git_url(git_url):
+    user, remains = git_url.rsplit('@')
+    host, path = remains.rsplit(':')
+    return (user, host, path)
+
+

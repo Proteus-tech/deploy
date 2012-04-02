@@ -1,20 +1,12 @@
 from profab.server import Server
-from proteus.buildbot import virtual_env_path 
+from proteus.buildbot import virtual_env_path, split_private_git_url 
 import simpleserver
-
-def split_private_git_url(git_url):
-    user, remains = git_url.rsplit('@')
-    host, path = remains.rsplit(':')
-    return (user, host, path)
 
 def check_privacy(privacy, repository, role_tuple_list):
     if privacy == 'private':
         print 'do hand shaking for private repository'
-        user, host, path = split_private_git_url(repository)
         role_tuple_list += [
-            ('proteus.ssh_key_gen', ''),
-            ('proteus.authorize_key', repository),
-            ('proteus.trust_host', host),
+            ('proteus.credentials', repository),
         ]
 
 def add_buildbot(server, project_name, repository, privacy):

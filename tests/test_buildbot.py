@@ -169,9 +169,7 @@ class TestSetup(TestCase):
             ',/home/www-data/Buildbot/fluffy/virtenv-master'
         slave_checkout_parameters = '%s/buildslave1/builder-sqlite,%s' % (self.master_src_path % project, repository)
         params = [('proteus.www_home','')
-            , ('proteus.ssh_key_gen', '')
-            , ('proteus.authorize_key', 'git@git.private.net:/home/git/project/projectlib.git')
-            , ('proteus.trust_host', 'git.private.net')
+            , ('proteus.credentials', 'git@git.private.net:/home/git/project/projectlib.git')
             , ('proteus.buildbot_master', repository)
             , ('proteus.buildbot_slave', repository)
             , ('proteus.start_buildbot_master','fluffy')
@@ -216,9 +214,7 @@ class TestSetup(TestCase):
         self.mock_connect.assert_called_once_with(client=client, hostname=ec2_host)
         slave_params = '%s,%s' % (repository, ec2_master_host)
         params = [ ('proteus.www_home','')
-            , ('proteus.ssh_key_gen', '')
-            , ('proteus.authorize_key', 'git@git.private.net:/home/git/project/projectlib.git')
-            , ('proteus.trust_host', 'git.private.net')
+            , ('proteus.credentials', 'git@git.private.net:/home/git/project/projectlib.git')
             , ('proteus.buildbot_slave', slave_params)
         ]
         self.mock_adders.assert_called_once_with(*params) 
