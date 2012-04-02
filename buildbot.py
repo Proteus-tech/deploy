@@ -69,24 +69,16 @@ def start(using_client, project_name, repository, privacy='public', *args):
     add_buildbot(server, project_name, repository, privacy)
 
 def restart_buildbot_master(using_client, ec2host, project_name):
-    root = "/home/www-data/Buildbot/%s" % (project_name)
-    buildbot_master_path = '%s/buildbot-master' % (root)
-    buildbot_virtenv = virtual_env_path(root)
-    buildbot_master_virtenv = '%s-master' % (buildbot_virtenv)
     server = Server.connect( client=using_client, hostname=ec2host )
     role_tuple_list = [
-         ('proteus.restart_buildbot_master','%s,%s' % (buildbot_master_path, buildbot_master_virtenv))
+         ('proteus.restart_buildbot_master', project_name)
     ]
     server.add_roles( server.get_role_adders(*role_tuple_list) )
 
 def restart_buildbot_slave(using_client, ec2host, project_name):
-    root = "/home/www-data/Buildbot/%s" % (project_name)
-    buildbot_slave_path = '%s/buildslave1' % (root)
-    buildbot_virtenv = virtual_env_path(root)
-    buildbot_slave_virtenv = '%s-slave' % (buildbot_virtenv)
     server = Server.connect( client=using_client, hostname=ec2host )
     role_tuple_list = [
-         ('proteus.restart_buildbot_slave','%s,%s' % (buildbot_slave_path, buildbot_slave_virtenv))
+         ('proteus.restart_buildbot_slave', project_name)
     ]
     server.add_roles( server.get_role_adders(*role_tuple_list) )
 
