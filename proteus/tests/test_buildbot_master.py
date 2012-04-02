@@ -8,7 +8,7 @@ class TestBuildbotMaster(TestCase):
         expected = '/home/www-data/Buildbot/fluffy/virtenv-master'
         self.assertEqual(expected, path)
 
-    def test_slave_location(self):
+    def test_master_location(self):
         root = '/home/www-data/Buildbot/fluffy'
         path = master_location(root) 
         expected = '/home/www-data/Buildbot/fluffy/buildbot-master'
