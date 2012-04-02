@@ -68,10 +68,3 @@ def start(using_client, project_name, repository, privacy='public', *args):
     server = simpleserver.start(using_client, *args)
     add_buildbot(server, project_name, repository, privacy)
 
-def restart_buildbot_slave(using_client, ec2host, project_name):
-    server = Server.connect( client=using_client, hostname=ec2host )
-    role_tuple_list = [
-         ('proteus.restart_buildbot_slave', project_name)
-    ]
-    server.add_roles( server.get_role_adders(*role_tuple_list) )
-
