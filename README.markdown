@@ -51,7 +51,7 @@ Complete Starts a new server step, then follow the steps below:
 
     pf-server-role-add client-name ec2-host postgres
 
-#Required parameter(s):
+Required parameter(s):
 
 - **client-name**
 - **ec2-host** the public domain of the EC2 instance (i.e ec2-184-169-247-45.us-west-1.compute.amazonaws.com)
