@@ -10,6 +10,10 @@ setup(
         , 'bin/start-simple-server'
         , 'bin/start-buildbot-server'
         , 'bin/setup-buildbot-on-server'
+        , 'bin/setup-buildbot-slave-on-server'
+        , 'bin/restart-buildbot-master'
+        , 'bin/restart-buildbot-slave' 
+
     ],
     packages = ['project_template'
         , 'project_template.project_name'
