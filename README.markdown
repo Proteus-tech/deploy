@@ -56,7 +56,7 @@ Required parameter(s):
 - **client-name**
 - **ec2-host** the public domain of the EC2 instance (i.e ec2-184-169-247-45.us-west-1.compute.amazonaws.com)
 
-## Setup buildbot on an existing server
+### Setup buildbot on an existing server
 Setups buildbot on an existing EC2 instance.
 
 #### Prerequisites
