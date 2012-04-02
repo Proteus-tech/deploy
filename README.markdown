@@ -6,7 +6,7 @@ As Django 1.4 has not been released, it's not yet included as dependencies in `s
     pip install git+git://github.com/Proteus-tech/deploy.git@develop
     pip freeze
 
-If you find `Django==1.4b1` and `proteus-deploy==0.0.1` in your environment, then everything is good! Now you can start a new project (See Create a project section).
+If you find `Django==1.4` and `proteus-deploy==0.0.7` in your environment, then everything is good! Now you can start a new project (See Create a project section).
 
 ### Development installation:
 
@@ -27,7 +27,7 @@ For example, if you want to create a project name `student`.
 
 A Django 1.4 project named student would be created at your current directory.
 
-### Start new simple server
+### Start new simple server without postgres
 Starts a new server.
 
 #### Prerequisites
@@ -45,6 +45,16 @@ Optional parameter(s):
 - **region** us-west-1, us-west-2 or ap-southeast-1 (default: us-west-1)
 - **size** size of the instance (default: t1.micro)
 - **ami** an AMI ID that consistent with other parameters (default: ami-4d580408)
+
+### Start new simple server with postgres
+Complete Start new simple server without postgres, then follow the steps below:
+
+    pf-server-role-add client-name ec2-host postgres
+
+Required parameter(s):
+
+- **client-name**
+- **ec2-host** the public domain of the EC2 instance (i.e ec2-184-169-247-45.us-west-1.compute.amazonaws.com)
 
 ### Setup buildbot on an existing server
 Setups buildbot on an existing EC2 instance.
