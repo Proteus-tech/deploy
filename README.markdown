@@ -127,7 +127,7 @@ Required parameter(s):
 - **ec2-host** the public domain of the EC2 instance (i.e ec2-184-169-247-45.us-west-1.compute.amazonaws.com)
 - **project-name** the name of the project
 
-Occationally, you might find that restarting master causes the build slavesto hang. Restarting slaves should fix it.
+Occasionally, you might find that restarting master causes the build slaves to hang. Restarting slaves should fix it.
 
 To restart slave, runs:
 
