@@ -27,7 +27,7 @@ For example, if you want to create a project name `student`.
 
 A Django 1.4 project named student would be created at your current directory.
 
-### Start new simple server
+### Start new simple server without postgres
 Starts a new server.
 
 #### Prerequisites
@@ -46,7 +46,17 @@ Optional parameter(s):
 - **size** size of the instance (default: t1.micro)
 - **ami** an AMI ID that consistent with other parameters (default: ami-4d580408)
 
-### Setup buildbot on an existing server
+### Start new simple server with postgres
+Complete Starts a new server step, then follow the steps below:
+
+    pf-server-role-add client-name ec2-host postgres
+
+#Required parameter(s):
+
+- **client-name**
+- **ec2-host** the public domain of the EC2 instance (i.e ec2-184-169-247-45.us-west-1.compute.amazonaws.com)
+
+## Setup buildbot on an existing server
 Setups buildbot on an existing EC2 instance.
 
 #### Prerequisites

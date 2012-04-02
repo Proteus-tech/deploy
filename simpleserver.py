@@ -3,7 +3,6 @@ from profab.server import Server
 BASE_ROLES = [
     ('security_group','ssh'),
     ('security_group','http'),
-    ('postgres',None),
     ('wsgi',None), # Adds the default WSGI configuration , installing apache2, libapache2-mod-wsgi.
 ]
 
