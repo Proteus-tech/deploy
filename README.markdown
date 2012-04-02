@@ -114,6 +114,31 @@ Optional parameter(s):
 
 - **privacy** repository is public or private (public|private, default: public)
 
+### Restarting buildbot
+When new `master.cfg` is committed, it would not affect until the buildbot master has been restarted.
+
+To restart master, runs:
+
+    restart-buildbot-master client-name ec2-host project-name
+
+Required parameter(s):
+
+- **client-name**
+- **ec2-host** the public domain of the EC2 instance (i.e ec2-184-169-247-45.us-west-1.compute.amazonaws.com)
+- **project-name** the name of the project
+
+Occationally, you might find that restarting master causes the build slavesto hang. Restarting slaves should fix it.
+
+To restart slave, runs:
+
+    restart-buildbot-slave client-name ec2-host project-name
+
+Required parameter(s):
+
+- **client-name**
+- **ec2-host** the public domain of the EC2 instance (i.e ec2-184-169-247-45.us-west-1.compute.amazonaws.com)
+- **project-name** the name of the project
+
 ##### proteus
 `proteus` is a package which contains profab roles.
 
