@@ -17,21 +17,12 @@ def check_privacy(privacy, repository, role_tuple_list):
             ('proteus.trust_host', host),
         ]
 
-
 def add_buildbot(server, project_name, repository, privacy):
     role_tuple_list = [
         ('proteus.www_home',''),
     ]
     check_privacy(privacy, repository, role_tuple_list)
-    root = "/home/www-data/Buildbot/%s" % (project_name)
-    # virtual environment
-    virtenv_path = virtual_env_path(root)
-    master_virtenv = '%s-master' % virtenv_path
-    slave_virtenv = '%s-slave' % virtenv_path
-    # master parameters
-    master_path = '%s/buildbot-master' % (root) 
     # slave parameters
-    slave_path = '%s/buildslave1' % (root)
     role_tuple_list += [
          ('proteus.buildbot_master', repository)
         ,('proteus.buildbot_slave', repository)
@@ -49,12 +40,7 @@ def add_buildbot_slave(server, project_name, ec2_master_host, repository, privac
         ('proteus.www_home',''),
     ]
     check_privacy(privacy, repository, role_tuple_list)
-    root = "/home/www-data/Buildbot/%s" % (project_name)
-    # virtual environment
-    virtenv_path = virtual_env_path(root)
-    slave_virtenv = '%s-slave' % virtenv_path
     # slave parameters
-    slave_path = '%s/buildslave1' % (root)
     slave_params = '%s,%s' % (repository, ec2_master_host)
 
     role_tuple_list += [
