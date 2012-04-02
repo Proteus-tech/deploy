@@ -19,7 +19,6 @@ class TestStart(TestCase):
         self.mock_start.assert_called_once_with('bmf'
             , ('security_group', 'ssh')
             , ('security_group', 'http')
-            , ('postgres', None)
             , ('wsgi', None)
             , ('bits', '64')
             , ('region', 'us-west-1')
@@ -40,7 +39,6 @@ class TestStart(TestCase):
         self.mock_start.assert_called_once_with('bmf'
             , ('security_group', 'ssh')
             , ('security_group', 'http')
-            , ('postgres', None)
             , ('wsgi', None)
             , ('bits', '32')
             , ('region', 'ap-south')

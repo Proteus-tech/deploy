@@ -1,55 +1,46 @@
-from fabric.context_managers import cd
-from fabric.operations import run, sudo
-from fabric.contrib.files import sed, exists
-from fabric.context_managers import prefix
 from profab.role import Role
+from proteus.buildbot import virtual_env_path, home, splitter
+from proteus.git_checkout import root_folder, git_checkout
+from proteus.install_buildbot_slave_env import install_buildbot_slave_env
+from proteus.setup_buildbot_slave import setup_buildbot_slave
+from proteus.tag import tag
+
+def slave_virtual_env_path(root):
+    virtenv_path = virtual_env_path(root)
+    return '%s-slave' % virtenv_path
+
+def slave_location(root):
+    return '%s/buildslave1' % (root)
+
 
 class Configure(Role):
     """
-    Add buildbot slave for postgres 
+    Add buildbot Slave with parameter "repository" 
     """
+    packages = [ 'build-essential'
+        , 'python-dev'
+        , 'python-setuptools'
+        , 'git-core'
+    ]
+
     def configure(self, server):
-        server_tag = 'buildbot-slave-postgres'
-        server.cnx.create_tags([server.instance.id], {server_tag:''})
-        project_name = self.parameter
-        limit_slave_number = 10
-        # Check if pip and virtualenv are valid.
-        if exists('/usr/local/bin/pip') and exists('/usr/local/bin/virtualenv'):
-            virtenv_path = "/home/www-data/Buildbot/%s/virtenv-bb-slave" % (project_name)
-            # Create virtual environment for buildbot slave
-            sudo("virtualenv --no-site-packages %s" % (virtenv_path), user="www-data")
-        with prefix("source %s/bin/activate" % (virtenv_path)):
-            # Check if there has previous buildslave number
-            # yes - increase buildslave number
-            # no - create buildslave with current number
-            with cd("/home/www-data/Buildbot/%s" % (project_name)):
-                for number in range(1, limit_slave_number):
-                    if exists('/home/www-data/Buildbot/%s/buildslave%d' % (project_name, number)):
-                        continue
-                    else:
-                        sudo("buildslave create-slave buildslave%d localhost slave%d slave%dpassword" % 
-                                (number, number, number) ,user="www-data")
-                        break
+        try:
+            repository, ec2_master_host = splitter(self.parameter)
+        except ValueError:
+            repository = self.parameter 
+            ec2_master_host = 'localhost'
 
-                sudo("mkdir -p /home/www-data/Buildbot/%s/buildslave%d/builder-sqlite" % (project_name, number), user="www-data")
-                with cd("/home/www-data/Buildbot/%s/buildslave%d/builder-sqlite" % (project_name, number)):
-                    sudo("git clone -q %s" % (git_url), user="www-data")
-                    # Point to develop branch
-                    git_folder = git_url.split('/')[-1]
-                    git_folder = git_folder.split('.')[0]
-                    with cd(git_folder):                   
-                        sudo("git checkout -b develop", user="www-data")
-                        sudo("git pull origin develop", user="www-data")
-                        sudo("git checkout develop", user="www-data")
+        project_name = root_folder(repository)
+        root = home(project_name) 
 
-        with prefix("source %s/bin/activate" % (virtenv_path)):
-            # Checking master.cfg.
-            result = run("buildbot checkconfig %s/master.cfg" % (master_config_path))
-            if "Config file is good" not in result:
-                print "Something wrong with master.cfg, Buildbot won't start properly."
-            with cd("/home/www-data/Buildbot/%s" % (project_name)):
-                sudo("buildbot restart buildbot-master", user="www-data")
-                sudo("buildslave start buildslave1", user="www-data")
+        slave_virtenv = slave_virtual_env_path(root)
+        install_buildbot_slave_env(server, slave_virtenv)
+        tag(server, 'slave', 'env-installed')
 
-        server.cnx.create_tags([server.instance.id], {server_tag:'installed'})
+        setup_buildbot_slave(server, root, 'slave1', ec2_master_host)
+
+        slave_path = slave_location(root)
+        slave_checkout_path = "%s/builder-sqlite" % (slave_path)
+        git_checkout(server, slave_checkout_path, repository)
+        tag(server, 'slave', 'ready')
 

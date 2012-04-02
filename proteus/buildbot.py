@@ -7,6 +7,9 @@ from profab.role import Role
 def virtual_env_path(root):
     return "%s/virtenv" % (root)
 
+def home(project_name):
+    return '/home/www-data/Buildbot/%s' % (project_name)
+
 def splitter(parameters):
     return parameters.split(',')
 
