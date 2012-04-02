@@ -7,10 +7,7 @@ def split_private_git_url(git_url):
     host, path = remains.rsplit(':')
     return (user, host, path)
 
-def add_buildbot(server, project_name, repository, privacy):
-    role_tuple_list = [
-        ('proteus.www_home',''),
-    ]
+def check_privacy(privacy, repository, role_tuple_list):
     if privacy == 'private':
         print 'do hand shaking for private repository'
         user, host, path = split_private_git_url(repository)
@@ -20,6 +17,12 @@ def add_buildbot(server, project_name, repository, privacy):
             ('proteus.trust_host', host),
         ]
 
+
+def add_buildbot(server, project_name, repository, privacy):
+    role_tuple_list = [
+        ('proteus.www_home',''),
+    ]
+    check_privacy(privacy, repository, role_tuple_list)
     root = "/home/www-data/Buildbot/%s" % (project_name)
     # virtual environment
     virtenv_path = virtual_env_path(root)
@@ -45,14 +48,7 @@ def add_buildbot_slave(server, project_name, ec2_master_host, repository, privac
     role_tuple_list = [
         ('proteus.www_home',''),
     ]
-    if privacy == 'private':
-        print 'do hand shaking for private repository'
-        user, host, path = split_private_git_url(repository)
-        role_tuple_list += [
-            ('proteus.ssh_key_gen', ''),
-            ('proteus.authorize_key', repository),
-            ('proteus.trust_host', host),
-        ]
+    check_privacy(privacy, repository, role_tuple_list)
     root = "/home/www-data/Buildbot/%s" % (project_name)
     # virtual environment
     virtenv_path = virtual_env_path(root)
