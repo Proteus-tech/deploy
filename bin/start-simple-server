@@ -1,26 +1,19 @@
-#!/usr/bin/env python
-import fabric.network, logging, sys
-import simpleserver
-
-def main(using_client, *args):
-    logging.basicConfig(level=logging.INFO)
-    simpleserver.start(using_client, *args)
-
-if __name__=="__main__":
-    msg = """Usage: start-simple-server client [bits] [region] [size] [ami]
-    client: is profab client
-    bits: could be either 32 or 64* 
-    region: could be us-west-1*, us-west-2 or ap-southeast-1
-    size: size of the instance (default is t1.micro)
-    ami: is AMI ID (default is ami-4d580408 which is Ubuntu Natty) 
-
-    * is default
-    """
-    try:
-        if len(sys.argv) <= 1:
-            print msg 
-            sys.exit(-1)
-        main(*sys.argv[1:])
-    finally:
-        fabric.network.disconnect_all()
-
+#!/bin/bash
+if [ $# -lt 1 ]; then
+    echo "Usage: start-simple-server client [bits] [region] [size] [ami]"
+    echo "client: is profab client"
+    echo "bits: could be either 32 or 64*"
+    echo "region: could be us-west-1*, us-west-2 or ap-southeast-1"
+    echo "size: size of the instance (default is t1.micro)"
+    echo "ami: is AMI ID (default is ami-4d580408 which is Ubuntu Natty)"
+    echo ""
+    echo "* is default"
+    exit 1
+else
+    client=$1 
+    bits=${2-'64'}
+    region=${3-'us-west-1'}
+    size=${4-'t1.micro'}
+    ami=${5-'ami-4d580408'}
+    pf-server-start $client --security_group 'ssh' --security_group 'http' wsgi --bits $bits --region $region --size $size --ami $ami
+fi
