@@ -32,7 +32,7 @@ def create_script_to_update_master_config(server, path):
 
 class Configure(Role):
     """
-    Checkout code from git_url to a path with parameters (git_url, path)
+    Checkout code from git_url to a path with parameters (path, git_url)
     """
     packages = ['git-core']
 
