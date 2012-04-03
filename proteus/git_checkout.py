@@ -1,6 +1,6 @@
 from fabric.context_managers import cd
 from fabric.operations import sudo
-from fabric.contrib.files import append
+from fabric.contrib.files import append, exists
 from profab.role import Role
 from proteus import buildbot
 
@@ -27,11 +27,13 @@ def create_script_to_update_master_config(server, path):
         , "fi"
     ]
     binary_folder = '%s/bin' % (path)
+    script_file = '%s/update_master_config' % (binary_folder)
     sudo('mkdir -p %s' % (binary_folder), user='www-data')
     with cd(binary_folder):
-        sudo('touch update_master_config', user='www-data')
-        sudo('chmod 755 update_master_config', user='www-data')
-        append(filename='update_master_config', text=script_content, use_sudo=True)
+        if not exists(script_file):
+            sudo('touch update_master_config', user='www-data')
+            sudo('chmod 755 update_master_config', user='www-data')
+            append(filename='update_master_config', text=script_content, use_sudo=True)
 
 class Configure(Role):
     """
