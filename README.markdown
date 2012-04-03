@@ -139,8 +139,60 @@ Required parameter(s):
 - **ec2-host** the public domain of the EC2 instance (i.e ec2-184-169-247-45.us-west-1.compute.amazonaws.com)
 - **project-name** the name of the project
 
-##### proteus
+# Roles
+
+## proteus.buildbot_master
+
+    --proteus.buildbot_master repository
+
+Setup buildbot master environment according to `master.cfg` in the project. Usually followed by `proteus.start_buildbot_master`.
+
+## proteus.buildbot_slave
+
+    --proteus.buildbot_slave repository
+
+Setup a build slave of the project. You need to update `master.cfg` to let the master knows this new slave. Usually followed by `proteus.start_buildbot_slave`.
+
+## proteus.credentials
+
+    --proteus.credentials repository
+
+Do `ssh-keygen` on the machine and add the generated key on repository so that the machine can checkout private code from the repository.
+
+## proteus.restart_buildbot_master
+
+    --proteus.restart_buildbot_master project
+
+Restart buildbot master of the given `project` on the machine.
+
+## proteus.restart_buildbot_slave
+
+    --proteus.restart_buildbot_slave project
+
+Restart buildslave of the given `project` on the machine.
+
+## proteus.start_buildbot_master
+
+    --proteus.start_buildbot_master project
+
+Start buildbot master of the given `project` on the machine.
+
+## proteus.start_buildbot_slave
+
+    --proteus.start_buildbot_slave project[,ec2_master_host]
+
+Start build slave of the given `project` on the machine. If the master is on a different machine `ec2_master_host` needs to be specified.
+
+## proteus.www_home
+
+    proteus.www_home
+
+Set `/home/www-data/` as `$HOME` folder of user `www-data` of the machine (default is `/var/www/`) and also set `bash` as the default shell.
+
+# Folders
+## proteus
 `proteus` is a package which contains profab roles.
 
-##### project template
+## project template
 `project_template` contains a template for creating a project according to standardized layout.
+
