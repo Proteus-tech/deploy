@@ -21,10 +21,13 @@ def git_checkout(server, path, git_url):
 def create_script_to_update_master_config(server, path):
     # Update latest code
     script_content = ["#!/bin/bash"
+        , "if [ $# -eq 1 ]; then"
         , "cd /home/www-data/Buildbot/$1/src"
         , "git pull origin develop"
+        , "fi"
     ]
     binary_folder = '%s/bin' % (path)
+    sudo('mkdir -p %s' % (binary_folder), user='www-data')
     with cd(binary_folder):
         sudo('touch update_master_config', user='www-data')
         sudo('chmod 755 update_master_config', user='www-data')
