@@ -15,5 +15,5 @@ else
     region=${3-'us-west-1'}
     size=${4-'t1.micro'}
     ami=${5-'ami-4d580408'}
-    pf-server-start $client --security_group ssh --security_group http wsgi --bits $bits --region $region --size $size --ami $ami
+    pf-server-start $client --security_group 'ssh' --security_group 'http' wsgi --bits $bits --region $region --size $size --ami $ami
 fi
