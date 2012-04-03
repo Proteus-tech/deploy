@@ -11,9 +11,9 @@ if [ $# -lt 1 ]; then
     exit 1
 else
     client=$1 
-    bits=${2-'32'}
+    bits=${2-'64'}
     region=${3-'us-west-1'}
     size=${4-'t1.micro'}
     ami=${5-'ami-4d580408'}
-    pf-server-start $client --bits $bits --region $region --size $size --ami $ami
+    pf-server-start $client --security_group ssh --security_group http wsgi --bits $bits --region $region --size $size --ami $ami
 fi
