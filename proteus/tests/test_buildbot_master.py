@@ -33,6 +33,18 @@ class TestMasterConfig(TestCase):
         self.patch_setup.start()
         self.patch_tag = patch('proteus.buildbot_master.tag')
         self.patch_tag.start()
+        self.patch_create_script = patch('proteus.buildbot_master.create_script_to_update_master_config')
+        self.mock_create_script = self.patch_create_script.start()        
+
+    def tearDown(self):
+        self.patch_check.stop()
+        self.patch_symlink.stop()
+        self.patch_complete.stop()
+        self.patch_install_env.stop()
+        self.patch_checkout.stop()
+        self.patch_setup.stop()
+        self.patch_tag.stop()
+        self.patch_create_script.stop()
         
     def test_master_config_is_symlink(self):
         """
@@ -82,3 +94,18 @@ class TestMasterConfig(TestCase):
             , repository
         )
         
+    def test_if_somecode_call_create_script(self):
+        """
+        If buildbot master role is done. That should create root folder with bin folder
+        then create script in it.
+        """
+        # Arrange
+        role = Configure()
+        role.parameter = repository = 'https://juacompe@github/juacompe/fluffy.git'
+        server = Mock()
+        # Act
+        role.configure(server)
+        # Assert
+        self.mock_create_script.assert_called_once_with(server
+            ,'/home/www-data/Buildbot/fluffy'
+        )

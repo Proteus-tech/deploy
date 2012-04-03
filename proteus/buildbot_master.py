@@ -3,7 +3,7 @@ from proteus.buildbot import virtual_env_path, home
 from proteus.check_config import check_config
 from proteus.complete_master_config import complete_master_config 
 from proteus.create_symlink import create_symlink
-from proteus.git_checkout import root_folder, git_checkout
+from proteus.git_checkout import root_folder, git_checkout, create_script_to_update_master_config 
 from proteus.install_buildbot_master_env import install_buildbot_master_env
 from proteus.setup_buildbot_master import setup_buildbot_master
 from proteus.tag import tag
@@ -37,6 +37,7 @@ class Configure(Role):
 
         setup_buildbot_master(server, root) 
         git_checkout(server, root, repository)
+        create_script_to_update_master_config(server, root)
 
         master_path = master_location(root) 
         master_cfg_src = '%s/src/buildbot/master.cfg' % (root)
