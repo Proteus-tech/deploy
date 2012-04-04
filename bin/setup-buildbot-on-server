@@ -1,5 +1,5 @@
 #!/bin/bash
-if [ $# -lt 3 ]; then
+if [ $# -lt 4 ]; then
     echo "Usage: setup-buildbot-on-server client ec2_host project_name repository privacy"
     echo ""
     echo "client: is profab client"

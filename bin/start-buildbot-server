@@ -1,6 +1,6 @@
 #!/bin/bash
 if [ $# -lt 3 ]; then
-    echo "Usage: setup-buildbot-on-server client project_name repository privacy bits region size ami"
+    echo "Usage: start-buildbot-server client project_name repository privacy bits region size ami"
     echo ""
     echo "client: is profab client"
     echo "project_name: name of the project that buildbot run against"
