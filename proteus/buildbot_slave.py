@@ -4,6 +4,7 @@ from proteus.git_checkout import root_folder, git_checkout
 from proteus.install_buildbot_slave_env import install_buildbot_slave_env
 from proteus.setup_buildbot_slave import setup_buildbot_slave
 from proteus.tag import tag
+from proteus.setup_library import setup_library
 
 def slave_virtual_env_path(root):
     virtenv_path = virtual_env_path(root)
@@ -42,5 +43,6 @@ class Configure(Role):
         slave_path = slave_location(root)
         slave_checkout_path = "%s/builder-sqlite" % (slave_path)
         git_checkout(server, slave_checkout_path, repository)
+        setup_library(server, '%s/src/setup/requirelibs.txt' % (slave_checkout_path))
         tag(server, 'slave', 'ready')
 
