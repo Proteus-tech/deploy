@@ -1,0 +1,6 @@
+build-essential
+libpng-dev 
+libjpeg-dev 
+libpq-dev
+python-dev 
+python-setuptools
