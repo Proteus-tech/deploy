@@ -90,7 +90,7 @@ class TestMasterConfig(TestCase):
         role.configure(server)
         # Assert
         self.mock_complete.assert_called_once_with(server
-            , '/home/www-data/Buildbot/fluffy/src/proteus_buildbot/master.cfg'
+            , '/home/www-data/Buildbot/fluffy/src/proteus_buildbot/settings.py'
             , repository
         )
         

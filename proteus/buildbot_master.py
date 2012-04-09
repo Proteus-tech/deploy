@@ -34,10 +34,11 @@ class Configure(Role):
         master_path = master_location(root) 
         master_src = '%s/src' % (root)
         master_cfg_src = '%s/proteus_buildbot/master.cfg' % (master_src)
+        master_cfg_settings = '%s/proteus_buildbot/settings.py' % (master_src)
         master_cfg_dest = '%s/master.cfg' % (master_path)
         create_symlink(server, master_cfg_src, master_cfg_dest)
 
-        complete_master_config(server, master_cfg_src, repository)
+        complete_master_config(server, master_cfg_settings, repository)
         check_config(server, master_cfg_dest, master_virtenv, master_src)
         tag(server, 'master', 'ready')
 
