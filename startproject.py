@@ -58,7 +58,6 @@ def move_files_into_build(template_path):
     1. create build and build/buildbot package
     2. pythonify
        - runtests -> build/runtests.py
-       - buildbot/master.cfg -> build/buildbot/master.cfg
 
     When Django is starting project, file *.py which contains 
     {{ project_name }} would be rendered. In order to make others
@@ -72,17 +71,12 @@ def move_files_into_build(template_path):
 
     create_python_package(build_root)
 
-    build_buildbot = os.path.join(template_path, 'build', 'buildbot')
-    create_python_package(build_buildbot)
-
     pythonify(template_path, 'runtests', [], ['build']) 
     pythonify(template_path, 'reset_db', [], ['build']) 
-    pythonify(template_path, 'master.cfg', ['buildbot'], ['build', 'buildbot']) 
 
 def move_files_out_of_build(project_dir):
     unpythonify(project_dir, 'runtests', ['build'], [])
     unpythonify(project_dir, 'reset_db', ['build'], [])
-    unpythonify(project_dir, 'master.cfg', ['build', 'buildbot'], ['buildbot'])
 
 def replace_secret_key(path_to_replace):
     skey = random_secret_key()
