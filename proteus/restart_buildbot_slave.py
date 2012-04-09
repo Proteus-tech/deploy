@@ -4,15 +4,10 @@ from fabric.contrib.files import exists
 from profab.role import Role
 from proteus.buildbot import home
 from proteus.buildbot_slave import slave_virtual_env_path, slave_location
+from proteus.start_buildbot_slave import control_buildbot_slave
 
 def restart_buildbot_slave(server, project_name):
-    root = home(project_name)
-    env_path = slave_virtual_env_path(root)
-    slave_path = slave_location(root)
-    if exists(slave_path):
-        if exists(env_path):
-            with prefix('source %s/bin/activate' % (env_path)):
-                sudo('buildslave restart %s' % (slave_path), user='www-data')
+    control_buildbot_slave(server, project_name, 'restart')
 
 
 class Configure(Role):
