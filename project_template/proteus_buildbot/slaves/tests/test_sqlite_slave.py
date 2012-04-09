@@ -1,5 +1,5 @@
 from buildbot.schedulers.basic import SingleBranchScheduler
-from project_template.buildbot.proteus import sqlite_slave
+from proteus_buildbot.slaves import sqlite_slave
 from unittest import TestCase
 
 class TestSqilteSlave(TestCase):
