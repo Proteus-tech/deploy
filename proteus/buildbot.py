@@ -18,4 +18,10 @@ def split_private_git_url(git_url):
     host, path = remains.rsplit(':')
     return (user, host, path)
 
+def master_virtual_env_path(root):
+    virtenv_path = virtual_env_path(root)
+    return '%s-master' % virtenv_path
+
+def master_location(root):
+    return '%s/buildbot-master' % (root)
 
