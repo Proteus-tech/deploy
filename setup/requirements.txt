@@ -4,5 +4,4 @@ nose==1.1.2
 mock==0.8.0
 coverage==3.5.1
 buildbot==0.8.4
-buildbot-slave==0.8.6
 
