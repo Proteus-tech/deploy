@@ -6,7 +6,7 @@ if [ $# -lt 2 ]; then
     echo "git_url: URL to the repository"
 exit 1
 else
-    master_config_file='buildbot/master.cfg'
+    master_config_file='buildbot_config/settings.py'
     ec2_host=$1
     git_url=$2
 
