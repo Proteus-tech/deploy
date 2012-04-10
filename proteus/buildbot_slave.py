@@ -38,7 +38,7 @@ class Configure(Role):
         install_buildbot_slave_env(server, slave_virtenv)
         tag(server, 'slave', 'env-installed')
 
-        setup_buildbot_slave(server, root, 'slave1', ec2_master_host)
+        setup_buildbot_slave(server, root, 'slave-sqlite', ec2_master_host)
 
         slave_path = slave_location(root)
         slave_checkout_path = "%s/builder-sqlite" % (slave_path)
