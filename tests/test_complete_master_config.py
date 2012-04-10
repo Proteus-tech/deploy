@@ -4,7 +4,7 @@ import os, shutil
 class TestCompleteMasterConfig(TestCase):
     def tearDown(self):
         if os.path.exists('settings.tmp'):
-            shutil.copyfile('settings.tmp', 'buildbot_config/setting.py')
+            shutil.copyfile('settings.tmp', 'buildbot_config/settings.py')
             os.remove('settings.tmp')
         os.chdir('../')
     
