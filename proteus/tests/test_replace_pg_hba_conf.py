@@ -27,17 +27,12 @@ class TestReplacePgHbaConf(TestCase):
         # Assert
         first_call = sed.call_args_list[0]
         expected = mock.call('%s/main/pg_hba.conf' % pg_hba_path
-            , '# If you want to allow non-local connections, you need to add more'
+            , '# Put your actual configuration here'
             , 'local   all all             trust'
+              '\\nhost    all all     127.0.0.1/32    md5'
             , use_sudo=True)
         self.assertEqual(expected, first_call)
-        second_call = sed.call_args_list[1]
-        expected = mock.call('%s/main/pg_hba.conf' % pg_hba_path
-            , '# "host" records. In that case you will also need to make PostgreSQL listen'
-            , 'host    all all     127.0.0.1/32    md5'
-            , use_sudo=True)
-        self.assertEqual(expected, second_call)
-
+        
         sudo.assert_called_once_with('/etc/init.d/postgresql restart')
     
     @mock.patch('proteus.replace_pg_hba_conf.sudo')
@@ -61,16 +56,11 @@ class TestReplacePgHbaConf(TestCase):
         # Assert
         first_call = sed.call_args_list[0]
         expected = mock.call('%s/main/pg_hba.conf' % pg_hba_path
-            , '# If you want to allow non-local connections, you need to add more'
+            , '# Put your actual configuration here'
             , 'local   all all             trust'
+              '\\nhost    all all     127.0.0.1/32    md5'
             , use_sudo=True)
         self.assertEqual(expected, first_call)
-        second_call = sed.call_args_list[1]
-        expected = mock.call('%s/main/pg_hba.conf' % pg_hba_path
-            , '# "host" records. In that case you will also need to make PostgreSQL listen'
-            , 'host    all all     127.0.0.1/32    md5'
-            , use_sudo=True)
-        self.assertEqual(expected, second_call)
 
         sudo.assert_called_once_with('/etc/init.d/postgresql restart')
 
