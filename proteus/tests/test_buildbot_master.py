@@ -48,7 +48,7 @@ class TestMasterConfig(TestCase):
         
     def test_master_config_is_symlink(self):
         """
-        master.cfg needs to be a symbolic link to src/proteus_buildbot/master.cfg
+        master.cfg needs to be a symbolic link to src/buildbot_config/master.cfg
         so that when a developer commits updated one, the file on server
         also updates
         """
@@ -60,7 +60,7 @@ class TestMasterConfig(TestCase):
         role.configure(server)
         # Assert
         self.mock_symlink.assert_called_once_with(server
-            , '/home/www-data/Buildbot/fluffy/src/proteus_buildbot/master.cfg'
+            , '/home/www-data/Buildbot/fluffy/src/buildbot_config/master.cfg'
             , '/home/www-data/Buildbot/fluffy/buildbot-master/master.cfg'
         )
         
@@ -71,7 +71,7 @@ class TestMasterConfig(TestCase):
 
         Expected:
         - complete_master_config is called with 
-          /home/www-data/Buildbot/fluffy/src/proteus_buildbot/master.cfg 
+          /home/www-data/Buildbot/fluffy/src/buildbot_config/master.cfg 
           as parameter
 
         sed command overrides the file with a new one; therefore, we
@@ -80,7 +80,7 @@ class TestMasterConfig(TestCase):
         or the link will be broken.
 
         we need to update the source in repository instead 
-        (i.e. /home/www-data/Buildbot/fluffy/src/proteus_buildbot/master.cfg)
+        (i.e. /home/www-data/Buildbot/fluffy/src/buildbot_config/master.cfg)
         """
         # Arrange
         role = Configure()
@@ -90,7 +90,7 @@ class TestMasterConfig(TestCase):
         role.configure(server)
         # Assert
         self.mock_complete.assert_called_once_with(server
-            , '/home/www-data/Buildbot/fluffy/src/proteus_buildbot/settings.py'
+            , '/home/www-data/Buildbot/fluffy/src/buildbot_config/settings.py'
             , repository
         )
         

@@ -1,9 +1,9 @@
-from proteus_buildbot.utils import list_modules, module_name
+from buildbot_config.utils import list_modules, module_name
 from unittest import TestCase
 
 class TestUtils(TestCase):
     def test_list_modules_with_slaves(self):
-        slaves = __import__('proteus_buildbot.slaves', fromlist=['proteus_buildbot', 'slaves'])
+        slaves = __import__('buildbot_config.slaves', fromlist=['buildbot_config', 'slaves'])
         sub_modules = list_modules(slaves) 
         self.assertTrue('sqlite_slave' in sub_modules)
         self.assertTrue('__init__' not in sub_modules)

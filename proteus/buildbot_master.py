@@ -33,8 +33,8 @@ class Configure(Role):
 
         master_path = master_location(root) 
         master_src = '%s/src' % (root)
-        master_cfg_src = '%s/proteus_buildbot/master.cfg' % (master_src)
-        master_cfg_settings = '%s/proteus_buildbot/settings.py' % (master_src)
+        master_cfg_src = '%s/buildbot_config/master.cfg' % (master_src)
+        master_cfg_settings = '%s/buildbot_config/settings.py' % (master_src)
         master_cfg_dest = '%s/master.cfg' % (master_path)
         create_symlink(server, master_cfg_src, master_cfg_dest)
 

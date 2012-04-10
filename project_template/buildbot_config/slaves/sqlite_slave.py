@@ -3,7 +3,8 @@ from buildbot.config import BuilderConfig
 from buildbot.process.factory import BuildFactory
 from buildbot.steps.shell import ShellCommand
 
-from proteus_buildbot.settings import BRANCH, PROJECT_NAME, PROJECT_CODE_URL
+from buildbot_config.settings import BRANCH, PROJECT_NAME, PROJECT_CODE_URL
+
 nickname = 'sqlite'
 name = 'slave-%s' % nickname
 builder_name = 'builder-%s' % nickname
