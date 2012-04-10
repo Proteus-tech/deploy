@@ -1,0 +1,18 @@
+#!/bin/bash
+if [ $# -lt 2 ]; then
+    echo "Usage: complete_master_config ec2_host git_url"
+    echo ""
+    echo "ec2_host: public host of EC2 instance"
+    echo "git_url: URL to the repository"
+exit 1
+else
+    master_config_file='buildbot/master.cfg'
+    ec2_host=$1
+    git_url=$2
+
+    sed -i "s|/path/to/repo|$git_url|g" $master_config_file
+    sed -i "s/project_dirname/src/g" $master_config_file
+    sed -i "s/buildbot_master_host/$ec2_host/g" $master_config_file
+    echo "Completed to config master.cfg"
+
+fi
