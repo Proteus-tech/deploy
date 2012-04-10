@@ -4,15 +4,10 @@ from profab.role import Role
 
 def replace_in_file(server, pg_hba_path):
     sed('%s/main/pg_hba.conf' % pg_hba_path
-        , '# If you want to allow non-local connections, you need to add more'
+        , '# Put your actual configuration here'
         , 'local   all all             trust'
+          '\\nhost    all all     127.0.0.1/32    md5'
         , use_sudo=True)
-
-    sed('%s/main/pg_hba.conf' % pg_hba_path
-        , '# "host" records. In that case you will also need to make PostgreSQL listen'
-        , 'host    all all     127.0.0.1/32    md5'
-        , use_sudo=True)
-
     sudo('/etc/init.d/postgresql restart')
 
 def select_postgres_version(server):

@@ -5,15 +5,20 @@ from fabric.contrib.files import exists
 from proteus.buildbot import home
 from proteus.buildbot_slave import slave_virtual_env_path, slave_location 
 
-def start_buildbot_slave(server, project_name):
+def control_buildbot_slave(server, project_name, command):
     root = home(project_name) 
     buildbot_slave_path = slave_location(root) 
     buildbot_slave_virtenv = slave_virtual_env_path(root)
-    if exists(buildbot_slave_path):
-        if exists(buildbot_slave_virtenv):
-            with prefix('source %s/bin/activate' % (buildbot_slave_virtenv)):
-                sudo('buildslave start %s' % (buildbot_slave_path), user='www-data')
-      
+    if not exists(buildbot_slave_path):
+        raise Exception('Buildbot slave not found: %s' % buildbot_slave_path)
+    if not exists(buildbot_slave_virtenv):
+        raise Exception('Slave environment not found: %s' % buildbot_slave_virtenv)
+    with prefix('source %s/bin/activate' % (buildbot_slave_virtenv)):
+        sudo('buildslave %s %s' % (command, buildbot_slave_path), user='www-data')
+ 
+def start_buildbot_slave(server, project_name):
+    control_buildbot_slave(server, project_name, 'start')
+         
 
 class Configure(Role):
     '''

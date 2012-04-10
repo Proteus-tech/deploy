@@ -45,7 +45,7 @@ class TestMasterConfig(TestCase):
         
     def test_master_config_is_symlink(self):
         """
-        master.cfg needs to be a symbolic link to src/buildbot/master.cfg
+        master.cfg needs to be a symbolic link to src/buildbot_config/master.cfg
         so that when a developer commits updated one, the file on server
         also updates
         """
@@ -57,7 +57,7 @@ class TestMasterConfig(TestCase):
         role.configure(server)
         # Assert
         self.mock_symlink.assert_called_once_with(server
-            , '/home/www-data/Buildbot/fluffy/src/buildbot/master.cfg'
+            , '/home/www-data/Buildbot/fluffy/src/buildbot_config/master.cfg'
             , '/home/www-data/Buildbot/fluffy/buildbot-master/master.cfg'
         )
         

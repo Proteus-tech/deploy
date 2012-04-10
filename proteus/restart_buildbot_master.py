@@ -4,6 +4,7 @@ from fabric.context_managers import prefix
 from fabric.contrib.files import exists
 from proteus.buildbot import home
 from proteus.buildbot_master import master_virtual_env_path, master_location
+from proteus.start_buildbot_master import control_buildbot_master
 
 def run_script_update_master_cfg(server, project_name):
     root = home(project_name)
@@ -13,13 +14,8 @@ def run_script_update_master_cfg(server, project_name):
         sudo(script_with_project_name, user='www-data')
 
 def restart_buildbot_master(server, project_name):
-    root = home(project_name)
-    buildbot_master_virtenv = master_virtual_env_path(root)
-    buildbot_master_path = master_location(root)
-    if exists(buildbot_master_path):
-        if exists(buildbot_master_virtenv):
-            with prefix('source %s/bin/activate' % (buildbot_master_virtenv)):
-                sudo('buildbot restart %s' % (buildbot_master_path), user='www-data')
+    control_buildbot_master(server, project_name, 'restart')
+
 
 class Configure(Role):
     '''

@@ -17,6 +17,8 @@ setup(
 
     ],
     packages = ['project_template'
+        , 'project_template.buildbot_config'
+        , 'project_template.buildbot_config.slaves'
         , 'project_template.project_name'
         , 'project_template.project_name.tests'
         , 'project_template.project_name_project'
@@ -26,7 +28,7 @@ setup(
     ],
     package_data = {
         'project_template': ['setup/*'
-            , 'buildbot/*'
+            , 'buildbot_config/master.cfg'
             , 'runtests'
             , 'runserver'
             , 'reset_db' 

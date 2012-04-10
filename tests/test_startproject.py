@@ -134,24 +134,19 @@ class TestStartProjectScript(TestCase):
         1. create sample project which contains: 
            - runtests
            - reset_db
-           - buildbot/master.cfg
         2. move files in sample project into build
         3. startproject using the sample project as template
         4. move files in created project out of build
         Expected:
         - runtests is rendered
         - reset_db is rendered
-        - buildbot/master.cfg is rendered
         """
         # Arrange
         os.makedirs('sample_project')
-        os.makedirs('sample_project/buildbot')
         shutil.copyfile('tests/sample_file_to_pythonify', 
                         'sample_project/runtests')
         shutil.copyfile('tests/sample_file_to_pythonify', 
                         'sample_project/reset_db')
-        shutil.copyfile('tests/sample_file_to_pythonify', 
-                        'sample_project/buildbot/master.cfg')
         # Act
         move_files_into_build('sample_project')
         create_project('teddy', 'sample_project')
@@ -165,10 +160,6 @@ class TestStartProjectScript(TestCase):
             with open('teddy/reset_db') as stream:
                 content = stream.read()
                 self.assertTrue('teddy' in content, 'teddy not found in reset_db')
-                self.assertFalse('{{ project_name }}' in content)
-            with open('teddy/buildbot/master.cfg') as stream:
-                content = stream.read()
-                self.assertTrue('teddy' in content, 'teddy not found in master.cfg')
                 self.assertFalse('{{ project_name }}' in content)
         except IOError:
             self.fail('some files are missing, render failed')
