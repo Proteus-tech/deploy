@@ -12,6 +12,7 @@ setup(
         , 'bin/setup-buildbot-on-server'
         , 'bin/setup-buildbot-slave-on-server'
         , 'bin/restart-buildbot-master'
+        , 'bin/complete_master_config'
         , 'bin/restart-buildbot-slave' 
         , 'bin/add-pg-slave-to-master-cfg'
 
