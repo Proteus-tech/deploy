@@ -14,7 +14,6 @@ class TestUtils(TestCase):
         self.assertTrue('buildbot' in sub_modules)
         self.assertTrue('buildbot_master' in sub_modules)
         self.assertTrue('check_config' in sub_modules)
-        self.assertTrue('complete_master_config' in sub_modules)
         self.assertTrue('create_symlink' in sub_modules)
         self.assertTrue('git_checkout' in sub_modules)
         self.assertTrue('setup_buildbot_master' in sub_modules)

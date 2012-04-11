@@ -21,8 +21,6 @@ class TestMasterConfig(TestCase):
     def setUp(self):
         self.patch_check = patch('proteus.buildbot_master.check_config')
         self.patch_check.start()
-        self.patch_complete = patch('proteus.buildbot_master.complete_master_config')
-        self.mock_complete = self.patch_complete.start()
         self.patch_symlink = patch('proteus.buildbot_master.create_symlink')
         self.mock_symlink = self.patch_symlink.start()
         self.patch_install_env = patch('proteus.buildbot_master.install_buildbot_master_env')
@@ -39,7 +37,6 @@ class TestMasterConfig(TestCase):
     def tearDown(self):
         self.patch_check.stop()
         self.patch_symlink.stop()
-        self.patch_complete.stop()
         self.patch_install_env.stop()
         self.patch_checkout.stop()
         self.patch_setup.stop()
@@ -62,36 +59,6 @@ class TestMasterConfig(TestCase):
         self.mock_symlink.assert_called_once_with(server
             , '/home/www-data/Buildbot/fluffy/src/buildbot_config/master.cfg'
             , '/home/www-data/Buildbot/fluffy/buildbot-master/master.cfg'
-        )
-        
-    def test_complete_config_with_master_in_repository(self):
-        """
-        Scenario: execute role proteus.buildbot_master with parameter
-        https://juacompe@github.com/juacompe/fluffy.git
-
-        Expected:
-        - complete_master_config is called with 
-          /home/www-data/Buildbot/fluffy/src/buildbot_config/master.cfg 
-          as parameter
-
-        sed command overrides the file with a new one; therefore, we
-        cannot use sed command on the symlink file 
-        (i.e. /home/www-data/Buildbot/fluffy/buildbot-master/master.cfg) 
-        or the link will be broken.
-
-        we need to update the source in repository instead 
-        (i.e. /home/www-data/Buildbot/fluffy/src/buildbot_config/master.cfg)
-        """
-        # Arrange
-        role = Configure()
-        role.parameter = repository = 'https://juacompe@github.com/juacompe/fluffy.git'
-        server = Mock()
-        # Act
-        role.configure(server)
-        # Assert
-        self.mock_complete.assert_called_once_with(server
-            , '/home/www-data/Buildbot/fluffy/src/buildbot_config/settings.py'
-            , repository
         )
         
     def test_if_somecode_call_create_script(self):
