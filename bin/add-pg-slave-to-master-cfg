@@ -31,15 +31,15 @@ builder = BuilderConfig(name=builder_name
             , factory=factory)
 '''
     context = raw_context.replace('[basename]',basename)
-    slave_file_path = 'buildbot_config/slaves/%s'
-    pg_slave_file_path = slave_file_path % 'pg_slave.py'
-    if os.path.exists(pg_slave_file_path):
+    slave_file_path = 'buildbot_config/slaves'
+    pg_slave_file_path = '%s/pg_slave.py' % slave_file_path
+    if os.path.exists(slave_file_path):
         fobj = open(pg_slave_file_path,'w')
         fobj.write(context)
         fobj.close()
     else:
-        print '%s not found' % (slave_file_path)
-
+        error_msg = '%s not found' % (slave_file_path)
+        raise Exception(error_msg)
 if __name__ == '__main__':
     if len(sys.argv) < 2:
         basename = 'pg'
