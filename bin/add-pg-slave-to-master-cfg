@@ -37,6 +37,7 @@ builder = BuilderConfig(name=builder_name
         fobj = open(pg_slave_file_path,'w')
         fobj.write(context)
         fobj.close()
+        print 'Create %s. Completed!' % (pg_slave_file_path)
     else:
         error_msg = '%s not found' % (slave_file_path)
         raise Exception(error_msg)
