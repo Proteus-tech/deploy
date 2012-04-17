@@ -153,6 +153,12 @@ Setup buildbot master environment according to `master.cfg` in the project. Usua
 
 Setup a build slave of the project. You need to update `master.cfg` to let the master knows this new slave. Usually followed by `proteus.start_buildbot_slave`.
 
+## proteus.buildbot_pg_slave
+
+    --proteus.buildbot_pg_slave repository,ec2-host
+    
+Setup a build slave of the project with postgres database.
+
 ## proteus.credentials
 
     --proteus.credentials repository
