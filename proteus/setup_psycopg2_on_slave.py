@@ -15,6 +15,8 @@ def setup_psycopg2_on_slave(server, virtual_env_path):
         1. check if virtual env exists.
         2. activate that virtual env.
     '''
+    sudo("apt-get install -y libpq-dev")
+    sudo("apt-get install -y python-psycopg2")
     if exists(virtual_env_path):
         with prefix("source %s/bin/activate" % (virtual_env_path)):
             sudo("pip install psycopg2==2.4.1", user="www-data")
@@ -35,10 +37,6 @@ class Configure(Role):
         postgres package installed
     """
     
-    packages = [
-        'python-psycopg2'
-    ]
-
     def configure(self, server):
         project_name = self.parameter
         root = home(project_name)
