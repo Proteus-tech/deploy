@@ -3,26 +3,26 @@ from fabric.api import cd, run
 from fabric.contrib.files import exists
 from profab.role import Role
 from fabric.context_managers import prefix
-from buildbot import slave_virtual_env_path, home
+from buildbot import home
+from buildbot_slave import slave_virtual_env_path
 from profab import _logger
 
-def setup_psycopg2_on_slave(server, project_name):
+def setup_psycopg2_on_slave(server, virtual_env_path):
     '''
+    Take
+        1. path of virtual environment.
     Process
         1. check if virtual env exists.
         2. activate that virtual env.
     '''
-    bb_virtual_env = "/home/www-data/Buildbot/%s/virtenv-slave" % (project_name)
-    root = home(project_name)
-    bb_virtual_env = slave_virtual_env_path(root)
-    if exists(bb_virtual_env):
-        with prefix("source %s/bin/activate" % (bb_virtual_env)):
+    if exists(virtual_env_path):
+        with prefix("source %s/bin/activate" % (virtual_env_path)):
             sudo("pip install psycopg2==2.4.1", user="www-data")
             result = sudo("pip freeze", user="www-data")
             if "psycopg2" not in result:
-                raise Exception("psycopg2 does not install in %s" % (bb_virtual_env))
+                raise Exception("psycopg2 does not install in %s" % (virtual_env_path))
             else:
-                print "psycopg2 installed in %s" % (bb_virtual_env)
+                print "psycopg2 installed in %s" % (virtual_env_path)
 
 class Configure(Role):
     """
@@ -40,5 +40,8 @@ class Configure(Role):
     ]
 
     def configure(self, server):
-        setup_psycopg2_on_slave(server, self.parameter)
+        project_name = self.parameter
+        root = home(project_name)
+        bb_virtual_env_path = slave_virtual_env_path(root) 
+        setup_psycopg2_on_slave(server, bb_virtual_env_path)
                      
