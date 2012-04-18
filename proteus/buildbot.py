@@ -25,3 +25,9 @@ def master_virtual_env_path(root):
 def master_location(root):
     return '%s/buildbot-master' % (root)
 
+def slave_virtual_env_path(root):
+    virtenv_path = virtual_env_path(root)
+    return '%s-slave' % virtenv_path
+
+def slave_location(root):
+    return '%s/buildbot-slave' % (root)
