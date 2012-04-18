@@ -25,3 +25,4 @@ def master_virtual_env_path(root):
 def master_location(root):
     return '%s/buildbot-master' % (root)
 
+
