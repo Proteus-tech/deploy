@@ -8,14 +8,6 @@ from proteus.setup_library import setup_library
 from proteus.buildbot_slave import slave_virtual_env_path, slave_location
 from proteus.setup_psycopg2_on_slave import setup_psycopg2_on_slave
 
-#def slave_virtual_env_path(root):
-#    virtenv_path = virtual_env_path(root)
-#    return '%s-slave' % virtenv_path
-#
-#def slave_location(root):
-#    return '%s/buildslave1' % (root)
-
-
 class Configure(Role):
     """
     Add buildbot Slave with parameter "repository" 
@@ -42,11 +34,6 @@ class Configure(Role):
         install_buildbot_slave_env(server, slave_virtenv)
         tag(server, 'slave', 'env-installed')
 
-        
-        # Setup python-psycopg2 in root environment and
-        # psycopg2 in virtual environemt.
-        setup_psycopg2_on_slave(server, slave_virtenv)
-
         # Setup buildbot-slave with postgres and create buildslave folder.
         setup_buildbot_pg_slave(server, root, 'slave-pg', ec2_master_host)
 
@@ -55,5 +42,9 @@ class Configure(Role):
         slave_checkout_path = "%s/builder-pg" % (slave_path)
         git_checkout(server, slave_checkout_path, repository)
         setup_library(server, '%s/src/setup/requirelibs.txt' % (slave_checkout_path))
-        tag(server, 'slave', 'ready')
 
+        # Setup python-psycopg2 in root environment and
+        # psycopg2 in virtual environemt.
+        setup_psycopg2_on_slave(server, slave_virtenv)
+
+        tag(server, 'slave', 'ready')
