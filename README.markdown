@@ -114,6 +114,31 @@ Optional parameter(s):
 
 - **privacy** repository is public or private (public|private, default: public)
 
+### Setup postgres buildbot slave on existing server
+Setups postgres buildbot slave on an existing EC2 instance.
+
+#### Prerequisites
+The buildbot master server must valid and has public doamin ( to be ec2-master-host value ).
+
+    setup-pg-slave-on-server client-name ec2-host ec2-master-host project-name repository-url privacy
+
+Required parameter(s):
+
+- **client-name**
+- **ec2-host** the public domain of the EC2 instance (i.e ec2-184-169-247-45.us-west-1.compute.amazonaws.com)
+- **ec2-master-host** the public domain of the buildbot master EC2 instance ( Use "localhost" for same instance )
+- **project-name** the name of the project
+- **repository-url**
+
+Optional parameter(s):
+
+- **privacy** repository is public or private (public|private, default: public)
+
+### Create postgres slave file for master configuration file
+Create pg_slave.py in /project_name/buildbot_config/slaves
+
+    add-pg-slave-to-master-cfg
+
 ### Restarting buildbot
 When new `master.cfg` is committed, it would not affect until the buildbot master has been restarted.
 
