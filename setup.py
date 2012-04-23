@@ -15,6 +15,7 @@ setup(
         , 'bin/complete_master_config'
         , 'bin/restart-buildbot-slave' 
         , 'bin/add-pg-slave-to-master-cfg'
+        , 'bin/setup-pg-slave-on-server'
 
     ],
     packages = ['project_template'

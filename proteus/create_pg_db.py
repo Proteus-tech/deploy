@@ -7,7 +7,7 @@ from profab.role import Role
 def create_user(server, dict_data):
     user = dict_data['USER']
     password = dict_data['PASSWORD']
-    sudo('''psql -c "CREATE USER %s WITH PASSWORD '%s';" -U postgres''' 
+    sudo('''psql -c "CREATE USER %s WITH PASSWORD '%s' CREATEDB;" -U postgres''' 
          % (user, password))
 
 def create_db(server, dict_data):

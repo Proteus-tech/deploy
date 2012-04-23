@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 cd `dirname $0`
 COVER_OPTS="--cover-erase --with-coverage --cover-package=startproject,proteus,project_template"
-nosetests $COVER_OPTS
+nosetests --exclude=integration_tests/* $COVER_OPTS
