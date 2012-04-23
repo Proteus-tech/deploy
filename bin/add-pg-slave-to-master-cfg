@@ -24,7 +24,7 @@ factory.addStep(ShellCommand(command="git pull origin develop", workdir=PROJECT_
 factory.addStep(ShellCommand(command=["pip", "install", "--upgrade", "--requirement=setup/requirements.txt"],workdir=PROJECT_CODE_URL))
 factory.addStep(ShellCommand(command=["pip", "freeze"], workdir=PROJECT_CODE_URL))
 factory.addStep(ShellCommand(command=["/bin/bash","reset_db"], workdir=PROJECT_CODE_URL))
-factory.addStep(ShellCommand(command=["/bin/bash","runtests"], workdir=PROJECT_CODE_URL))
+factory.addStep(ShellCommand(command=["/bin/bash","runtests", "--settings=%s_project.settings.pg_buildbot" % PROJECT_NAME, "--noinput"], workdir=PROJECT_CODE_URL))
 
 builder = BuilderConfig(name=builder_name
             , slavenames=[name]
