@@ -52,12 +52,11 @@ class TestBuildbotPGSlave(TestCase):
         delete environment and unuse folder
         terminate server
         '''
-        #os.system('rm -rf /tmp/proteus-deploy-int/')
-        #os.system('rm -rf ../build/ ../dist/ ../proteus_deploy.egg-info/')
+        os.system('rm -rf /tmp/proteus-deploy-int/')
+        os.system('rm -rf ../build/ ../dist/ ../proteus_deploy.egg-info/')
         
-        #cls.server.cnx.close()
-        #cls.server.terminate()
-        pass
+        cls.server.cnx.close()
+        cls.server.terminate()
 
     def setUp(self):
         self.ec2_host = self.server.instance.dns_name
@@ -126,7 +125,6 @@ class TestBuildbotPGSlave(TestCase):
             self.assertTrue('host    all all     127.0.0.1/32    md5' in output)
                     
             # check if postgresdb was created correctly.
-
             output = sudo("psql -c '\l' -U postgres -A")
             self.assertTrue('hobby|hobbyuser' in output)
 
