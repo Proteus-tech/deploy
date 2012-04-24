@@ -39,4 +39,17 @@ class TestAddPostgresSlave(TestCase):
                 self.assertTrue("nickname = '%s'" % (param) in content)
         except IOError:
             self.fail('buildbot_config/slaves/pg_slave.py not found')
+ 
+    def test_runtest_command(self):
+        os.makedirs(self.path_bb_slave % (self.path_check))
+        os.chdir('%s/fakeproject' % (self.path_check))
+        param = 'mongo'
+        call( ['../../bin/add-pg-slave-to-master-cfg',param] )
+        self.assertTrue(os.path.exists('buildbot_config/slaves/pg_slave.py'))
+        try:
+            with open('buildbot_config/slaves/pg_slave.py') as stream:
+                content = stream.read()
+                self.assertTrue('''["/bin/bash","runtests", "--settings=%s_project.settings.pg_buildbot" % PROJECT_NAME, "--noinput"]''' in content)
+        except IOError:
+            self.fail('buildbot_config/slaves/pg_slave.py not found')
        

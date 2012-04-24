@@ -1,12 +1,13 @@
+#!usr/bin/python
 from fabric.api import settings
 from fabric.context_managers import prefix
-from fabric.operations import sudo
+from fabric.operations import sudo, local
 from os.path import abspath
 from profab.server import Server, _on_this_server
 from proteus.install_buildbot_master_env import install_buildbot_master_env
 from subprocess import call
 from unittest import TestCase
-import sys
+import sys, os
 
 class TestBuildbotMaster(TestCase):
     @classmethod
@@ -30,16 +31,37 @@ class TestBuildbotMaster(TestCase):
     @classmethod
     def connect_to_server(cls, ec2_host):
         cls.server = Server.connect('proteus', ec2_host)
+        #pass
 
     @classmethod
     def setUpClass(cls):
-        #cls.create_simple_server()
-        cls.connect_to_server('ec2-184-72-4-120.us-west-1.compute.amazonaws.com')
+        '''
+        create virtual environment for run integration test
+        start simple server
+        '''
+        tmp_path = os.getcwd()
+        os.chdir('..')
+        os.system('virtualenv /tmp/proteus-deploy-int')
+        activate_this = '/tmp/proteus-deploy-int/bin/activate_this.py'
+        execfile(activate_this, dict(__file__=activate_this))
+        os.system('python setup.py install')
+        os.system('pip install nose')
+        os.chdir(tmp_path)
+       
+        cls.create_simple_server()
+        #cls.connect_to_server('ec2-50-18-1-24.us-west-1.compute.amazonaws.com')
 
     @classmethod
     def tearDownClass(cls):
-        #cls.server.terminate()
-        pass
+        '''
+        delete environment and unuse folder
+        terminate server
+        '''
+        os.system('rm -rf /tmp/proteus-deploy-int/')
+        os.system('rm -rf ../build/ ../dist/ ../proteus_deploy.egg-info/')
+        
+        cls.server.stop()
+        cls.server.terminate()
         
     def setUp(self):
         self.ec2_host = self.server.instance.dns_name
@@ -57,13 +79,13 @@ class TestBuildbotMaster(TestCase):
         master_virtual_env_path = '/home/www-data/Buildbot/hobby/virtenv-master'
         # Act
         # TODO call from script to test script too
-        #call(['pf-server-role-add'
-        #    , 'proteus'
-        #    , self.ec2_host
-        #    , '--proteus.install_buildbot_master_env'
-        #    , master_virtual_env_path]) 
-        remote_function = _on_this_server(install_buildbot_master_env)
-        remote_function(self.server, master_virtual_env_path)
+        call(['pf-server-role-add'
+            , 'proteus'
+            , self.ec2_host
+            , '--proteus.install_buildbot_master_env'
+            , master_virtual_env_path]) 
+        #remote_function = _on_this_server(install_buildbot_master_env)
+        #remote_function(self.server, master_virtual_env_path)
         # Assert
         with settings(host_string=self.host_string):
             activate = 'source %s/bin/activate' % master_virtual_env_path
@@ -74,5 +96,3 @@ class TestBuildbotMaster(TestCase):
                 # test that environment contains buildbot package
                 output = sudo('pip freeze')
                 self.assertTrue('buildbot' in output)
-                
-
