@@ -45,6 +45,6 @@ class Configure(Role):
 
         # Setup python-psycopg2 in root environment and
         # psycopg2 in virtual environemt.
-        setup_psycopg2_on_slave(server, slave_virtenv)
-
+        setup_psycopg2_on_slave(server, slave_virtenv, slave_checkout_path)
+        
         tag(server, 'slave', 'ready')
