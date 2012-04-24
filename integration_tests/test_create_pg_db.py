@@ -75,7 +75,7 @@ class TestCreatePgDb(TestCase):
         with settings(host_string=self.host_string):
             sudo('rm -rf /home/www-data/Buildbot')
 
-    def test_setup_buildbot_master_env(self):
+    def test_create_pg_db(self):
         # Arrange
         master_virtual_env_path = '/home/www-data/Buildbot/hobby/virtenv-master'
         # Act
@@ -106,7 +106,7 @@ class TestCreatePgDb(TestCase):
             , 'proteus'
             , self.ec2_host
             , '--proteus.setup_psycopg2_on_slave'
-            , 'hobby']) 
+            , 'hobby,/home/www-data/Buildbot/hobby/buildslave1']) 
         # Assert
         with settings(host_string=self.host_string):
             # test have psycopg2 in server
