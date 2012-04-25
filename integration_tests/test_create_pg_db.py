@@ -41,7 +41,6 @@ class TestCreatePgDb(TestCase):
         '''
         tmp_path = os.getcwd()
         os.chdir('..')
-        os.system('. ~/.bashrc')
         os.system('virtualenv /tmp/proteus-deploy-int')
         activate_this = '/tmp/proteus-deploy-int/bin/activate_this.py'
         execfile(activate_this, dict(__file__=activate_this))
@@ -69,7 +68,6 @@ class TestCreatePgDb(TestCase):
         
     def tearDown(self):
         self.delete_buildbot_folder()
-        pass
 
     def delete_buildbot_folder(self):
         with settings(host_string=self.host_string):
@@ -77,7 +75,7 @@ class TestCreatePgDb(TestCase):
 
     def test_create_pg_db(self):
         # Arrange
-        master_virtual_env_path = '/home/www-data/Buildbot/hobby/virtenv-master'
+        slave_virtual_env_path = '/home/www-data/Buildbot/hobby/virtenv-slave'
         # Act
         call(['setup-buildbot-on-server'
             , 'proteus'
@@ -100,18 +98,6 @@ class TestCreatePgDb(TestCase):
             # test have postgresql in server
             output = sudo('ls /etc/')
             self.assertTrue('postgresql' in output)
-        
-        # Act
-        call(['pf-server-role-add'
-            , 'proteus'
-            , self.ec2_host
-            , '--proteus.setup_psycopg2_on_slave'
-            , 'hobby,/home/www-data/Buildbot/hobby/buildslave1']) 
-        # Assert
-        with settings(host_string=self.host_string):
-            # test have psycopg2 in server
-            output = sudo('pip freeze')
-            self.assertTrue('psycopg2' in output)
         
         # Act
         call(['pf-server-role-add'
@@ -147,6 +133,20 @@ class TestCreatePgDb(TestCase):
             output = sudo('cat /home/www-data/Buildbot/hobby/buildslave1/buildbot.tac')
             self.assertTrue("slavename = 'slave-pg'" in output)
             self.assertTrue("passwd = 'slave-pgpassword'" in output)
+        
+        # Act
+        call(['pf-server-role-add'
+            , 'proteus'
+            , self.ec2_host
+            , '--proteus.setup_psycopg2_on_slave'
+            , 'hobby,/home/www-data/Buildbot/hobby/buildslave1/builder-pg']) 
+        # Assert
+        with settings(host_string=self.host_string):
+            # test have psycopg2 in server
+            activate = 'source %s/bin/activate' % slave_virtual_env_path
+            with prefix(activate):
+                output = sudo('pip freeze')
+                self.assertTrue('psycopg2' in output)
         
         # Act
         call(['restart-buildbot-master'
