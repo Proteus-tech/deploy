@@ -168,19 +168,19 @@ Required parameter(s):
 
 ## proteus.buildbot_master
 
-    --proteus.buildbot_master repository
+    --proteus.buildbot_master repository,project_name
 
 Setup buildbot master environment according to `master.cfg` in the project. Usually followed by `proteus.start_buildbot_master`.
 
 ## proteus.buildbot_slave
 
-    --proteus.buildbot_slave repository
+    --proteus.buildbot_slave repository,project_name
 
 Setup a build slave of the project. You need to update `master.cfg` to let the master knows this new slave. Usually followed by `proteus.start_buildbot_slave`.
 
 ## proteus.buildbot_pg_slave
 
-    --proteus.buildbot_pg_slave repository,ec2-host
+    --proteus.buildbot_pg_slave repository,ec2-host,project_name
     
 Setup a build slave of the project with postgres database.
 
