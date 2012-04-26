@@ -47,8 +47,8 @@ class TestCreatePgDb(TestCase):
         os.system('pip install nose')
         os.chdir(tmp_path)
        
-        #cls.create_simple_server()
-        cls.connect_to_server('ec2-184-72-29-114.us-west-1.compute.amazonaws.com')
+        cls.create_simple_server()
+        #cls.connect_to_server('ec2-184-72-29-114.us-west-1.compute.amazonaws.com')
 
     @classmethod
     def tearDownClass(cls):
@@ -58,24 +58,37 @@ class TestCreatePgDb(TestCase):
         '''
         os.system('rm -rf /tmp/proteus-deploy-int/')
         os.system('rm -rf ../build/ ../dist/ ../proteus_deploy.egg-info/')
-        #cls.server.stop()
-        #cls.server.terminate()
+        cls.server.stop()
+        cls.server.terminate()
         
     def setUp(self):
         self.ec2_host = self.server.instance.dns_name
         self.host_string = 'ubuntu@%s' % self.ec2_host
         
     def tearDown(self):
-        #self.delete_buildbot_folder()
-        pass
+        self.delete_buildbot_folder()
 
-    #def delete_buildbot_folder(self):
-    #    with settings(host_string=self.host_string):
-    #        sudo('rm -rf /home/www-data/Buildbot')
+    def delete_buildbot_folder(self):
+        with settings(host_string=self.host_string):
+            sudo('rm -rf /home/www-data/Buildbot')
 
     def test_create_pg_db(self):
         # Arrange
         slave_virtual_env_path = '/home/www-data/Buildbot/hobby/virtenv-slave'
+
+        '''0.run role postgres
+        '''
+        # Act
+        call(['pf-server-role-add'
+            , 'proteus'
+            , self.ec2_host
+            , 'postgres']) 
+        # Assert
+        with settings(host_string=self.host_string):
+            # test have postgresql in server
+            output = sudo('ls /etc/')
+            self.assertTrue('postgresql' in output)
+
         ''' 1.run role install_buildbot_slave_env
         '''
         # Act
@@ -162,20 +175,7 @@ class TestCreatePgDb(TestCase):
             with prefix(activate):
                 output = sudo('pip freeze')
                 self.assertTrue('psycopg2' in output)
-        
-        '''6.run role postgres
-        '''
-        # Act
-        call(['pf-server-role-add'
-            , 'proteus'
-            , self.ec2_host
-            , 'postgres']) 
-        # Assert
-        with settings(host_string=self.host_string):
-            # test have postgresql in server
-            output = sudo('ls /etc/')
-            self.assertTrue('postgresql' in output)
-        
+                
         '''7.run role replace_pg_hba_conf
         '''
         # Act
