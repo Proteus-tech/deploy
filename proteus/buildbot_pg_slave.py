@@ -20,13 +20,11 @@ class Configure(Role):
 
     def configure(self, server):
         try:
-            repository, ec2_master_host = splitter(self.parameter)
+            repository, ec2_master_host, project_name = splitter(self.parameter)
         except ValueError:
-            repository = self.parameter 
+            repository, project_name = splitter(self.parameter) 
             ec2_master_host = 'localhost'
 
-        # Derive project_name, root from repository.
-        project_name = root_folder(repository)
         root = home(project_name) 
 
         # Setup buildbot-slave environment.

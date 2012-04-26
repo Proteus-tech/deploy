@@ -25,7 +25,7 @@ else
         roles="${roles} --proteus.credentials $repository"
     fi
 
-    roles="${roles} --proteus.buildbot_slave $repository,$ec2_master_host"
+    roles="${roles} --proteus.buildbot_slave $repository,$ec2_master_host,$project_name"
 
     pf-server-role-add $client $ec2_host $roles
 fi

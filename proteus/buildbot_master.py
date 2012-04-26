@@ -6,6 +6,7 @@ from proteus.git_checkout import root_folder, git_checkout, create_script_to_upd
 from proteus.install_buildbot_master_env import install_buildbot_master_env
 from proteus.setup_buildbot_master import setup_buildbot_master
 from proteus.tag import tag
+from proteus import buildbot
 
 class Configure(Role):
     """
@@ -18,8 +19,7 @@ class Configure(Role):
     ]
 
     def configure(self, server):
-        repository = self.parameter 
-        project_name = root_folder(repository)
+        repository, project_name = buildbot.splitter(self.parameter) 
         root = home(project_name)
  
         master_virtenv = master_virtual_env_path(root)
