@@ -26,12 +26,11 @@ class Configure(Role):
 
     def configure(self, server):
         try:
-            repository, ec2_master_host = splitter(self.parameter)
+            repository, ec2_master_host, project_name = splitter(self.parameter)
         except ValueError:
-            repository = self.parameter 
+            repository, project_name = splitter(self.parameter) 
             ec2_master_host = 'localhost'
 
-        project_name = root_folder(repository)
         root = home(project_name) 
 
         slave_virtenv = slave_virtual_env_path(root)

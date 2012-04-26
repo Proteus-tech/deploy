@@ -51,7 +51,7 @@ class TestMasterConfig(TestCase):
         """
         # Arrange
         role = Configure()
-        role.parameter = repository = 'https://juacompe@github.com/juacompe/fluffy.git'
+        role.parameter = 'https://juacompe@github.com/juacompe/fluffy.git,fluffy'
         server = Mock()
         # Act
         role.configure(server)
@@ -68,11 +68,11 @@ class TestMasterConfig(TestCase):
         """
         # Arrange
         role = Configure()
-        role.parameter = repository = 'https://juacompe@github/juacompe/fluffy.git'
+        role.parameter = "https://juacompe@github/juacompe/fluffy.git,fluffy"
         server = Mock()
         # Act
         role.configure(server)
         # Assert
         self.mock_create_script.assert_called_once_with(server
-            ,'/home/www-data/Buildbot/fluffy'
+            ,"/home/www-data/Buildbot/fluffy"
         )
