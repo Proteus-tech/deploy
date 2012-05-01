@@ -1,16 +1,50 @@
 #!/bin/bash
-if [ $# -lt 3 ]; then
+if [ $# -lt 2 ]; then
     echo "Usage: start-buildbot-server client project_name repository privacy bits region size ami"
     echo ""
     echo "client: is profab client"
-    echo "project_name: name of the project that buildbot run against"
+    echo "<optional>project_name: name of the project that buildbot run against"
     echo "repository: URL to the repository"
-    echo "privacy: privacy of repository (public|private)"
-    echo "bits: could be either 32 or 64*"
-    echo "region: could be us-west-1*, us-west-2 or ap-southeast-1"
-    echo "size: size of the instance (default is t1.micro)"
-    echo "ami: is AMI ID (default is ami-4d580408 which is Ubuntu Natty)"
+    echo "<optional>privacy: privacy of repository (public|private)"
+    echo "<optional>bits: could be either 32 or 64*"
+    echo "<optional>region: could be us-west-1*, us-west-2 or ap-southeast-1"
+    echo "<optional>size: size of the instance (default is t1.micro)"
+    echo "<optional>ami: is AMI ID (default is ami-4d580408 which is Ubuntu Natty)"
     exit 1
+elif [ $# -eq 2 ]; then
+    string=$2
+    string=${string%.*}
+    string=${string##*/}
+   
+    project_name=$string
+    client=$1
+    repository=$2
+    privacy="publici"
+    bits="64"
+    region="us-west-1"
+    size="t1.micro"
+    ami="ami-4d580408"
+elif [ $# -eq 3 ]; then
+    if [[ $3 = "public" || $3 = "private" ]]; then
+        string=$2
+        string=${string%.*}
+        string=${string##*/}
+                                
+        project_name=$string
+        client=$1
+        repository=$2
+        privacy=$3
+    else
+        client=$1
+        project_name=$2
+        repository=$3
+        privacy="public"
+    fi
+    bits="64"
+    region="us-west-1"
+    size="t1.micro"
+    ami="ami-4d580408"
+
 else
     client=$1
     project_name=$2
@@ -21,15 +55,17 @@ else
     size=${7-t1.micro}
     ami=${8-ami-4d580408}
     
-    roles=proteus.www_home 
-
-    if [ $privacy = "private" ]; then
-        echo "do hand shaking for private repository"
-        roles="${roles} --proteus.credentials $repository"
-    fi
-    
-    roles="${roles} --proteus.buildbot_master $repository,$project_name --proteus.buildbot_slave $repository,$project_name --proteus.start_buildbot_master $project_name --proteus.start_buildbot_slave $project_name smarthost --proteus.tag mta,exim4 --proteus.tag buildbot,combo-$project_name --proteus.tag Name,buildbot-$project_name"
-
-    pf-server-start $client --security_group ssh --security_group http wsgi --bits $bits --region $region --size $size --ami $ami $roles
 fi
+
+roles=proteus.www_home 
+
+if [ $privacy = "private" ]; then
+    echo "do hand shaking for private repository"
+    roles="${roles} --proteus.credentials $repository"
+fi
+    
+roles="${roles} --proteus.buildbot_master $repository,$project_name --proteus.buildbot_slave $repository,$project_name --proteus.start_buildbot_master $project_name --proteus.start_buildbot_slave $project_name smarthost --proteus.tag mta,exim4 --proteus.tag buildbot,combo-$project_name --proteus.tag Name,buildbot-$project_name"
+
+pf-server-start $client --security_group ssh --security_group http wsgi --bits $bits --region $region --size $size --ami $ami $roles
+
 

@@ -1,28 +1,59 @@
 #!/bin/bash
-if [ $# -lt 4 ]; then
+if [ $# -lt 3 ]; then
     echo "Usage: setup-buildbot-on-server client ec2_host project_name repository privacy"
     echo ""
     echo "client: is profab client"
     echo "ec2_host: public host of EC2 instance"
-    echo "project_name: name of the project that buildbot run against"
+    echo "<optional>project_name: name of the project that buildbot run against"
     echo "repository: URL to the repository"
-    echo "privacy: privacy of repository (public|private)"
+    echo "<optional>privacy: privacy of repository (public|private)"
     exit 1
+elif [ $# -eq 3 ]; then
+    string=$3
+    string=${string%.*}
+    string=${string##*/}
+    
+    project_name=$string
+    client=$1
+    ec2_host=$2
+    repository=$3
+    privacy="public"
+ 
+elif [ $# -eq 4 ]; then
+    if [[ $4 = "public" || $4 = "private" ]]; then
+        string=$3
+        string=${string%.*}
+        string=${string##*/}
+    
+        project_name=$string
+        client=$1
+        ec2_host=$2
+        repository=$3
+        privacy=$4
+    else
+        client=$1
+        ec2_host=$2
+        project_name=$3
+        repository=$4
+        privacy="public"
+    fi
 else
     client=$1
     ec2_host=$2
     project_name=$3
     repository=$4
-    privacy=${5-public}
+    privacy=$5
 
-    roles=proteus.www_home 
-
-    if [ $privacy = "private" ]; then
-        echo "do hand shaking for private repository"
-        roles="${roles} --proteus.credentials $repository"
-    fi
-                            
-    roles="${roles} --proteus.buildbot_master $repository,$project_name --proteus.buildbot_slave $repository,$project_name --proteus.start_buildbot_master $project_name --proteus.start_buildbot_slave $project_name smarthost --proteus.tag mta,exim4 --proteus.tag buildbot,combo-$project_name --proteus.tag Name,buildbot-$project_name"
-
-    pf-server-role-add $client $ec2_host $roles
 fi
+
+roles=proteus.www_home 
+
+if [ $privacy = "private" ]; then
+    echo "do hand shaking for private repository"
+    roles="${roles} --proteus.credentials $repository"
+fi
+                            
+roles="${roles} --proteus.buildbot_master $repository,$project_name --proteus.buildbot_slave $repository,$project_name --proteus.start_buildbot_master $project_name --proteus.start_buildbot_slave $project_name smarthost --proteus.tag mta,exim4 --proteus.tag buildbot,combo-$project_name --proteus.tag Name,buildbot-$project_name"
+
+pf-server-role-add $client $ec2_host $roles
+

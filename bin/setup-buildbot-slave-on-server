@@ -1,15 +1,47 @@
 #!/bin/bash
-if [ $# -lt 5 ]; then
+if [ $# -lt 4 ]; then
     echo "Usage: setup-buildbot-slave-on-server client ec2_host ec2_master_host project_name repository privacy"
     echo ""
     echo "client: is profab client"
     echo "ec2_host: public host of EC2 instance"
     echo "ec2_master_host : buildbot-master public host of EC2 instance or use 'localhost' -"
     echo "    if setup buildbot-slave in same server as buildbot-master"
-    echo "project_name: name of the project that buildbot run against"
+    echo "<optional>project_name: name of the project that buildbot run against"
     echo "repository: URL to the repository"
-    echo "privacy: privacy of repository (public|private)"
+    echo "<optional>privacy: privacy of repository (public|private)"
     exit 1
+elif [ $# -eq 4 ]; then
+    string=$4
+    string=${string%.*}
+    string=${string##*/}
+                
+    project_name=$string
+    client=$1
+    ec2_host=$2
+    ec2_master_host=$3
+    repository=$4
+    privacy="public"
+
+elif [ $# -eq 5 ]; then
+    if [[ $5 = "public" || $5 = "private" ]]; then
+        string=$4
+        string=${string%.*}
+        string=${string##*/}
+                                
+        project_name=$string
+        client=$1
+        ec2_host=$2
+        ec2_master_host=$3
+        repository=$4
+        privacy=$5
+    else
+        client=$1
+        ec2_host=$2
+        ec2_master_host=$3
+        project_name=$4
+        repository=$5
+        privacy="public"
+    fi
 else
     client=$1
     ec2_host=$2
@@ -18,14 +50,16 @@ else
     repository=$5
     privacy=${6-public}
 
-    roles=proteus.www_home
-
-    if [ $privacy = "private" ]; then
-        echo "do hand shaking for private repository"
-        roles="${roles} --proteus.credentials $repository"
-    fi
-
-    roles="${roles} --proteus.buildbot_slave $repository,$ec2_master_host,$project_name"
-
-    pf-server-role-add $client $ec2_host $roles
 fi
+    
+roles=proteus.www_home
+
+if [ $privacy = "private" ]; then
+    echo "do hand shaking for private repository"
+    roles="${roles} --proteus.credentials $repository"
+fi
+
+roles="${roles} --proteus.buildbot_slave $repository,$ec2_master_host,$project_name"
+
+pf-server-role-add $client $ec2_host $roles
+

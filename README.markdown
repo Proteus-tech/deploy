@@ -3,7 +3,7 @@
 
 As Django 1.4 has not been released, it's not yet included as dependencies in `setup.py`. So you need to install it separately.
 
-    mkvirtualenv proteus-deploy
+    mkvirtualenv proteus-deploy-user
     pip install git+git://github.com/Proteus-tech/deploy.git@develop
     pip freeze
 
@@ -34,6 +34,12 @@ Starts a new server.
 #### Prerequisites
 The target region of the server must have 2 security groups prepared (`ssh` and `http`).
 
+Simple step:
+
+    start-simple-server client-name
+
+Full step:
+
     start-simple-server client-name bits region size ami
 
 Required parameter(s):
@@ -63,32 +69,43 @@ Setups buildbot on an existing EC2 instance.
 #### Prerequisites
 The root folder of the repository must contain `buildbot/master.cfg`.
 
+Simple step:
+
+    setup-buildbot-on-server client-name ec2-host repository-url
+
+Full step:
+
     setup-buildbot-on-server client-name ec2-host project-name repository-url privacy
 
 Required parameter(s):
 
 - **client-name**
 - **ec2-host** the public domain of the EC2 instance (i.e ec2-184-169-247-45.us-west-1.compute.amazonaws.com)
-- **project-name** the name of the project
 - **repository-url**
 
 Optional parameter(s):
-
+- **project-name** the name of the project (default:  project name from repository-url)
 - **privacy** repository is public or private (public|private, default: public)
 
 ### Start new buildbot server
 Starts a new server and setup buildbot on it.
+
+Simple step:
+
+    start-buildbot-server client-name repository-url
+
+Full step:
 
     start-buildbot-server client-name project-name repository-url privacy bits region size ami
 
 Required parameter(s):
 
 - **client-name**
-- **project-name** the name of the project
 - **repository-url**
 
 Optional parameter(s):
 
+- **project-name** the name of the project (default:  project name from repository-url)
 - **privacy** repository is public or private (public|private, default: public)
 - **bits** 32 | 64 (default: 64)
 - **region** us-west-1, us-west-2 or ap-southeast-1 (default: us-west-1)
@@ -101,6 +118,12 @@ Setups buildbot slave on an existing EC2 instance.
 #### Prerequisites
 The buildbot master server must valid and has public doamin ( to be ec2-master-host value ).
 
+Simple step:
+
+    setup-buildbot-slave-on-server client-name ec2-host ec2-master-host repository-url
+
+Full step:
+
     setup-buildbot-slave-on-server client-name ec2-host ec2-master-host project-name repository-url privacy
 
 Required parameter(s):
@@ -108,11 +131,11 @@ Required parameter(s):
 - **client-name**
 - **ec2-host** the public domain of the EC2 instance (i.e ec2-184-169-247-45.us-west-1.compute.amazonaws.com)
 - **ec2-master-host** the public domain of the buildbot master EC2 instance ( Use "localhost" for same instance )
-- **project-name** the name of the project
 - **repository-url**
 
 Optional parameter(s):
 
+- **project-name** the name of the project (default:  project name from repository-url)
 - **privacy** repository is public or private (public|private, default: public)
 
 ### Setup postgres buildbot slave on existing server
@@ -121,6 +144,12 @@ Setups postgres buildbot slave on an existing EC2 instance.
 #### Prerequisites
 The buildbot master server must valid and has public doamin ( to be ec2-master-host value ).
 
+Simple step:
+
+    setup-pg-slave-on-server client-name ec2-host ec2-master-host repository-url
+
+Full step:
+
     setup-pg-slave-on-server client-name ec2-host ec2-master-host project-name repository-url privacy
 
 Required parameter(s):
@@ -128,11 +157,11 @@ Required parameter(s):
 - **client-name**
 - **ec2-host** the public domain of the EC2 instance (i.e ec2-184-169-247-45.us-west-1.compute.amazonaws.com)
 - **ec2-master-host** the public domain of the buildbot master EC2 instance ( Use "localhost" for same instance )
-- **project-name** the name of the project
 - **repository-url**
 
 Optional parameter(s):
 
+- **project-name** the name of the project (default:  project name from repository-url)
 - **privacy** repository is public or private (public|private, default: public)
 
 ### Create postgres slave file for master configuration file
