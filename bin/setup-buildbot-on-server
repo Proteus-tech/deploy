@@ -20,7 +20,7 @@ elif [ $# -eq 3 ]; then
     privacy="public"
  
 elif [ $# -eq 4 ]; then
-    if [ $4 = "public"] || [ $4 = "private" ]; then
+    if [[ $4 = "public" || $4 = "private" ]]; then
         string=$3
         string=${string%.*}
         string=${string##*/}

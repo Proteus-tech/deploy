@@ -25,7 +25,7 @@ elif [ $# -eq 2 ]; then
     size="t1.micro"
     ami="ami-4d580408"
 elif [ $# -eq 3 ]; then
-    if [ $3 = "public"] || [ $3 = "private" ]; then
+    if [[ $3 = "public" || $3 = "private" ]]; then
         string=$2
         string=${string%.*}
         string=${string##*/}

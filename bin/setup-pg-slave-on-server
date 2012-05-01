@@ -22,7 +22,7 @@ elif [ $# -eq 4 ]; then
     repository=$4
     privacy="public"
 elif [ $# -eq 5 ]; then
-    if [ $5 = "public"] || [ $5 = "private" ]; then
+    if [[ $5 = "public" || $5 = "private" ]]; then
         string=$4
         string=${string%.*}
         string=${string##*/}
