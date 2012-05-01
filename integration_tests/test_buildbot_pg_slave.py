@@ -55,7 +55,7 @@ class TestBuildbotPGSlave(TestCase):
         os.system('rm -rf /tmp/proteus-deploy-int/')
         os.system('rm -rf ../build/ ../dist/ ../proteus_deploy.egg-info/')
         
-        cls.server.cnx.close()
+        cls.server.stop()
         cls.server.terminate()
 
     def setUp(self):
