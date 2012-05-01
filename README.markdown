@@ -3,6 +3,7 @@
 
 As Django 1.4 has not been released, it's not yet included as dependencies in `setup.py`. So you need to install it separately.
 
+    mkvirtualenv proteus-deploy
     pip install git+git://github.com/Proteus-tech/deploy.git@develop
     pip freeze
 
@@ -12,7 +13,7 @@ If you find `Django==1.4` and `proteus-deploy==0.0.7` in your environment, then 
 
 First, clone the project, then follow the steps below:
 
-    mkvirtualenv --no-site-packages proteus-deploy
+    mkvirtualenv --no-site-packages proteus-deploy-dev
     pip install -r setup/requirements.txt
     ./runtests
 
