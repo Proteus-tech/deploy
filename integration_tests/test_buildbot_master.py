@@ -3,7 +3,7 @@ from fabric.api import settings
 from fabric.context_managers import prefix
 from fabric.operations import sudo, local
 from os.path import abspath
-from profab.server import Server, _on_this_server
+from profab.server import Server
 from proteus.install_buildbot_master_env import install_buildbot_master_env
 from subprocess import call
 from unittest import TestCase
