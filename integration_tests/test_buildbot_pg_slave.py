@@ -1,3 +1,4 @@
+#!usr/bin/python
 from fabric.api import settings
 from fabric.context_managers import prefix
 from fabric.operations import sudo, local
