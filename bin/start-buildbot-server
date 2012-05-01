@@ -40,6 +40,7 @@ elif [ $# -eq 3 ]; then
         repository=$3
         privacy="public"
     fi
+    bits="64"
     region="us-west-1"
     size="t1.micro"
     ami="ami-4d580408"
