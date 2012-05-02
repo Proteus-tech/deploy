@@ -62,20 +62,20 @@ class TestBuildbotMaster(TestCase):
         delete environment and unuse folder
         terminate server
         '''
-        os.system('rm -rf /tmp/proteus-deploy-int/')
-        os.system('rm -rf ../build/ ../dist/ ../proteus_deploy.egg-info/')
-        
+
         cls.server.stop()
         cls.server.terminate()
-        
+
+        os.system('rm -rf /tmp/proteus-deploy-int/')
+        os.system('rm -rf /tmp/easy_install-*')
+        os.system('rm -rf ../build/ ../dist/ ../proteus_deploy.egg-info/')
+
     def setUp(self):
         self.ec2_host = self.server.instance.dns_name
         self.host_string = 'ubuntu@%s' % self.ec2_host
 
     def tearDown(self):
-#        self.delete_buildbot_folder()
-        os.system('rm -rf /tmp/proteus-deploy-int/')
-        os.system('rm -rf /tmp/easy_install-*')
+        self.delete_buildbot_folder()
 
 
     def delete_buildbot_folder(self):
