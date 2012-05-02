@@ -36,6 +36,12 @@ class TestBuildbotPGSlave(TestCase):
 
     @classmethod
     def setUpClass(cls):
+        
+        # clean previous step
+        target_dir = '/tmp/proteus-deploy-int'
+        if os.path.exists(target_dir)
+            os.system('rm -rf %s' % (target_dir))
+        
         tmp_path = os.getcwd()
         os.chdir('..')
         os.system('virtualenv /tmp/proteus-deploy-int')
