@@ -74,6 +74,9 @@ class TestCreatePgDb(TestCase):
         
     def tearDown(self):
         self.delete_buildbot_folder()
+        target_dir = '/tmp/proteus-deploy-int'
+        if os.path.exists(target_dir):
+            os.system('rm -rf %s' % (target_dir))
 
     def delete_buildbot_folder(self):
         with settings(host_string=self.host_string):
