@@ -41,6 +41,7 @@ class TestBuildbotPGSlave(TestCase):
         target_dir = '/tmp/proteus-deploy-int'
         if os.path.exists(target_dir):
             os.system('rm -rf %s' % (target_dir))
+        os.system('rm -rf /tmp/easy_install-*')
         
         tmp_path = os.getcwd()
         os.chdir('..')
@@ -75,6 +76,7 @@ class TestBuildbotPGSlave(TestCase):
         if os.path.exists(target_dir):
             os.system('rm -rf %s' % (target_dir))
 
+        os.system('rm -rf /tmp/easy_install-*')
     def delete_buildbot_folder(self):
         with settings(host_string=self.host_string):
             sudo('rm -rf /home/www-data/Buildbot')

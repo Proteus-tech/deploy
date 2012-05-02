@@ -44,6 +44,7 @@ class TestBuildbotMaster(TestCase):
         target_dir = '/tmp/proteus-deploy-int'
         if os.path.exists(target_dir):
             os.system('rm -rf %s' % (target_dir))
+        os.system('rm -rf /tmp/easy_install-*')
 
         tmp_path = os.getcwd()
         os.chdir('..')
@@ -78,6 +79,8 @@ class TestBuildbotMaster(TestCase):
         target_dir = '/tmp/proteus-deploy-int'
         if os.path.exists(target_dir):
             os.system('rm -rf %s' % (target_dir))
+        os.system('rm -rf /tmp/easy_install-*')
+
 
     def delete_buildbot_folder(self):
         with settings(host_string=self.host_string):
