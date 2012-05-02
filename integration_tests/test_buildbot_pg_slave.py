@@ -39,7 +39,7 @@ class TestBuildbotPGSlave(TestCase):
         
         # clean previous step
         target_dir = '/tmp/proteus-deploy-int'
-        if os.path.exists(target_dir)
+        if os.path.exists(target_dir):
             os.system('rm -rf %s' % (target_dir))
         
         tmp_path = os.getcwd()
