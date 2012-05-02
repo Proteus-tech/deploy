@@ -41,9 +41,7 @@ class TestBuildbotMaster(TestCase):
         '''
 
         # clean previous step
-        target_dir = '/tmp/proteus-deploy-int'
-        if os.path.exists(target_dir):
-            os.system('rm -rf %s' % (target_dir))
+        os.system('rm -rf /tmp/proteus-deploy-int/')
         os.system('rm -rf /tmp/easy_install-*')
 
         tmp_path = os.getcwd()
@@ -73,12 +71,10 @@ class TestBuildbotMaster(TestCase):
     def setUp(self):
         self.ec2_host = self.server.instance.dns_name
         self.host_string = 'ubuntu@%s' % self.ec2_host
-        
+
     def tearDown(self):
-        self.delete_buildbot_folder()
-        target_dir = '/tmp/proteus-deploy-int'
-        if os.path.exists(target_dir):
-            os.system('rm -rf %s' % (target_dir))
+#        self.delete_buildbot_folder()
+        os.system('rm -rf /tmp/proteus-deploy-int/')
         os.system('rm -rf /tmp/easy_install-*')
 
 

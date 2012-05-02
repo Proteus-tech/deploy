@@ -36,11 +36,9 @@ class TestBuildbotPGSlave(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        
+
         # clean previous step
-        target_dir = '/tmp/proteus-deploy-int'
-        if os.path.exists(target_dir):
-            os.system('rm -rf %s' % (target_dir))
+        os.system('rm -rf /tmp/proteus-deploy-int/')
         os.system('rm -rf /tmp/easy_install-*')
         
         tmp_path = os.getcwd()
@@ -71,12 +69,10 @@ class TestBuildbotPGSlave(TestCase):
         self.host_string = 'ubuntu@%s' % self.ec2_host
 
     def tearDown(self):
-        self.delete_buildbot_folder()
-        target_dir = '/tmp/proteus-deploy-int'
-        if os.path.exists(target_dir):
-            os.system('rm -rf %s' % (target_dir))
-
+#        self.delete_buildbot_folder()
+        os.system('rm -rf /tmp/proteus-deploy-int/')
         os.system('rm -rf /tmp/easy_install-*')
+
     def delete_buildbot_folder(self):
         with settings(host_string=self.host_string):
             sudo('rm -rf /home/www-data/Buildbot')
