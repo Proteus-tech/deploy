@@ -123,66 +123,7 @@ class TestBuildbot(TestCase):
                 self.assertTrue('buildbot' in output)
 
     ### Scenario-2 : setting up buildbot slave with postgres
-    def test_setup_buildbot_pg_slave(self):
-        slave_virtual_env_path = '/home/www-data/Buildbot/hobby/virtenv-slave'
 
-        local('''setup-pg-slave-on-server \
-                proteus \
-                %s \
-                localhost \
-                hobby \
-                git://github.com/juacompe/hobby.git''' 
-                % (self.ec2_host)
-        )
-
-        with settings(host_string=self.host_string):
-            # check if postres was installed.
-            output = sudo('aptitude search postgres')
-            self.assertTrue('i   postgresql' in output)
-            self.assertTrue('i A postgresql-' in output) 
-
-            activate = 'source %s/bin/activate' % slave_virtual_env_path
-            with prefix(activate):
-                # check if virtenv-slave is valid.
-                output = sudo('env | grep virtenv-slave')
-                self.assertTrue('VIRTUAL_ENV=/home/www-data/Buildbot/hobby/virtenv-slave' in output)
-                
-                # check if buildbot-slave environment was installed.
-                output = sudo('pip freeze')
-                self.assertTrue('buildbot-slave' in output)
-
-                # check if buildbot slave was installed and git check out work correctly.
-                self.assertTrue(exists('/home/www-data/Buildbot/hobby/buildslave1/builder-pg/src'))
-
-                # check if needed libraries were installed.
-                output = sudo('aptitude search libpq-dev')
-                self.assertTrue('i   libpq-dev' in output)
-                output = sudo('aptitude search python-psycopg')
-                self.assertTrue('i   python-psycopg' in output)
-                
-                # check if psycopg2 was already install in virtual-env.
-                output = sudo('pip freeze')
-                self.assertTrue('psycopg' in output)
-
-            # check if pg_hba.conf was modified correctly.
-            linux_codename = sudo('lsb_release -cs')
-            if 'natty' in linux_codename:
-                pg_version = '8.4'
-            elif 'oneiric' in linux_codename:
-                pg_version = '9.1'
-            else:
-                pg_version = '8.4'
-
-            pg_hba_conf_path = '/etc/postgresql/%s/main/pg_hba.conf' % (pg_version)
-            output = sudo('cat %s' % (pg_hba_conf_path))
-            self.assertTrue('local   all all             trust' in output)
-            self.assertTrue('host    all all     127.0.0.1/32    md5' in output)
-                    
-            # check if postgresdb was created correctly.
-            output = sudo("psql -c '\l' -U postgres -A")
-            self.assertTrue('hobby|hobbyuser' in output)
-
-    ### Scenario-3 : create postgres database
     def test_create_pg_db(self):
         # Arrange
         slave_virtual_env_path = '/home/www-data/Buildbot/hobby/virtenv-slave'
@@ -316,4 +257,63 @@ class TestBuildbot(TestCase):
             self.assertTrue('hobbyuser' in output)
             # test database is created
             self.assertTrue('hobby' in output)
+    ### Scenario-3 : create postgres database
 
+    def test_setup_buildbot_pg_slave(self):
+        slave_virtual_env_path = '/home/www-data/Buildbot/hobby/virtenv-slave'
+
+        local('''setup-pg-slave-on-server \
+                proteus \
+                %s \
+                localhost \
+                hobby \
+                git://github.com/juacompe/hobby.git''' 
+                % (self.ec2_host)
+        )
+
+        with settings(host_string=self.host_string):
+            # check if postres was installed.
+            output = sudo('aptitude search postgres')
+            self.assertTrue('i   postgresql' in output)
+            self.assertTrue('i A postgresql-' in output) 
+
+            activate = 'source %s/bin/activate' % slave_virtual_env_path
+            with prefix(activate):
+                # check if virtenv-slave is valid.
+                output = sudo('env | grep virtenv-slave')
+                self.assertTrue('VIRTUAL_ENV=/home/www-data/Buildbot/hobby/virtenv-slave' in output)
+                
+                # check if buildbot-slave environment was installed.
+                output = sudo('pip freeze')
+                self.assertTrue('buildbot-slave' in output)
+
+                # check if buildbot slave was installed and git check out work correctly.
+                self.assertTrue(exists('/home/www-data/Buildbot/hobby/buildslave1/builder-pg/src'))
+
+                # check if needed libraries were installed.
+                output = sudo('aptitude search libpq-dev')
+                self.assertTrue('i   libpq-dev' in output)
+                output = sudo('aptitude search python-psycopg')
+                self.assertTrue('i   python-psycopg' in output)
+                
+                # check if psycopg2 was already install in virtual-env.
+                output = sudo('pip freeze')
+                self.assertTrue('psycopg' in output)
+
+            # check if pg_hba.conf was modified correctly.
+            linux_codename = sudo('lsb_release -cs')
+            if 'natty' in linux_codename:
+                pg_version = '8.4'
+            elif 'oneiric' in linux_codename:
+                pg_version = '9.1'
+            else:
+                pg_version = '8.4'
+
+            pg_hba_conf_path = '/etc/postgresql/%s/main/pg_hba.conf' % (pg_version)
+            output = sudo('cat %s' % (pg_hba_conf_path))
+            self.assertTrue('local   all all             trust' in output)
+            self.assertTrue('host    all all     127.0.0.1/32    md5' in output)
+                    
+            # check if postgresdb was created correctly.
+            output = sudo("psql -c '\l' -U postgres -A")
+            self.assertTrue('hobby|hobbyuser' in output)
