@@ -40,8 +40,9 @@ class TestBuildbot(TestCase):
     def setUpClass(cls):
 
         # clean previous step
-        self.delete_tmp_folder()
-        
+        os.system('rm -rf /tmp/proteus-deploy-int/')
+        os.system('rm -rf /tmp/easy_install-*')
+
         tmp_path = os.getcwd()
         os.chdir('..')
         os.system('virtualenv /tmp/proteus-deploy-int')
