@@ -261,17 +261,18 @@ class TestBuildbot(TestCase):
     def test_setup_buildbot_pg_slave(self):
         # try to get original pg_hba before postgres role dominate this test
         # check if pg_hba.conf was modified correctly.
-        linux_codename = sudo('lsb_release -cs')
-        if 'natty' in linux_codename:
-            pg_version = '8.4'
-        elif 'oneiric' in linux_codename:
-            pg_version = '9.1'
-        else:
-            pg_version = '8.4'
-        pg_hba_conf_bak_path = '/etc/postgresql/%s/main/pg_hba.conf.bak' % (pg_version)
-        pg_hba_conf_path = '/etc/postgresql/%s/main/pg_hba.conf' % (pg_version)
-        self.assertTrue(exists(pg_hba_conf_bak_path))
-        sudo('mv %s %s' % (pg_hba_conf_bak_path, pg_hba_conf_path)) 
+        with settings(host_string=self.host_string):
+            linux_codename = sudo('lsb_release -cs')
+            if 'natty' in linux_codename:
+                pg_version = '8.4'
+            elif 'oneiric' in linux_codename:
+                pg_version = '9.1'
+            else:
+                pg_version = '8.4'
+            pg_hba_conf_bak_path = '/etc/postgresql/%s/main/pg_hba.conf.bak' % (pg_version)
+            pg_hba_conf_path = '/etc/postgresql/%s/main/pg_hba.conf' % (pg_version)
+            self.assertTrue(exists(pg_hba_conf_bak_path))
+            sudo('mv %s %s' % (pg_hba_conf_bak_path, pg_hba_conf_path)) 
 
         slave_virtual_env_path = '/home/www-data/Buildbot/hobby/virtenv-slave'
 
