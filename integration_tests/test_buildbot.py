@@ -1,7 +1,7 @@
 #!usr/bin/python
 from fabric.api import settings
 from fabric.context_managers import prefix
-from fabric.operations import sudo, local
+from fabric.operations import sudo, local, run
 from fabric.contrib.files import exists
 from os.path import abspath
 from profab.server import Server 
