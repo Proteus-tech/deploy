@@ -259,6 +259,12 @@ class TestBuildbot(TestCase):
             
     ### Scenario-3 : setting buildbot slave with postgres
     def test_setup_buildbot_pg_slave(self):
+        # try to get original pg_hba before postgres role dominate this test
+        pg_hba_conf_bak_path = '/etc/postgresql/%s/main/pg_hba.conf.bak' % (pg_version)
+        pg_hba_conf_path = '/etc/postgresql/%s/main/pg_hba.conf' % (pg_version)
+        self.assertTrue(exists(pg_hba_conf_bak_path))
+        sudo('mv %s %s' % (pg_hba_conf_bak_path, pg_hba_conf_path)) 
+
         slave_virtual_env_path = '/home/www-data/Buildbot/hobby/virtenv-slave'
 
         local('''setup-pg-slave-on-server \
@@ -308,12 +314,10 @@ class TestBuildbot(TestCase):
             else:
                 pg_version = '8.4'
             
-            pg_hba_conf_bak_path = '/etc/postgresql/%s/main/pg_hba.conf.bak' % (pg_version)
-            pg_hba_conf_path = '/etc/postgresql/%s/main/pg_hba.conf' % (pg_version)
-
-            ### this step should return original pg_hba.conf ###
-            if exists(pg_hba_conf_bak_path):
-                sudo('mv %s %s' % (pg_hba_conf_bak_path, pg_hba_conf_path)) 
+#            pg_hba_conf_bak_path = '/etc/postgresql/%s/main/pg_hba.conf.bak' % (pg_version)
+#            pg_hba_conf_path = '/etc/postgresql/%s/main/pg_hba.conf' % (pg_version)
+#            if exists(pg_hba_conf_bak_path):
+#                sudo('mv %s %s' % (pg_hba_conf_bak_path, pg_hba_conf_path)) 
 
             output = sudo('cat %s' % (pg_hba_conf_path))
             self.assertTrue('local   all all             trust' in output)
