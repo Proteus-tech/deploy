@@ -64,8 +64,11 @@ class TestBuildbot(TestCase):
         cls.server.stop()
         cls.server.terminate()
 
-        self.delete_remote_buildbot_folder()
-        self.delete_local_tmp_folder() 
+        #self.delete_remote_buildbot_folder()
+        #self.delete_local_tmp_folder() 
+        
+        os.system('rm -rf /tmp/proteus-deploy-int/')
+        os.system('rm -rf /tmp/easy_install-*')
 
         os.system('rm -rf ../build/ ../dist/ ../proteus_deploy.egg-info/')
 
