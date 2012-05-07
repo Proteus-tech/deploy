@@ -122,8 +122,7 @@ class TestBuildbot(TestCase):
                 output = sudo('pip freeze')
                 self.assertTrue('buildbot' in output)
 
-    ### Scenario-2 : setting up buildbot slave with postgres
-
+    ### Scenario-2 : create and setting for postgres database
     def test_create_pg_db(self):
         # Arrange
         slave_virtual_env_path = '/home/www-data/Buildbot/hobby/virtenv-slave'
@@ -257,8 +256,8 @@ class TestBuildbot(TestCase):
             self.assertTrue('hobbyuser' in output)
             # test database is created
             self.assertTrue('hobby' in output)
-    ### Scenario-3 : create postgres database
-
+            
+    ### Scenario-3 : setting buildbot slave with postgres
     def test_setup_buildbot_pg_slave(self):
         slave_virtual_env_path = '/home/www-data/Buildbot/hobby/virtenv-slave'
 
@@ -308,8 +307,14 @@ class TestBuildbot(TestCase):
                 pg_version = '9.1'
             else:
                 pg_version = '8.4'
-
+            
+            pg_hba_conf_bak_path = '/etc/postgresql/%s/main/pg_hba.conf.bak' % (pg_version)
             pg_hba_conf_path = '/etc/postgresql/%s/main/pg_hba.conf' % (pg_version)
+
+            ### this step should return original pg_hba.conf ###
+            if exists(pg_hba_conf_bak_path):
+                sudo('mv %s %s' % (pg_hba_conf_bak_path, pg_hba_conf_path)) 
+
             output = sudo('cat %s' % (pg_hba_conf_path))
             self.assertTrue('local   all all             trust' in output)
             self.assertTrue('host    all all     127.0.0.1/32    md5' in output)
