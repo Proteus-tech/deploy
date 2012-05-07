@@ -64,8 +64,8 @@ class TestBuildbot(TestCase):
         cls.server.stop()
         cls.server.terminate()
 
-        #self.delete_buildbot_folder()
-        self.delete_tmp_folder() 
+        self.delete_remote_buildbot_folder()
+        self.delete_local_tmp_folder() 
 
         os.system('rm -rf ../build/ ../dist/ ../proteus_deploy.egg-info/')
 
@@ -74,19 +74,19 @@ class TestBuildbot(TestCase):
         self.host_string = 'ubuntu@%s' % self.ec2_host
 
     def tearDown(self):
-        self.delete_buildbot_folder()
+        self.delete_remote_buildbot_folder()
         #self.delete_tmp_folder()
-        self.delete_postgres_related()
+        self.delete_remote_postgres_related()
 
-    def delete_buildbot_folder(self):
+    def delete_remote_buildbot_folder(self):
         with settings(host_string=self.host_string):
             sudo('rm -rf /home/www-data/Buildbot')
 
-    def delete_tmp_folder(self):
+    def delete_local_tmp_folder(self):
         os.system('rm -rf /tmp/proteus-deploy-int/')
         os.system('rm -rf /tmp/easy_install-*')
 
-    def delete_postgres_related(self):
+    def delete_remote_postgres_related(self):
         with settings(host_string=self.host_string):
             check_result = sudo('''psql -a -c "select datname from pg_database"''', user='postgres')
             if 'hobby' in check_result:
