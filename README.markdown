@@ -19,7 +19,7 @@ First, clone the project, then follow the steps below:
 
 If all tests pass, you are good to go.
 
-NOTE: If you not have virtualenvwrapper, you can see installation virtualenvwrapper guide [here](https://github.com/Proteus-tech/deploy/wiki/Scenario-of-installation-virtualenvwrapper)
+NOTE: If you not have virtualenvwrapper, you can see installation virtualenvwrapper guide [here](https://github.com/Proteus-tech/deploy/wiki/Scenario-of-installation-virtualenvwrapper).
 
 ### Create a project
 Once you have installed proteus-deploy, you will have startproject command in your environment.
