@@ -1,7 +1,7 @@
 from buildbot.buildslave import BuildSlave
 from buildbot.config import BuilderConfig
 from buildbot.schedulers.basic import SingleBranchScheduler
-from buildbot_config.slaves import sqlite_slave
+from buildbot_config.slaves_svn import sqlite_svn_slave
 from unittest import TestCase
 
 class TestSqilteSvnSlave(TestCase):
