@@ -257,3 +257,4 @@ Set `/home/www-data/` as `$HOME` folder of user `www-data` of the machine (defau
 ## project template
 `project_template` contains a template for creating a project according to standardized layout.
 
+
