@@ -17,7 +17,7 @@ class Configure(Role):
     packages = [ 'build-essential'
         , 'python-dev'
         , 'python-setuptools'
-        , 'git-core'
+        , 'subversion'
     ]
 
     def configure(self, server):
