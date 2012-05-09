@@ -59,7 +59,7 @@ fi
 roles="${roles} postgres 
             --proteus.buildbot_pg_slave_svn $repository,$ec2_master_host,$project_name 
             proteus.replace_pg_hba_conf 
-            --proteus.create_pg_db $project_name,$repository"
+            --proteus.create_pg_db_svn $project_name,$repository"
 
 pf-server-role-add $client $ec2_host $roles
 
