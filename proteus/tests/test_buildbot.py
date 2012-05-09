@@ -16,3 +16,9 @@ class TestBuildbotCommonFunctions(TestCase):
         expected = ['/home/www-data/Buildbot/fluffy/buildslave1/builder-sqlite', 'git@github.com:Proteus-tech/deploy.git']
         results = buildbot.splitter(parameters)
         self.assertEqual(expected, results)
+
+    def test_split_svn_url(self):
+        # Act
+        host = buildbot.split_svn_url('http://vcs.vps.shogunvps.com:8081/scm-webapp-1.14/svn/testsvn/project/trunk')
+        # Assert
+        self.assertEqual('http://vcs.vps.shogunvps.com', host)
