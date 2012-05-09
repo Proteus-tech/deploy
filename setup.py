@@ -19,7 +19,7 @@ setup(
         , 'bin/setup-pg-slave-on-server'
         , 'bin/setup-pg-slave-on-svn-server'
         , 'utilities/svn_split_name.py'
-
+        , 'bin/setup-buildbot-slave-svn-on-server'
     ],
     packages = ['project_template'
         , 'project_template.buildbot_config'
