@@ -4,7 +4,8 @@ from buildbot.process.factory import BuildFactory
 from buildbot.steps.shell import ShellCommand
 
 from buildbot_config.settings import BRANCH, PROJECT_NAME, PROJECT_CODE_URL
-
+svn_username = 'www-data'
+svn_password = 'www-d@t@!@#'
 nickname = 'sqlite'
 name = 'slave-%s' % nickname
 builder_name = 'builder-%s' % nickname
@@ -12,7 +13,7 @@ builder_name = 'builder-%s' % nickname
 slave = BuildSlave(name, "%spassword" % name)
 # builder
 factory = BuildFactory()
-factory.addStep(ShellCommand(command="svn update", workdir=PROJECT_CODE_URL))
+factory.addStep(ShellCommand(command="svn update --username %s --password %s --trust-server-cert --non-interactive" % (svn_username, svn_password), workdir=PROJECT_CODE_URL))
 # Pip install and update to environment which run this buildbot
 factory.addStep(ShellCommand(command=["pip", "install", "--upgrade", "--requirement=setup/requirements.txt"],workdir=PROJECT_CODE_URL))
 factory.addStep(ShellCommand(command=["pip", "freeze"], workdir=PROJECT_CODE_URL))
