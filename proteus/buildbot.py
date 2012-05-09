@@ -25,4 +25,6 @@ def master_virtual_env_path(root):
 def master_location(root):
     return '%s/buildbot-master' % (root)
 
-
+def split_svn_url(svn_url):
+    host = svn_url.split('.com')[0]+'.com'
+    return host
