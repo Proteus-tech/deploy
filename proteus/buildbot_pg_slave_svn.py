@@ -1,6 +1,6 @@
 from profab.role import Role
 from proteus.buildbot import virtual_env_path, home, splitter
-from proteus.git_checkout import root_folder, git_checkout
+from proteus.svn_checkout import root_folder, svn_checkout
 from proteus.install_buildbot_slave_env import install_buildbot_slave_env
 from proteus.setup_buildbot_pg_slave import setup_buildbot_pg_slave
 from proteus.tag import tag

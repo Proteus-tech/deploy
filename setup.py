@@ -17,6 +17,7 @@ setup(
         , 'bin/add-pg-slave-to-master-cfg'
         , 'bin/setup-pg-slave-on-server'
         , 'bin/setup-pg-slave-on-svn-server'
+        , 'utilities/svn_split_name.py'
 
     ],
     packages = ['project_template'
@@ -27,7 +28,6 @@ setup(
         , 'project_template.project_name_project'
         , 'project_template.project_name_project.settings'
         , 'project_template.buildbot_config.slaves_svn'
-        , 'utilities'
         , 'proteus'
         , '.'
     ],
@@ -35,7 +35,6 @@ setup(
         'project_template': ['setup/*'
             , 'buildbot_config/master.cfg'
             , 'buildbot_config/master_svn.cfg'
-            , 'utilities/svn_split_name.py'
             , 'runtests'
             , 'runserver'
             , 'reset_db' 

@@ -11,7 +11,7 @@ if [ $# -lt 4 ]; then
     echo "<optional>privacy: privacy of repository (public|private)"
     exit 1
 elif [ $# -eq 4 ]; then
-    string=`python ../utilitys/svn_split_name.py $4`
+    string=`python svn_split_name.py $4`
                 
     project_name=$string
     client=$1
@@ -21,7 +21,7 @@ elif [ $# -eq 4 ]; then
     privacy="public"
 elif [ $# -eq 5 ]; then
     if [[ $5 = "public" || $5 = "private" ]]; then
-        string=`python ../utilitys/svn_split_name.py $4`
+        string=`python svn_split_name.py $4`
         
         project_name=$string
         client=$1
