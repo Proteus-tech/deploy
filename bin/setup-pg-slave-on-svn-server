@@ -20,7 +20,7 @@ elif [ $# -eq 4 ]; then
     ec2_host=$2
     ec2_master_host=$3
     repository=$4
-    privacy="public"
+    privacy="private"
 elif [ $# -eq 5 ]; then
     if [[ $5 = "public" || $5 = "private" ]]; then
         string=`python svn_split_name.py $4`
@@ -37,7 +37,7 @@ elif [ $# -eq 5 ]; then
         ec2_master_host=$3
         project_name=$4
         repository=$5
-        privacy="public"
+        privacy="private"
     fi
 else
     client=$1
@@ -45,7 +45,7 @@ else
     ec2_master_host=$3
     project_name=$4
     repository=$5
-    privacy=${6-public}
+    privacy=${6-private}
 
 fi
 
@@ -53,7 +53,7 @@ roles=proteus.www_home
 
 if [ $privacy = "private" ]; then
     echo "do hand shaking for private repository"
-    roles="${roles} --proteus.credentials $repository"
+    roles="${roles} --proteus.credentials_svn $repository"
 fi
 
 roles="${roles} postgres 
