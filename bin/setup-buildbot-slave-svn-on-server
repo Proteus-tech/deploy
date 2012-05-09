@@ -1,30 +1,32 @@
 #!/bin/bash
 if [ $# -lt 4 ]; then
-    echo "Usage: setup-pg-slave-on-server client ec2_host ec2_master_host project_name repository privacy"
+    echo "Usage: setup-buildbot-slave-on-server client ec2_host ec2_master_host project_name repository privacy"
     echo ""
     echo "client: is profab client"
     echo "ec2_host: public host of EC2 instance"
     echo "ec2_master_host : buildbot-master public host of EC2 instance or use 'localhost' -"
     echo "    if setup buildbot-slave in same server as buildbot-master"
     echo "<optional>project_name: name of the project that buildbot run against"
-    echo "repository: URL to the repository"
+    echo "repository: URL to the svn repository"
     echo "<optional>privacy: privacy of repository (public|private)"
     exit 1
 elif [ $# -eq 4 ]; then
     path=`echo $VIRTUAL_ENV`
     svn_split_path="${path}/bin/svn_split_name.py"
     string=`python $svn_split_path $4`
-                
+
+
     project_name=$string
     client=$1
     ec2_host=$2
     ec2_master_host=$3
     repository=$4
-    privacy="private"
+    privacy="public"
+
 elif [ $# -eq 5 ]; then
     if [[ $5 = "public" || $5 = "private" ]]; then
         string=`python svn_split_name.py $4`
-        
+
         project_name=$string
         client=$1
         ec2_host=$2
@@ -48,7 +50,7 @@ else
     privacy=${6-private}
 
 fi
-
+    
 roles=proteus.www_home
 
 if [ $privacy = "private" ]; then
@@ -56,10 +58,7 @@ if [ $privacy = "private" ]; then
     roles="${roles} --proteus.credentials_svn $repository"
 fi
 
-roles="${roles} postgres 
-            --proteus.buildbot_pg_slave_svn $repository,$ec2_master_host,$project_name 
-            proteus.replace_pg_hba_conf 
-            --proteus.create_pg_db_svn $project_name,$repository"
+roles="${roles} --proteus.buildbot_slave_svn $repository,$ec2_master_host,$project_name"
 
 pf-server-role-add $client $ec2_host $roles
 
