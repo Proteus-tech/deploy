@@ -11,7 +11,9 @@ if [ $# -lt 4 ]; then
     echo "<optional>privacy: privacy of repository (public|private)"
     exit 1
 elif [ $# -eq 4 ]; then
-    string=`python svn_split_name.py $4`
+    path=`echo $VIRTUAL_ENV`
+    svn_split_path="${path}/bin/svn_split_name.py"
+    string=`python $svn_split_path $4`
                 
     project_name=$string
     client=$1
