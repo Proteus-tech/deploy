@@ -9,10 +9,10 @@ if [ $# -lt 3 ]; then
     echo "<optional>privacy: privacy of repository (public|private)"
     exit 1
 elif [ $# -eq 3 ]; then
-    string=$3
-    string=${string%.*}
-    string=${string##*/}
-    
+    path=`echo $VIRTUAL_ENV`
+    svn_split_path="${path}/bin/svn_split_name.py"
+    string=`python $svn_split_path $3`    
+
     project_name=$string
     client=$1
     ec2_host=$2
@@ -21,10 +21,10 @@ elif [ $# -eq 3 ]; then
  
 elif [ $# -eq 4 ]; then
     if [[ $4 = "public" || $4 = "private" ]]; then
-        string=$3
-        string=${string%.*}
-        string=${string##*/}
-    
+        path=`echo $VIRTUAL_ENV`
+        svn_split_path="${path}/bin/svn_split_name.py"
+        string=`python $svn_split_path $3`    
+        
         project_name=$string
         client=$1
         ec2_host=$2
@@ -35,7 +35,7 @@ elif [ $# -eq 4 ]; then
         ec2_host=$2
         project_name=$3
         repository=$4
-        privacy="public"
+        privacy="private"
     fi
 else
     client=$1
@@ -50,7 +50,7 @@ roles=proteus.www_home
 
 if [ $privacy = "private" ]; then
     echo "do hand shaking for private repository"
-    roles="${roles} --proteus.credentials $repository"
+    roles="${roles} --proteus.credentials_svn $repository"
 fi
                             
 roles="${roles} --proteus.buildbot_master_svn $repository,$project_name --proteus.buildbot_slave_svn $repository,$project_name --proteus.start_buildbot_master $project_name --proteus.start_buildbot_slave $project_name smarthost --proteus.tag mta,exim4 --proteus.tag buildbot,combo-$project_name --proteus.tag Name,buildbot-$project_name"
