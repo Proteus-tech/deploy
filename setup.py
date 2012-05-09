@@ -16,6 +16,8 @@ setup(
         , 'bin/restart-buildbot-slave' 
         , 'bin/add-pg-slave-to-master-cfg'
         , 'bin/setup-pg-slave-on-server'
+        , 'bin/setup-pg-slave-on-svn-server'
+        , 'utilities/svn_split_name.py'
 
     ],
     packages = ['project_template'
