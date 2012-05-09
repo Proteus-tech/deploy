@@ -25,12 +25,14 @@ setup(
         , 'project_template.project_name.tests'
         , 'project_template.project_name_project'
         , 'project_template.project_name_project.settings'
+        , 'project_template.buildbot_config.slaves_svn'
         , 'proteus'
         , '.'
     ],
     package_data = {
         'project_template': ['setup/*'
             , 'buildbot_config/master.cfg'
+            , 'buildbot_config/master_svn.cfg'
             , 'runtests'
             , 'runserver'
             , 'reset_db' 
