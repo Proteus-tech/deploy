@@ -15,6 +15,7 @@ setup(
         , 'bin/complete_master_config'
         , 'bin/restart-buildbot-slave' 
         , 'bin/add-pg-slave-to-master-cfg'
+        , 'bin/add-pg-slave-to-master-svn-cfg'
         , 'bin/setup-pg-slave-on-server'
         , 'bin/setup-pg-slave-on-svn-server'
         , 'utilities/svn_split_name.py'

@@ -148,6 +148,7 @@ Setups postgres buildbot slave on an existing EC2 instance.
 #### Prerequisites
 The buildbot master server must valid and has public doamin ( to be ec2-master-host value ).
 
+#####For git repository
 Simple step:
 
     setup-pg-slave-on-server client-name ec2-host ec2-master-host repository-url
@@ -155,6 +156,15 @@ Simple step:
 Full step:
 
     setup-pg-slave-on-server client-name ec2-host ec2-master-host project-name repository-url privacy
+
+#####For svn repository
+Simple step:
+
+    setup-pg-slave-on-svn-server client-name ec2-host ec2-master-host repository-url
+
+Full step:
+
+    setup-pg-slave-on-svn-server client-name ec2-host ec2-master-host project-name repository-url
 
 Required parameter(s):
 
