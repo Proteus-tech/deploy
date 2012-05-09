@@ -5,12 +5,12 @@ from profab.role import Role
 from proteus import buildbot
 
 def root_folder(svn_url):
-    return svn_url.split('/')[-1]
+    return svn_url.split('/')[-2]
 
 def svn_checkout(server, path, svn_url):
     with cd(path):
         svn_folder = 'src'
-        sudo("svn co --username 'www-data' --password 'www-d@t@!@#' --force --trust-server-cert --non-interactive %s/trunk %s" % (svn_url, svn_folder), user="www-data")
+        sudo("svn co --username 'www-data' --password 'www-d@t@!@#' --force --trust-server-cert --non-interactive %s %s" % (svn_url, svn_folder), user="www-data")
         # Point to develop branch
         with cd(svn_folder):
             sudo("svn update --username 'www-data' --password 'www-d@t@!@#' --force --trust-server-cert --non-interactive", user="www-data")
