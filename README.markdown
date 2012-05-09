@@ -9,6 +9,8 @@ As Django 1.4 has not been released, it's not yet included as dependencies in `s
 
 If you find `Django==1.4` and `proteus-deploy==0.0.7` in your environment, then everything is good! Now you can start a new project (See Create a project section).
 
+NOTE: If you not have virtualenvwrapper, you can see installation virtualenvwrapper guide [here](https://github.com/Proteus-tech/deploy/wiki/Scenario-of-installation-virtualenvwrapper).
+
 ### Development installation:
 
 First, clone the project, then follow the steps below:
@@ -18,6 +20,8 @@ First, clone the project, then follow the steps below:
     ./runtests
 
 If all tests pass, you are good to go.
+
+NOTE: If you not have virtualenvwrapper, you can see installation virtualenvwrapper guide [here](https://github.com/Proteus-tech/deploy/wiki/Scenario-of-installation-virtualenvwrapper).
 
 ### Create a project
 Once you have installed proteus-deploy, you will have startproject command in your environment.
@@ -256,4 +260,5 @@ Set `/home/www-data/` as `$HOME` folder of user `www-data` of the machine (defau
 
 ## project template
 `project_template` contains a template for creating a project according to standardized layout.
+
 
