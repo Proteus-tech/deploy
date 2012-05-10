@@ -12,24 +12,25 @@ if [ $# -lt 2 ]; then
     echo "<optional>ami: is AMI ID (default is ami-4d580408 which is Ubuntu Natty)"
     exit 1
 elif [ $# -eq 2 ]; then
-    path=`echo $VIRTUAL_ENV
+    path=`echo $VIRTUAL_ENV`
     svn_split_path="${path}/bin/svn_split_name.py"
     string=`python $svn_split_path $2`
  
     project_name=$string
     client=$1
     repository=$2
-    privacy="publici"
+    privacy="private"
     bits="64"
     region="us-west-1"
     size="t1.micro"
     ami="ami-4d580408"
 elif [ $# -eq 3 ]; then
     if [[ $3 = "public" || $3 = "private" ]]; then
-        string=$2
-        string=${string%.*}
-        string=${string##*/}
                                 
+        path=`echo $VIRTUAL_ENV`
+        svn_split_path="${path}/bin/svn_split_name.py"
+        string=`python $svn_split_path $2`
+        
         project_name=$string
         client=$1
         repository=$2
@@ -38,7 +39,7 @@ elif [ $# -eq 3 ]; then
         client=$1
         project_name=$2
         repository=$3
-        privacy="public"
+        privacy="private"
     fi
     bits="64"
     region="us-west-1"
