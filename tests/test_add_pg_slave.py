@@ -9,6 +9,7 @@ class TestAddPostgresSlave(TestCase):
         self.origin_path = os.getcwd()
         self.path_check = 'tmp'      
         self.path_bb_slave = '%s/fakeproject/buildbot_config/slaves'  
+        self.path_bb_slave_svn = '%s/fakeproject/buildbot_config/slaves_svn'  
 
     def tearDown(self):
         os.chdir(self.origin_path)
@@ -52,4 +53,41 @@ class TestAddPostgresSlave(TestCase):
                 self.assertTrue('''["/bin/bash","runtests", "--settings=%s_project.settings.pg_buildbot" % PROJECT_NAME, "--noinput"]''' in content)
         except IOError:
             self.fail('buildbot_config/slaves/pg_slave.py not found')
-       
+
+    def test_create_pg_slave_svn_file(self):
+        os.makedirs(self.path_bb_slave_svn % (self.path_check))
+        os.chdir('%s/fakeproject' % (self.path_check))
+        call( ['../../bin/add-pg-slave-to-master-svn-cfg'] )
+        self.assertTrue(os.path.exists('buildbot_config/slaves_svn/pg_slave_svn.py'))
+        try:
+            with open('buildbot_config/slaves_svn/pg_slave_svn.py') as stream:
+                content = stream.read()
+                self.assertTrue("nickname = 'pg'" in content)
+        except IOError:
+            self.fail('buildbot_config/slaves_svn/pg_slave_svn.py not found')
+
+    def test_create_pg_slave_svn_with_parameter(self):
+        os.makedirs(self.path_bb_slave_svn % (self.path_check))
+        os.chdir('%s/fakeproject' % (self.path_check))
+        param = 'mongo'
+        call( ['../../bin/add-pg-slave-to-master-svn-cfg',param] )
+        self.assertTrue(os.path.exists('buildbot_config/slaves_svn/pg_slave_svn.py'))
+        try:
+            with open('buildbot_config/slaves_svn/pg_slave_svn.py') as stream:
+                content = stream.read()
+                self.assertTrue("nickname = '%s'" % (param) in content)
+        except IOError:
+            self.fail('buildbot_config/slaves_svn/pg_slave_svn.py not found')
+ 
+    def test_runtest_svn_command(self):
+        os.makedirs(self.path_bb_slave_svn % (self.path_check))
+        os.chdir('%s/fakeproject' % (self.path_check))
+        param = 'mongo'
+        call( ['../../bin/add-pg-slave-to-master-svn-cfg',param] )
+        self.assertTrue(os.path.exists('buildbot_config/slaves_svn/pg_slave_svn.py'))
+        try:
+            with open('buildbot_config/slaves_svn/pg_slave_svn.py') as stream:
+                content = stream.read()
+                self.assertTrue('''["/bin/bash","runtests", "--settings=%s_project.settings.pg_buildbot" % PROJECT_NAME, "--noinput"]''' in content)
+        except IOError:
+            self.fail('buildbot_config/slaves_svn/pg_slave_svn.py not found')
