@@ -1,6 +1,6 @@
 #!/bin/bash
 if [ $# -lt 2 ]; then
-    echo "Usage: start-buildbot-server client project_name repository privacy bits region size ami"
+    echo "Usage: start-buildbot-svn-server client project_name repository privacy bits region size ami"
     echo ""
     echo "client: is profab client"
     echo "<optional>project_name: name of the project that buildbot run against"

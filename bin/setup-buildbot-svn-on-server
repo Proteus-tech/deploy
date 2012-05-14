@@ -1,6 +1,6 @@
 #!/bin/bash
 if [ $# -lt 3 ]; then
-    echo "Usage: setup-buildbot-on-server client ec2_host project_name repository privacy"
+    echo "Usage: setup-buildbot-svn-on-server client ec2_host project_name repository privacy"
     echo ""
     echo "client: is profab client"
     echo "ec2_host: public host of EC2 instance"
