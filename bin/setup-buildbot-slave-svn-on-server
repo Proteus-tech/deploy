@@ -21,7 +21,7 @@ elif [ $# -eq 4 ]; then
     ec2_host=$2
     ec2_master_host=$3
     repository=$4
-    privacy="public"
+    privacy="private"
 
 elif [ $# -eq 5 ]; then
     if [[ $5 = "public" || $5 = "private" ]]; then
