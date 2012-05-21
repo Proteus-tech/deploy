@@ -2,16 +2,14 @@ from fabric.api import local, settings
 from fabric.operations import run, sudo
 from profab.role import Role
 from proteus.authorize_key import authorize_key
-from proteus.ssh_key_gen import ssh_key_gen
 from fabric.contrib.files import exists
 
 def put_private_key_to_server(server, current_user, remote_host):
-    ssh_key_gen(server)
     current_home = '/home/%s' % current_user
-    private_key = local("sudo cat %s/.ssh/id_rsa" %current_home)
+    private_key = local('sudo cat %s/.ssh/id_rsa' %current_home)
     with settings(host_string=remote_host):
-        if not exists("%s/.ssh/" % current_home):
-            sudo("mkdir %s/.ssh/" % current_home, user=current_user)
+        if not exists('%s/.ssh/' % current_home):
+            sudo('mkdir %s/.ssh/' % current_home, user=current_user)
         if not exists('%s/.ssh/id_rsa' % current_home):
             sudo('echo "%s" >> %s/.ssh/id_rsa' % (private_key, current_home), user=current_user)
             sudo('chmod 600 %s/.ssh/id_rsa' % current_home, user=current_user)
