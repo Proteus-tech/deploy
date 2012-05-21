@@ -3,6 +3,7 @@ from fabric.contrib.files import exists
 from fabric.operations import run, sudo
 from profab.role import Role
 from proteus.authorize_key import authorize_key
+from proteus import buildbot
 
 def put_private_key_to_server(server, current_user, remote_host):
     current_home = '/home/%s' % current_user
@@ -26,5 +27,5 @@ class Configure(Role):
         else:
             remote_host, current_user = buildbot.splitter(self.parameter)
         
-        put_private_key_to_server(server, current_user,remote_host)
+        put_private_key_to_server(server, current_user, remote_host)
 
