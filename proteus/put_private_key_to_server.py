@@ -18,6 +18,8 @@ def put_private_key_to_server(server, current_user):
 class Configure(Role):
     """
     Role to put private key to target server
+    Parameter
+    - target_server's current_user
     """
     def configure(self, server):
         current_user = self.parameter
