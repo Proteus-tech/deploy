@@ -31,3 +31,27 @@ def master_location(root):
 def split_svn_url(svn_url):
     host = svn_url.split('.com')[0]+'.com'
     return host
+
+def create_build_slave_layout(server, project_name):
+    base_folder = '/home/www-data'
+    with cd(base_folder):
+        current_folder = '%s/current' % (project_name)
+        config_folder = '%s/config' % (project_name)
+        logs_folder = '%s/logs' % (project_name)
+        bin_folder = '%s/bin' % (project_name)
+
+        sudo('mkdir -p %s' % (current_folder), user="www-data") 
+        sudo('mkdir -p %s' % (config_folder), user="www-data")
+        sudo('mkdir -p %s' % (logs_folder), user="www-data")
+        sudo('mkdir -p %s' % (bin_folder), user="www-data")
+
+        sudo('mkdir -p %s/service' % (current_folder), user="www-data")
+        sudo('mkdir -p %s/virtualenv' % (current_folder), user="www-data")
+        sudo('mkdir -p %s/static' % (current_folder), user="www-data")
+
+        buildbot_folder = '%s/buildbot' % (project_name)
+        sudo('mkdir -p %s' % (buildbot_folder), user="www-data")
+        sudo('mkdir -p %s/master' % (buildbot_folder), user="www-data")
+        sudo('mkdir -p %s/slave1' % (buildbot_folder), user="www-data")
+
+
