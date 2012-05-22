@@ -62,6 +62,6 @@ class Configure(Role):
         svn_url = self.parameter
         project_name = svn_checkout.root_folder(svn_url)
         project_base_folder = buildbot.project_base_folder(project_name) 
-        create_build_slave_layout(server, project_name)
+        buildbot.create_build_slave_layout(server, project_name)
         svn_build_checkout(server, svn_url, project_base_folder)
 
