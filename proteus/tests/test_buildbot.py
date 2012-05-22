@@ -22,3 +22,10 @@ class TestBuildbotCommonFunctions(TestCase):
         host = buildbot.split_svn_url('http://vcs.vps.shogunvps.com:8081/scm-webapp-1.14/svn/testsvn/project/trunk')
         # Assert
         self.assertEqual('http://vcs.vps.shogunvps.com', host)
+
+    def test_project_base_folder(self):
+        project_name = 'dotto'
+        project_base_folder = buildbot.project_base_folder(project_name)
+        self.assertEqual('/home/www-data/dotto', project_base_folder)
+
+ 
