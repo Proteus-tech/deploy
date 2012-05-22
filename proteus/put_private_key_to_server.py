@@ -6,7 +6,7 @@ from proteus.authorize_key import authorize_key
 
 def put_private_key_to_server(server, current_user):
     current_home = '/home/%s' % current_user
-    private_key = local('cat ~/.ssh/id_rsa'i)
+    private_key = local('cat ~/.ssh/id_rsa', capture=True)
     print '\n\n'+private_key+'\n\n'
     
     if not exists('%s/.ssh/' % current_home):
@@ -21,10 +21,6 @@ class Configure(Role):
     Role to put private key to target server
     """
     def configure(self, server):
-        if self.parameter == '':
-            current_user = 'www-data'
-        else:
-            current_user = self.parameter
-        
+        current_user = self.parameter
         put_private_key_to_server(server, current_user)
 
