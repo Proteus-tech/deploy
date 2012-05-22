@@ -7,7 +7,6 @@ from proteus.authorize_key import authorize_key
 def put_private_key_to_server(server, current_user):
     current_home = '/home/%s' % current_user
     private_key = local('cat ~/.ssh/id_rsa', capture=True)
-    print '\n\n'+private_key+'\n\n'
     
     if not exists('%s/.ssh/' % current_home):
         sudo('mkdir %s/.ssh/' % current_home, user=current_user)
