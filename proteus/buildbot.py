@@ -10,6 +10,9 @@ def virtual_env_path(root):
 def home(project_name):
     return '/home/www-data/Buildbot/%s' % (project_name)
 
+def project_base_folder(project_name):
+    return '/home/www-data/%s' % (project_name)
+
 def splitter(parameters):
     return parameters.split(',')
 

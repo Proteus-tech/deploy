@@ -1,12 +1,13 @@
 from fabric.context_managers import cd
-from fabric.operations import sudo
+from fabric.operations import sudo, run
 from fabric.contrib.files import append, exists
 from profab.role import Role
 from proteus import buildbot
+from proteus import svn_checkout
 
-def svn_build_checkout(server, path, svn_url):
+def svn_build_checkout(server, svn_url, path):
     with cd(path):
-        svn_folder = 'current'
+        svn_folder = 'current/service'
         sudo("svn co --username 'www-data' \
                      --password 'www-d@t@!@#' \
                      --force \
@@ -31,19 +32,19 @@ def create_build_slave_layout(server, project_name):
         logs_folder = '%s/logs' % (project_name)
         bin_folder = '%s/bin' % (project_name)
 
-        run('mkdir -p %s' % (current_folder)) 
-        run('mkdir -p %s' % (config_folder))
-        run('mkdir -p %s' % (logs_folder))
-        run('mkdir -p %s' % (bin_folder))
+        sudo('mkdir -p %s' % (current_folder),user="www-data") 
+        sudo('mkdir -p %s' % (config_folder),user="www-data")
+        sudo('mkdir -p %s' % (logs_folder),user="www-data")
+        sudo('mkdir -p %s' % (bin_folder),user="www-data")
 
-        run('mkdir -p %s/service' % (current_folder))
-        run('mkdir -p %s/virtualenv' % (current_folder))
-        run('mkdir -p %s/static' % (current_folder))
+        sudo('mkdir -p %s/service' % (current_folder),user="www-data")
+        sudo('mkdir -p %s/virtualenv' % (current_folder),user="www-data")
+        sudo('mkdir -p %s/static' % (current_folder),user="www-data")
 
         buildbot_folder = '%s/buildbot' % (project_name)
-        run('mkdir -p %s' % (buildbot_folder))
-        run('mkdir -p %s/master' % (buildbot_folder))
-        run('mkdir -p %s/slave1' % (buildbot_folder))
+        sudo('mkdir -p %s' % (buildbot_folder),user="www-data")
+        sudo('mkdir -p %s/master' % (buildbot_folder),user="www-data")
+        sudo('mkdir -p %s/slave1' % (buildbot_folder),user="www-data")
         
         
 
@@ -53,11 +54,14 @@ class Configure(Role):
     Description
     - path : should be project folder 
              ex. 
+    - svn_url
     """
     packages = ['subversion']
 
     def configure(self, server):
-        path, svn_url = buildbot.spitter(self.parameter)
+        svn_url = self.parameter
+        project_name = svn_checkout.root_folder(svn_url)
+        project_base_folder = buildbot.project_base_folder(project_name) 
         create_build_slave_layout(server, project_name)
-        svn_build_checkout(server)
+        svn_build_checkout(server, svn_url, project_base_folder)
 
