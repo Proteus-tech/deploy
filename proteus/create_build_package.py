@@ -1,17 +1,17 @@
 #!/usr/bin/env python
 from profab.role import Role
-from profab.state import env
-from profab.decorators import with_settings
+#from profab.state import env
+#from fabric.decorators import with_settings
 from proteus import buildbot
 from fabric.api import local, run
-
+from proteus import upload_tar_to_s3
 
 # should relocate to buildbot.py
 def create_virtenv(server, project_name):
     with cd(project_name):
         sudo("scripts/virtenv", user="www-data")
 
-def gen_tar_name(server, svn_rev):
+def get_tar_name(server, project_name, svn_rev):
     ubuntu_version = run('lsb_release', '-cs').strip()
     bits = run('uname', '-m').strip()
     tarfile = "%s.%s.%s.%s.tar.bz2" % (project_name, svn_rev, ubuntu_version, bits)
@@ -23,7 +23,7 @@ def export_code_from_svn(server, svn_url):
         """ % (svn_url), user="www-data")
     svn_rev = long(svn_out.split('\n')[1].split(' ')[0][1:])
     
-    return get_tar_name(server, svn_rev)
+    return get_tar_name(server, project_name, svn_url)
 
 def create_build_package(server):
     '''
