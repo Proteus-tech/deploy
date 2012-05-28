@@ -2,7 +2,8 @@
 
 from profab.role import Role
 from proteus import buildbot
-from fabric.api import local, run
+from fabric.context_managers import cd
+from fabric.api import local, run, sudo
 from proteus import svn_checkout
 #from proteus import upload_package_to_s3
 
