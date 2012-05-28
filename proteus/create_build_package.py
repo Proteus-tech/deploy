@@ -41,7 +41,7 @@ def create_tar_file(server, project_name, tar_filename):
     project_base = "/home/www-data/%s" % (project_name)
     current_revision_project = "%s/current" % (project_name)
     with cd(current_revision_project):
-        sudo("tar cfa %s service static virtenv" % (
+        sudo("tar cfa %s service static virtenv" % (tar_filename), user='www-data')
 
 def upload_tar_file(server, client_name, project_name):
     pass
