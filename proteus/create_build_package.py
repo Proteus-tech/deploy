@@ -3,6 +3,7 @@
 from profab.role import Role
 from proteus import buildbot
 from fabric.api import local, run
+from proteus import svn_checkout
 #from proteus import upload_package_to_s3
 
 def create_virtenv(server, project_name):
@@ -51,18 +52,19 @@ class Configure(Role):
     Prerequesties - code should be in working directory.
     """
     def configure(self, server):
+        svn_url = self.parameter
+        project_name = svn_checkout.root_folder(svn_url)
         # check out deploy project to build server
         build_base = "/home/www-data/build/deploy"
         git_url = "%s@develop" % ("git://github.com/Proteus-tech/deploy.git")
         git_checkout(server, build_base, git_url)
 
         # derive tar file from svn url
-        tar_filename = export_code_from_svn(server,'project_url')
+        tar_filename = export_code_from_svn(server, svn_url)
         
         # create virtual environment from project name
-        create_virtenv(server,'project_name')
-
-        collect_static(server,'project_name')
+        create_virtenv(server, project_name)
+        collect_static(server, project_name)
 
         #create_tar_file(server,'project_name')
 
