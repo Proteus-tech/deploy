@@ -65,7 +65,6 @@ class Configure(Role):
         svn_url = self.parameter
         project_name = svn_checkout.root_folder(svn_url)
         git_url = "git://github.com/Proteus-tech/deploy.git"
-        git_checkout(server, build_base, git_url)
         checkout_deploy_code(server, project_name, git_url, branch="feature/PINFR241_siraset") 
 
         # derive tar file from svn url
