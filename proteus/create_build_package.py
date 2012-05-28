@@ -6,6 +6,16 @@ from fabric.api import local, run
 from proteus import svn_checkout
 #from proteus import upload_package_to_s3
 
+def checkout_deploy_code(server, project_name, deploy_url, branch="develop"):
+    project_base_folder = "/home/www-data/%s" % (project_name)
+    deploy_base_folder = "deploy"
+    with cd(project_base_folder):
+        sudo("git clone -q %s %s" % (deploy_url, deploy_base_folder))
+        with cd(deploy_base_folder):
+            sudo("git checkout -b %s" % (branch), user="www-data")
+            sudo("git pull origin %s" % (branch), user="www-data")
+            sudo("git checkout %s" % (branch), user="www-data")
+
 def create_virtenv(server, project_name):
     deploy_base = "/home/www-data/%s/deploy" % (project_name)
     project_base = "/home/www-data/%s" % (project_name)
@@ -54,10 +64,9 @@ class Configure(Role):
     def configure(self, server):
         svn_url = self.parameter
         project_name = svn_checkout.root_folder(svn_url)
-        # check out deploy project to build server
-        build_base = "/home/www-data/build/deploy"
-        git_url = "%s@develop" % ("git://github.com/Proteus-tech/deploy.git")
+        git_url = "git://github.com/Proteus-tech/deploy.git"
         git_checkout(server, build_base, git_url)
+        checkout_deploy_code(server, project_name, git_url, branch="feature/PINFR241_siraset") 
 
         # derive tar file from svn url
         tar_filename = export_code_from_svn(server, svn_url)
