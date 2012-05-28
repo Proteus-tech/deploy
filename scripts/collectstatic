@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+export WORKON_HOME=$1
+export PIP_VIRTUALENV_BASE=$WORKON_HOME
+source /usr/local/bin/virtualenvwrapper.sh
+
+function check_worked {
+    if ! $*
+    then
+        exit 1
+    fi
+}
+
+source $1/virtenv/bin/activate
+export PYTHONPATH=$1/service/setup/deploy
+mkdir -p $1/../log
+check_worked python $1/service/manage.py collectstatic --noinput
