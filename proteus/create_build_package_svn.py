@@ -17,6 +17,7 @@ def checkout_deploy_code(server, project_name, deploy_url, branch="develop"):
             sudo("git checkout %s" % (branch), user="www-data")
 
 def create_virtenv(server, project_name):
+    sudo("easy_install virtualenv")
     deploy_base = "/home/www-data/%s/deploy" % (project_name)
     project_base = "/home/www-data/%s" % (project_name)
     current_folder = "%s/current" % (project_base)
@@ -60,12 +61,19 @@ def create_virtenv(server, project_name):
 
 class Configure(Role):
     """
-    Prerequesties - code should be in working directory.
+    Create build package, then upload to s2
+    - usage
+        --proteus.create_build_package_svn git_url,svn_url
+        * git_url : deploy git 
+            should be "git://github.com/Proteus-tech/deploy.git" 
+        ** svn_url : project svn
     """
+    packages = [
+        'python-setuptools',
+        'git-core'
+    ]
     def configure(self, server):
-        svn_url = self.parameter
+        git_url, svn_url = buildbot.splitter(self.parameter)
         project_name = svn_checkout.root_folder(svn_url)
-        git_url = "git://github.com/Proteus-tech/deploy.git"
-
-        checkout_deploy_code(server, project_name, git_url, branch="feature/PINFR241_siraset") 
+        checkout_deploy_code(server, project_name, git_url)
         create_virtenv(server, project_name)
