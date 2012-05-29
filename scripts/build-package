@@ -1,0 +1,89 @@
+#!/usr/bin/env python
+from boto.s3.bucket import Bucket
+from boto.s3.connection import S3Connection
+import os
+from profab import Configuration
+import shutil
+import subprocess
+import sys
+import tempfile
+
+
+class CommandFail(Exception):
+    pass
+
+
+def usage():
+    print file("README.txt").read()
+
+
+def is_windows():
+    """
+        Returns True if the system is Windows.
+    """
+    return sys.platform == 'win32'
+
+
+def execute(program, *args):
+    """
+        Execute a program and return True if it worked.
+    """
+    if is_windows():
+        program = program.replace('/', '\\')
+    command = '%s %s' % (program, ' '.join([str(a) for a in args]))
+    if os.system(command) != 0:
+        raise CommandFail(command)
+
+def capture(*execute):
+    return subprocess.Popen(execute, stdout=subprocess.PIPE).communicate()[0]
+
+
+if len(sys.argv) < 2:
+    usage()
+else:
+    cwd = os.getcwd()
+    service = sys.argv[1]
+    url = "https://svn.searchventures.proteus-tech.com/repos/projects/%s/trunk" % service
+    svn_out = capture("svn", "log", "-l", "1", "--non-interactive",
+            "--no-auth-cache", "--trust-server-cert",
+            "--username",  "www-data", "--password", "www-d@t@!@#", url)
+    svn_rev = long(svn_out.split('\n')[1].split(' ')[0][1:])
+    ubuntu_version = capture('lsb_release', '-cs').strip()
+    bits = capture('uname', '-m').strip()
+    tarfile = "%s.%s.%s.%s.tar.bz2" % (service, svn_rev, ubuntu_version, bits)
+    keyname = '%s/%s' % (service, tarfile)
+
+    config = Configuration('sv')
+    s3cnx = S3Connection(aws_access_key_id=config.keys.api,
+            aws_secret_access_key=config.keys.secret)
+    bucket = Bucket(connection=s3cnx, name='deployment-sv-all')
+    key = bucket.get_key(keyname)
+
+    if key:
+        print key, "already exists"
+
+    else:
+        if os.access(tarfile, os.R_OK):
+            print tarfile, "has already been made"
+
+        else:
+            # Build the tar file as it doesn't already exist
+
+            build_location = tempfile.mkdtemp()
+            execute("svn", "export", "--non-interactive",
+                "--no-auth-cache", "--trust-server-cert",
+                "--username",  "www-data", "--password", "www-d@t@!@#",
+                url, "%s/service" % build_location)
+            execute("env", "bash", "scripts/virtenv", build_location)
+
+            execute("env", "bash", "scripts/collectstatic", build_location)
+            os.chdir(build_location)
+            execute("tar", "cfa", "%s/%s" % (cwd, tarfile), "service", "static", "virtenv")
+            os.chdir(cwd)
+
+            shutil.rmtree(build_location)
+
+        print "Uploading", keyname
+        key = bucket.new_key(keyname)
+        key.set_contents_from_filename(tarfile)
+

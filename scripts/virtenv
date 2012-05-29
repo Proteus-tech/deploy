@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+export WORKON_HOME=$1
+export PIP_VIRTUALENV_BASE=$WORKON_HOME
+source /usr/local/bin/virtualenvwrapper.sh
+
+function check_worked {
+    if ! $*
+    then
+        exit 1
+    fi  
+}
+
+check_worked virtualenv --no-site-packages $1/virtenv
+source $1/virtenv/bin/activate
+check_worked pip install -r $1/service/setup/requirements.txt -r $1/service/setup/server.pip
+check_worked virtualenv --relocatable $1/virtenv
+
