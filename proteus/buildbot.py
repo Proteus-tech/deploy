@@ -49,7 +49,7 @@ def create_build_slave_layout(server, project_name):
         sudo('mkdir -p %s/virtualenv' % (current_folder), user="www-data")
         sudo('mkdir -p %s/static' % (current_folder), user="www-data")
 
-        buildbot_folder = '%s/buildbot' % (project_name)
+        buildbot_folder = 'buildbot'
         sudo('mkdir -p %s' % (buildbot_folder), user="www-data")
         sudo('mkdir -p %s/master' % (buildbot_folder), user="www-data")
         sudo('mkdir -p %s/slave1' % (buildbot_folder), user="www-data")
