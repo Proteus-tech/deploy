@@ -48,12 +48,10 @@ def upload_package(server, bucket_name, remote_tarfile_path, create_bucket_on_re
     bucket = Bucket(connection=s3cnx, name=bucket_name)
     key = bucket.get_key(tarfile)
     if key:
-#        print "%s is valid" % tarfile
         _logger.info("%s is valid", tarfile)
     else:
         list_items = local("ls %s" % local_tar_path, capture=True)
         if tarfile in list_items:
-#            print "Start uploading %s from %s" % (tarfile, local_tar_path)
             _logger.info("Start uploading %s from %s", tarfile, local_tar_path)
             nkey = bucket.new_key(tarfile)
             local_tarfile_path = "%s/%s" % (local_tar_path, tarfile)
@@ -62,7 +60,6 @@ def upload_package(server, bucket_name, remote_tarfile_path, create_bucket_on_re
             )
             local("rm -rf %s" % (local_tar_path))
         else:
-#            print "%s not found" % tarfile
             _logger.info("%s not found", tarfile)
 
 class Configure(Role):
