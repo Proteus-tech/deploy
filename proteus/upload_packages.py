@@ -10,7 +10,7 @@ from proteus import buildbot
 def upload_package(server, bucket_name, remote_tarfile_path):
     # create folder in buildslave server
     local('mkdir -p /home/www-data/buildpackage')
-    local_tarfile_path = '/home/www-data/buildpackage'
+    local_tar_path = '/home/www-data/buildpackage'
 
     # get client name from server instance
     config = Configuration(server.config.client)
@@ -22,7 +22,7 @@ def upload_package(server, bucket_name, remote_tarfile_path):
     )
 
     # download backup file from build server to buildslave server
-    get(remote_tarfile_path, local_tarfile_path)
+    get(remote_tarfile_path, local_tar_path)
 
     # check on s3 if our bucket_name is valid on there
     if s3cnx.lookup(bucket_name) == None:
@@ -45,12 +45,13 @@ def upload_package(server, bucket_name, remote_tarfile_path):
     if key:
         print "%s is valid" % tarfile
     else:
-        list_items = local("ls %s" % local_tarfile_path, capture=True)
+        list_items = local("ls %s" % local_tar_path, capture=True)
         if tarfile in list_items:
             print "Start uploading %s" % (tarfile)
             nkey = bucket.new_key(tarfile)
+            local_tarfile_path = "%s/%s" % (local_tar_path, tarfile)
             nkey.set_contents_from_filename(local_tarfile_path)
-            local("rm -rf %s" % (local_tarfile_path))
+            local("rm -rf %s" % (local_tar_path))
         else:
             print "%s not found" % tarfile
 
