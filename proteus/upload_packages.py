@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import sys
+
 from boto.s3.bucket import Bucket
 from boto.s3.connection import S3Connection
 from fabric.api import local
@@ -7,10 +7,6 @@ from fabric.operations import os ,sudo, get
 from profab import Configuration
 from profab.role import Role
 from proteus import buildbot
-
-def _percent_cb(complete, total):
-    sys.stdout.write(".")
-    sys.stdout.flush()
 
 def upload_package(server, bucket_name, remote_tarfile_path):
     # create folder in buildslave server
@@ -56,9 +52,7 @@ def upload_package(server, bucket_name, remote_tarfile_path):
             nkey = bucket.new_key(tarfile)
             local_tarfile_path = "%s/%s" % (local_tar_path, tarfile)
             nkey.set_contents_from_filename(
-                local_tarfile_path,
-                cb=_percent_cb,
-                num_cb=10
+                local_tarfile_path
             )
             local("rm -rf %s" % (local_tar_path))
         else:
