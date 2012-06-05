@@ -7,8 +7,9 @@ from fabric.operations import os ,sudo, get
 from profab import Configuration
 from profab.role import Role
 from proteus import buildbot
+from profab import _logger
 
-def upload_package(server, bucket_name, remote_tarfile_path):
+def upload_package(server, bucket_name, remote_tarfile_path, create_bucket_on_region=None):
     # create folder in buildslave server
     local('mkdir -p /home/www-data/buildpackage')
     local_tar_path = '/home/www-data/buildpackage'
@@ -28,11 +29,14 @@ def upload_package(server, bucket_name, remote_tarfile_path):
     # check on s3 if our bucket_name is valid on there
     if s3cnx.lookup(bucket_name) == None:
         try:
-            s3cnx.create_bucket(bucket_name=bucket_name, location=server.cnx.region.name)
+            s3cnx.create_bucket(
+                bucket_name=bucket_name,
+                location = server.cnx.region.name if create_bucket_on_region==None else create_bucket_on_region
+            )
         except:
             raise Exception("%s has duplicate name" % bucket_name)
     else:
-        print "%s is valid" % bucket_name
+        _logger.info("%s is valid", bucket_name)
 
     # get tarfile name from tarfile_path
     if remote_tarfile_path.endswith('/'):
@@ -44,11 +48,13 @@ def upload_package(server, bucket_name, remote_tarfile_path):
     bucket = Bucket(connection=s3cnx, name=bucket_name)
     key = bucket.get_key(tarfile)
     if key:
-        print "%s is valid" % tarfile
+#        print "%s is valid" % tarfile
+        _logger.info("%s is valid", tarfile)
     else:
         list_items = local("ls %s" % local_tar_path, capture=True)
         if tarfile in list_items:
-            print "Start uploading %s from %s" % (tarfile, local_tar_path)
+#            print "Start uploading %s from %s" % (tarfile, local_tar_path)
+            _logger.info("Start uploading %s from %s", tarfile, local_tar_path)
             nkey = bucket.new_key(tarfile)
             local_tarfile_path = "%s/%s" % (local_tar_path, tarfile)
             nkey.set_contents_from_filename(
@@ -56,7 +62,8 @@ def upload_package(server, bucket_name, remote_tarfile_path):
             )
             local("rm -rf %s" % (local_tar_path))
         else:
-            print "%s not found" % tarfile
+#            print "%s not found" % tarfile
+            _logger.info("%s not found", tarfile)
 
 class Configure(Role):
     """
@@ -64,6 +71,8 @@ class Configure(Role):
     parameters
         bucket_name : bucket's name
         remote_tarfile_path : full path to tarfile name
+    optional parameters
+        create_bucket_on_region : default is same as buildslave server's region
     """
     def configure(self, server):
         bucket_name,remote_tarfile_path = buildbot.splitter(self.parameter)
