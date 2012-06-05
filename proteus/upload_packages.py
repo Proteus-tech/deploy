@@ -48,7 +48,7 @@ def upload_package(server, bucket_name, remote_tarfile_path):
     else:
         list_items = local("ls %s" % local_tar_path, capture=True)
         if tarfile in list_items:
-            print "Start uploading %s" % (tarfile)
+            print "Start uploading %s from %s" % (tarfile, local_tar_path)
             nkey = bucket.new_key(tarfile)
             local_tarfile_path = "%s/%s" % (local_tar_path, tarfile)
             nkey.set_contents_from_filename(
