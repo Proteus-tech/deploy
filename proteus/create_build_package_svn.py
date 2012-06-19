@@ -15,11 +15,12 @@ def checkout_deploy_sourcecode(server, project_name, deploy_url, branch="develop
     project_base_folder = "/home/www-data/%s" % (project_name)
     deploy_base_folder = "deploy"
     with cd(project_base_folder):
-        sudo("git clone -q %s %s" % (deploy_url, deploy_base_folder), user="www-data")
-        with cd(deploy_base_folder):
-            sudo("git checkout -b %s" % (branch), user="www-data")
-            sudo("git pull origin %s" % (branch), user="www-data")
-            sudo("git checkout %s" % (branch), user="www-data")
+        if not exists(deploy_base_folder):
+            sudo("git clone -q %s %s" % (deploy_url, deploy_base_folder), user="www-data")
+            with cd(deploy_base_folder):
+                sudo("git checkout -b %s" % (branch), user="www-data")
+                sudo("git pull origin %s" % (branch), user="www-data")
+                sudo("git checkout %s" % (branch), user="www-data")
 
 def create_virtenv(server, project_name):
     sudo("easy_install virtualenv")
@@ -33,30 +34,39 @@ def create_virtenv(server, project_name):
             sudo("virtualenv --relocatable virtualenv", user="www-data")    
 
 def _get_project_name(svn_url):
+    project_name = None
     if svn_url.endswith('/'):
-        svn_url = svn_url.rstrip('/')
-        return svn_url.split('/')[-2]
+        project_name = svn_url.rstrip('/').split('/')[-2]
     else:
-        return None
+        project_name = svn_url.split('/')[-2]
+    return project_name
 
 def _get_machine_spec(server):
-    ubuntu_version = run('lsb_release', '-cs').strip()
-    bits = run('uname', '-m').strip()
+    ubuntu_version = run('lsb_release -cs').strip()
+    bits = run('uname -m').strip()
     return (ubuntu_version, bits)
 
 def get_build_package_name(server, svn_url):
-    svn_out = sudo("""svn log -l 1 --non-interactive --no-auth-cache
-        --trust-server-cert --username www-data --password 'www-d@t@!@#' %s
-        """ % (svn_url), user="www-data")
-    svn_rev = long(svn_out.split('\n')[1].split(' ')[0][1:])
-    ubuntu_version, bits = get_machine_spec(server)
     project_name = _get_project_name(svn_url)
-    return "%s.%s.%s.%s.tar.bz2" % (project_name, svn_rev, ubuntu_version, bits)
+    service_dir = "/home/www-data/%s/current/service" % (project_name)
+    with cd(service_dir):
+        svn_out = sudo(
+            "svn log -l 1 "
+            "--non-interactive "
+            "--no-auth-cache "
+            "--trust-server-cert "
+            "--username www-data --password 'www-d@t@!@#' %s "
+            % (svn_url), user="www-data")
+        svn_rev = long(svn_out.split('\n')[1].split(' ')[0][1:])
+        ubuntu_version, bits = _get_machine_spec(server)
+
+        return "%s.%s.%s.%s.tar.bz2" % (project_name, svn_rev, ubuntu_version, bits)
+
 
 def collect_static(server, project_name):
     project_base_dir = "/home/www-data/%s" % (project_name)
-    with cd(project_base_dir):
-        sudo("mkdir -p logs",user="www-data")
+    current_base_dir = "%s/current" % (project_base_dir)
+    with cd(current_base_dir):
         with prefix("source virtualenv/bin/activate"):
             sudo("python service/manage.py collectstatic --noinput", user="www-data")
 
@@ -64,27 +74,9 @@ def create_tar_file(server, project_name, tarfile_name):
     project_base_dir = "/home/www-data/%s" % (project_name)
     current_dir = "%s/current" % (project_base_dir)
     with cd(current_dir):
-        sudo("tar cfa %s service static virtenv" % (tarfile_name), user='www-data')
+        sudo("tar cfa %s service static virtualenv" % (tarfile_name), user='www-data')
         path_to_tarfile = '%s/%s' % (current_dir, tarfile_name)
         return path_to_tarfile
-
-
-
-#def setup_s3tool_for_remote_machine(server):
-#    '''
-#    upload s3cfg to remote machine
-#    '''
-#    config_dir = "templates/s3cfg"
-#    if exists(config_dir):
-#        _logger.info('found s3cmd configuration file at %s ', config_dir)
-#        upload_template(config_dir, ".s3cfg")
-#        run('chmod a+r .s3cfg')
-#
-#
-#def s3cmd_upload_build_pkg(server, path_to_tarfile, bucket_name):
-#    keyname = os.path.split(path_to_tarfile.rstrip('/'))[1]
-#    sudo("s3cmd put %s s3://%s/%s" % (bucket_name, keyname))
-
 
 class Configure(Role):
     """
@@ -99,7 +91,6 @@ class Configure(Role):
         'python-setuptools',
         'git-core',
         'subversion',
-        's3cmd'
     ]
     def configure(self, server):
         git_url, svn_url = buildbot.splitter(self.parameter)
@@ -122,10 +113,8 @@ class Configure(Role):
 
         # create tar file
         path_to_tarfile = create_tar_file(server, project_name, bpkg_name)
+        _logger.info("%s was created", path_to_tarfile)
 
-        # setup s3cmd tools
-        bucket_name = 'build-pkg-%s' % (project_name)
-        upload_packages.upload_package(server, bucket_name , path_to_tarfile)
 
 
 
