@@ -79,6 +79,8 @@ def collect_static(server, project_name):
     service_base_dir = "%s/service" % (current_base_dir)
     project_settings_dir = '%s_project' % (project_name)
     upload_template("utilities/build_settings.py", destination=service_base_dir,context={'project_name':project_settings_dir})
+    with cd(service_base_dir):
+        sudo("chown www-data:www-data build_settings.py")
     with cd(current_base_dir):
         with prefix("source virtualenv/bin/activate"):
             sudo("python service/manage.py collectstatic --noinput --settings=build_settings", user="www-data")
