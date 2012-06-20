@@ -74,8 +74,10 @@ def get_build_package_name(server, svn_url):
 def collect_static(server, project_name):
     project_base_dir = "/home/www-data/%s" % (project_name)
     current_base_dir = "%s/current" % (project_base_dir)
+    service_base_dir = "%s/service" % (current_base_dir)
     with cd(current_base_dir):
         with prefix("source virtualenv/bin/activate"):
+            upload_template(filename="utilities/build_settings.py", destination=service_base_dir)
             sudo("python service/manage.py collectstatic --noinput", user="www-data")
 
 def create_tar_file(server, project_name, tarfile_name):
