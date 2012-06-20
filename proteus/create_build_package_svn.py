@@ -77,9 +77,9 @@ def collect_static(server, project_name):
     project_base_dir = "/home/www-data/%s" % (project_name)
     current_base_dir = "%s/current" % (project_base_dir)
     service_base_dir = "%s/service" % (current_base_dir)
+    upload_template("utilities/build_settings.py", destination=service_base_dir,use_sudo=True)
     with cd(current_base_dir):
         with prefix("source virtualenv/bin/activate"):
-            upload_template("utilities/build_settings.py", destination=service_base_dir,use_sudo=True)
             sudo("python service/manage.py collectstatic --noinput", user="www-data")
 
 def create_tar_file(server, project_name, tarfile_name):
