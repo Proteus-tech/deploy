@@ -12,6 +12,7 @@ from proteus import svn_checkout
 from proteus import upload_packages
 
 def checkout_deploy_sourcecode(server, project_name, deploy_url, branch="develop"):
+    _logger.info('checkout deploy sourcecode on remote machine')
     project_base_folder = "/home/www-data/%s" % (project_name)
     deploy_base_folder = "deploy"
     with cd(project_base_folder):
@@ -23,6 +24,7 @@ def checkout_deploy_sourcecode(server, project_name, deploy_url, branch="develop
                 sudo("git checkout %s" % (branch), user="www-data")
 
 def checkout_deploy_sourcecode_on_local(server, project_name, deploy_git_url, branch="develop"):
+    _logger.info('checkout deploy sourcecode on local machine')
     project_base_folder = "/home/www-data/Buildbot/%s" % (project_name)
     deploy_base_folder = '%s/deploy' % (project_base_folder)
     local("git clone -q %s %s" % (deploy_git_url,deploy_base_folder ))
@@ -77,7 +79,7 @@ def collect_static(server, project_name):
     service_base_dir = "%s/service" % (current_base_dir)
     with cd(current_base_dir):
         with prefix("source virtualenv/bin/activate"):
-            upload_template(filename="utilities/build_settings.py", destination=service_base_dir)
+            upload_template(filename="utilities/build_settings.py", destination=service_base_dir,use_sudo=True)
             sudo("python service/manage.py collectstatic --noinput", user="www-data")
 
 def create_tar_file(server, project_name, tarfile_name):
