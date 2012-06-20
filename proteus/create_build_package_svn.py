@@ -22,6 +22,14 @@ def checkout_deploy_sourcecode(server, project_name, deploy_url, branch="develop
                 sudo("git pull origin %s" % (branch), user="www-data")
                 sudo("git checkout %s" % (branch), user="www-data")
 
+def checkout_deploy_sourcecode_on_local(server, project_name, deploy_git_url, branch="develop"):
+    project_base_folder = "/home/www-data/Buildbot/%s" % (project_name)
+    deploy_base_folder = '%s/deploy' % (project_base_folder)
+    local("git clone -q %s %s" % (deploy_git_url,deploy_base_folder ))
+    local("cd %s && git checkout -b %s" % (deploy_base_folder, branch))
+    local("cd %s && git pull origin %s" % (deploy_base_folder, branch))
+    local("cd %s && git checkout %s" % (deploy_base_folder, branch))
+
 def create_virtenv(server, project_name):
     sudo("easy_install virtualenv")
     project_base_dir = "/home/www-data/%s" % (project_name)
@@ -101,6 +109,7 @@ class Configure(Role):
         # checkout deploy code to use in host machine
         # for using role
         checkout_deploy_sourcecode(server, project_name, git_url)
+        checkout_deploy_sourcecode_on_local(server, project_name, git_url)
 
         # create virtual environment from requirements.txt
         create_virtenv(server, project_name)
