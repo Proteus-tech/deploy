@@ -109,7 +109,7 @@ class Configure(Role):
         # checkout deploy code to use in host machine
         # for using role
         checkout_deploy_sourcecode(server, project_name, git_url)
-        checkout_deploy_sourcecode_on_local(server, project_name, git_url)
+#        checkout_deploy_sourcecode_on_local(server, project_name, git_url)
 
         # create virtual environment from requirements.txt
         create_virtenv(server, project_name)
