@@ -1,6 +1,7 @@
 from fabric.operations import sudo, run
 from fabric.context_managers import prefix, cd
 from fabric.contrib.files import exists, upload_template
+from profab import _logger
 
 def create_virtenv(server, project_name):
     sudo("easy_install virtualenv")
