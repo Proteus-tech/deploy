@@ -1,5 +1,5 @@
-from fabric.operations import sudo, cd, run
-from fabric.context_managers import prefix
+from fabric.operations import sudo, run
+from fabric.context_managers import prefix, cd
 from fabric.contrib.files import exists, upload_template
 
 def create_virtenv(server, project_name):
