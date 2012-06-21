@@ -5,7 +5,7 @@ from fabric.api import sudo
 
 from proteus import buildbot as buildbot_utils
 from proteus import buildbot_build_utils as build_utils
-from proteus import svn_checkout
+from proteus import git_checkout
 
 from profab.role import Role
 from profab import _logger
@@ -51,7 +51,7 @@ class Configure(Role):
         git_url, project_url = buildbot_utils.splitter(self.parameter)
 
         # get project name from svn_url
-        project_name = svn_checkout.root_folder(project_url)
+        project_name = git_checkout.root_folder(project_url)
 
         # checkout deploy code to use in host machine
         # for using role
