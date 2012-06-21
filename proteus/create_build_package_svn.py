@@ -33,7 +33,7 @@ def get_build_package_name(server, svn_url):
         svn_rev = long(svn_out.split('\n')[1].split(' ')[0][1:])
         ubuntu_version, bits = build_utils.get_machine_spec(server)
 
-        return "%s.%s.%s.%s.tar.bz2" % (project_name, svn_rev, ubuntu_version, bits)
+        return "%s.%s.%s.%s.tar" % (project_name, svn_rev, ubuntu_version, bits)
 
 def remove_svn_hidden_folder(server, project_name):
     code_path = '/home/www-data/%s/current/service' % (project_name)

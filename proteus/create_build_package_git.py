@@ -27,7 +27,7 @@ def get_build_package_name(server, url):
         sha = std_out.split('\n')[0].split(' ')[1]
         rev = sha[:40]
         ubuntu_version, bits = build_utils.get_machine_spec(server)
-        return "%s.%s.%s.%s.tar.bz2" % (project_name, rev, ubuntu_version, bits)
+        return "%s.%s.%s.%s.tar" % (project_name, rev, ubuntu_version, bits)
 
 def remove_git_hidden_folder(server, project_name):
     code_path = '/home/www-data/%s/current/service' % (project_name)
