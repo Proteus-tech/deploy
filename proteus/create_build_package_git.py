@@ -24,7 +24,8 @@ def get_build_package_name(server, url):
     service_dir = "/home/www-data/%s/current/service" % (project_name)
     with cd(service_dir):
         std_out = sudo("git log -n 1",user="www-data")
-        rev = std_out.split('\n')[0].split(' ')[1]
+        sha = std_out.split('\n')[0].split(' ')[1]
+        rev = sha[:40]
         ubuntu_version, bits = build_utils.get_machine_spec(server)
         return "%s.%s.%s.%s.tar.bz2" % (project_name, rev, ubuntu_version, bits)
 
