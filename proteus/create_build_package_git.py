@@ -19,7 +19,7 @@ def _get_project_name(url):
         project_name = git_url.split('/')[-1].split('.')[0]
     return project_name
 
-def get_build_package_name(server, url, buildbot_rev):
+def get_build_package_name(server, url):
     project_name = _get_project_name(url)
     service_dir = "/home/www-data/%s/current/service" % (project_name)
     with cd(service_dir):
@@ -48,7 +48,7 @@ class Configure(Role):
         'git-core'
         ]
     def configure(self, server):
-        git_url, project_url, buildbot_rev = buildbot_utils.splitter(self.parameter)
+        git_url, project_url = buildbot_utils.splitter(self.parameter)
 
         # get project name from svn_url
         project_name = svn_checkout.root_folder(project_url)
@@ -64,7 +64,7 @@ class Configure(Role):
         build_utils.collect_static(server, project_name)
 
         # just get only build package name
-        bpkg_name = get_build_package_name(server, project_url, buildbot_rev)
+        bpkg_name = get_build_package_name(server, project_url)
 
         # clean svn hidden folder of project dir
         remove_git_hidden_folder(server, project_name)
