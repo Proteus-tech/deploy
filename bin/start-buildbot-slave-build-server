@@ -1,0 +1,26 @@
+#!/bin/bash
+
+if [ $# -lt 0 ]; then
+
+
+fi
+
+roles=proteus.www_home
+
+if [ $privacy = "private" ]; then
+    echo "do hand shaking for private repository"
+    roles="${roles} --proteus.credentials $repository"
+fi
+
+roles="${roles} --proteus.buildbot_slave_svn $repository,$ec2_master_host,$project_name"
+
+pf-server-start $client \
+                --security_group ssh \
+                --security_group \
+                http \
+                wsgi \
+                --bits $bits \
+                --region $region \
+                --size $size \
+                --ami $ami \
+                $roles
