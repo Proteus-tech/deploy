@@ -22,6 +22,7 @@ setup(
         , 'bin/setup-pg-slave-on-svn-server'
         , 'utilities/svn_split_name.py'
         , 'bin/setup-buildbot-slave-svn-on-server'
+        , 'bin/setup-virtenv-for-build-pkg'
     ],
     packages = ['project_template'
         , 'project_template.buildbot_config'
