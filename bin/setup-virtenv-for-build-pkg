@@ -1,0 +1,18 @@
+#!/bin/bash
+
+if [ $# -lt 3 ]; then
+    echo "Usage: setup-virtenv-for-build-pkg client ec2_host project_name,virtenv_name"
+    echo ""
+    echo "client: is profab client"
+    echo "ec2_host: public host of EC2 instance"
+    echo "<project-name>,<virtenv-name>: project name, virtual environment name"
+    exit 1
+elif [ $# -eq 3 ]; then
+    client=$1
+    ec2_host=$2
+    params=$3
+fi
+
+roles="--proteus.install_buildbot_for_build_package"
+
+pf-server-role-add $client $ec2_host $roles $params
