@@ -27,7 +27,9 @@ if [ $privacy = "private" ]; then
     roles="${roles} --proteus.credentials $repository"
 fi
 
-roles="${roles} --proteus.buildbot_slave_svn $repository,$ec2_master_host,$project_name"
+roles
+roles="${roles} --proteus.buildbot_slave_build_svn $repository,$ec2_master_host,$project_name "
+
 
 pf-server-start $client \
                 --security_group ssh \
