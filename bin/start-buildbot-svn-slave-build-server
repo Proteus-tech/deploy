@@ -18,16 +18,15 @@ fi
 bits="64"
 region="us-west-1"
 size="t1.micro"
-ami="ami-4d580408"
+#ami="ami-4d580408"
 
 roles=proteus.www_home
 
 if [ $privacy = "private" ]; then
     echo "do hand shaking for private repository"
-    roles="${roles} --proteus.credentials $repository"
+    roles="${roles} --proteus.credentials_svn $repository"
 fi
 
-roles
 roles="${roles} --proteus.buildbot_slave_build_svn $repository,$ec2_master_host,$project_name "
 
 
@@ -39,5 +38,6 @@ pf-server-start $client \
                 --bits $bits \
                 --region $region \
                 --size $size \
-                --ami $ami \
+                #--ami $ami \
+                ami.precise
                 $roles

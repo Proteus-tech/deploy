@@ -9,54 +9,63 @@ from proteus.install_buildbot_slave_env import install_buildbot_slave_env
 from proteus.setup_buildbot_slave import setup_buildbot_slave
 from proteus.tag import tag
 
+
+TAG_ON_SL = 'slave-build'
+BASE_DIR = 'buildslave1-build'
+
+
 def slave_build_virtual_env_path(root):
     virtenv_path = virtual_env_path(root)
     return '%s-slave-build' % virtenv_path
 
-def slave_build_location(root):
-    return '%s/buildslave1-build' % (root)
 
-#def setup_buildbot_slave_build(slave, root, name, master_host):
-#    virtenv_path = '%s-slave-build' % virtual_env_path(root)
-#    base_dir = 'buildslave1-build'
-#    password = '%spassword' % name
-#    parameters = "%s %s %s %s" % (base_dir, master_host, name, password)
-#    with prefix("source %s/bin/activate" % (virtenv_path)):
-#        with cd(root):
-#            sudo("buildslave create-slave %s" % parameters, user="www-data")
-#            sudo("mkdir -p %s/%s/builder-build" % (root, base_dir, ), user="www-data")
+def slave_build_location(root):
+    return '%s/%s' % (root, BASE_DIR)
+
+
+def setup_buildbot_slave_build(slave, root, name, master_host):
+    virtenv_path = '%s-slave-build' % virtual_env_path(root)
+    base_dir = BASE_DIR
+    password = '%spassword' % name
+    parameters = "%s %s %s %s" % (base_dir, master_host, name, password)
+    with prefix("source %s/bin/activate" % (virtenv_path)):
+        with cd(root):
+            sudo("buildslave create-slave %s" % parameters, user="www-data")
+            sudo(
+                "mkdir -p %s/%s/builder-build" % (root, base_dir),
+                user="www-data"
+            )
 
 
 class Configure(Role):
+    """Add buildbot Slave for create build package with parameter "repository"
     """
-    Add buildbot Slave for create build package with parameter "repository"
-    """
-    packages = [ 'build-essential'
-        , 'python-dev'
-        , 'python-setuptools'
-        , 'subversion'
+    packages = [
+        'build-essential',
+        'python-dev',
+        'python-setuptools',
+        'subversion'
     ]
 
     def configure(self, server):
+        param = self.parameter
         try:
-            repository, ec2_master_host, project_name = splitter(self.parameter)
+            repository, ec2_master_host, project_name = splitter(param)
         except ValueError:
-            repository, project_name = splitter(self.parameter)
+            repository, project_name = splitter(param)
             ec2_master_host = 'localhost'
 
         root = home(project_name)
 
-        tag_on_slave = 'slave-build'
-
+        # Create virtenv for buildbot slave.
         slave_virtenv = slave_build_virtual_env_path(root)
         install_buildbot_slave_env(server, slave_virtenv)
-        tag(server, tag_on_slave, 'env-installed')
+        tag(server, TAG_ON_SL, 'env-installed')
 
-#        setup_buildbot_slave_build(server, root, tag_on_slave, ec2_master_host)
+        # Create buildbot slave base folder and builder folder.
+        setup_buildbot_slave_build(server, root, TAG_ON_SL, ec2_master_host)
 
-        slave_path = slave_build_location(root)
-        slave_checkout_path = "%s/builder-build" % (slave_path)
-        svn_checkout(server, slave_checkout_path, repository)
-#        setup_library(server, '%s/src/setup/requirelibs.txt' % (slave_checkout_path))
-        tag(server, tag_on_slave, 'ready')
-
+#        slave_path = slave_build_location(root)
+#        slave_checkout_path = "%s/builder-build" % (slave_path)
+#        svn_checkout(server, slave_checkout_path, repository)
+        tag(server, TAG_ON_SL, 'ready')
