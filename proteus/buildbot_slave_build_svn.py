@@ -14,7 +14,8 @@ from profab import _logger
 
 TAG_ON_SL = 'slave-build'
 BASE_DIR = 'buildslave1-build'
-PROTEUS_DEPLOY_GIT_URL = 'git@github.com:Proteus-tech/deploy.git@deploy'
+PROTEUS_DEPLOY_GIT = "git://github.com/Proteus-tech/deploy.git"
+PROTEUS_DEPLOY_GIT_DEVELOP = '%s@develop' % PROTEUS_DEPLOY_GIT
 
 
 def slave_build_virtual_env_path(root):
@@ -43,10 +44,20 @@ def setup_buildbot_slave_build(server, root, name, master_host):
 def setup_proteus_deploy_on_virtenv(server, path_to_virtenv):
     if exists(path_to_virtenv):
         with prefix("source %s/bin/activate" % path_to_virtenv):
-            sudo("pip install git+%s" % PROTEUS_DEPLOY_GIT_URL, user="www-data")
+            sudo("pip install git+%s" % PROTEUS_DEPLOY_GIT_DEVELOP, user="www-data")
             _logger.info("Done, setting up proteus-deploy")
     else:
         _logger.error("%s does not exist.", path_to_virtenv)
+
+
+def git_clone_proteus_deploy(server, root):
+    deploy_folder = "%s/deploy" % root
+#    if not exists(deploy_folder):
+    with cd (root):
+        sudo("git clone -q %s deploy" % PROTEUS_DEPLOY_GIT, user="www-data")
+        with cd(deploy_folder):
+            sudo("git checkout -b develop", user="www-data")
+            sudo("git pull origin develop", user="www-data")
 
 
 class Configure(Role):
@@ -56,7 +67,8 @@ class Configure(Role):
         'build-essential',
         'python-dev',
         'python-setuptools',
-        'subversion'
+        'subversion',
+        'git-core'
     ]
 
     def configure(self, server):
@@ -77,8 +89,8 @@ class Configure(Role):
         # Create buildbot slave base folder and builder folder.
         setup_buildbot_slave_build(server, root, TAG_ON_SL, ec2_master_host)
 
-#        slave_path = slave_build_location(root)
-#        slave_checkout_path = "%s/builder-build" % (slave_path)
-#        svn_checkout(server, slave_checkout_path, repository)
+        # Git clone proteus-deploy src
+        git_clone_proteus_deploy(server, root)
+
         setup_proteus_deploy_on_virtenv(server, slave_virtenv)
         tag(server, TAG_ON_SL, 'ready')
