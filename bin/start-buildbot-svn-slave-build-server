@@ -1,0 +1,58 @@
+#!/bin/bash
+
+if [ $# -lt 4 ]; then
+    echo "Usage: start-buildbot-svn-slave-build-server \
+client \
+ec2_master_host \
+project_name \
+repository \
+privacy "
+    echo ""
+    echo "client : is profab client"
+    echo "ec2_master_host : public host of buildbot master of EC2 instance"
+    echo "project_name : project name"
+    echo "repository : url of project repository"
+    echo "privacy : <private*|public>"
+    exit 1
+elif [ $# -eq 5 ]; then
+    client=$1
+    ec2_master_host=$2
+    project_name=$3
+    repository=$4
+    privacy=$5
+
+    bits="64"
+    region="us-west-1"
+    size="t1.micro"
+    ami="ami-4d580408"
+
+elif [ $# -gt 5 ]; then
+    client=$1
+    ec2_master_host=$2
+    project_name=$3
+    repository=$4
+    privacy=$5
+
+    bits=${6-64}
+    region=${7-us-west-1}
+    size=${8-t1.micro}
+    ami=${9-ami-4d580408}
+
+fi
+
+roles=proteus.www_home
+
+if [ $privacy = "private" ]; then
+    echo "do hand shaking for private repository"
+    roles="${roles} --proteus.credentials_svn $repository"
+fi
+
+roles="${roles} --proteus.buildbot_slave_build_svn $repository,$ec2_master_host,$project_name "
+
+pf-server-start $client --security_group ssh --security_group \
+                http wsgi \
+                --bits $bits \
+                --region $region \
+                --size $size \
+                --ami $ami \
+                $roles

@@ -8,6 +8,8 @@ from proteus.www_home import www_home
 def credentials_svn(server, repository):
     host = split_svn_url(repository)
     www_home(server)
+    ssh_key_gen(server)
+#    authorize_key(server, repository)
     trust_host(server, host)
 
 class Configure(Role):
