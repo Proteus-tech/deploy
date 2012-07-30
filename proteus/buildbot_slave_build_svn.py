@@ -5,10 +5,9 @@ from fabric.contrib.files import exists
 
 from profab.role import Role
 from proteus.buildbot import virtual_env_path, home, splitter
-from proteus.svn_checkout import root_folder, svn_checkout
 from proteus.install_buildbot_slave_env import install_buildbot_slave_env
-from proteus.setup_buildbot_slave import setup_buildbot_slave
 from proteus.tag import tag
+from proteus.profab_config import profab_config
 from profab import _logger
 
 
@@ -89,8 +88,11 @@ class Configure(Role):
         # Create buildbot slave base folder and builder folder.
         setup_buildbot_slave_build(server, root, TAG_ON_SL, ec2_master_host)
 
-        # Git clone proteus-deploy src
+        # Git clone proteus-deploy src.
         git_clone_proteus_deploy(server, root)
+
+        # Copy profab config to buildslave server.
+        profab_config(server)
 
         setup_proteus_deploy_on_virtenv(server, slave_virtenv)
         tag(server, TAG_ON_SL, 'ready')
