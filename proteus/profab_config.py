@@ -10,9 +10,7 @@ from profab import _logger
 def profab_config(server, remote_user="www-data"):
     client_name = server.config.client
     current_user = local("echo $USER", capture=True).strip()
-    current_user = 'siraset'
     _logger.info(current_user)
-    _logger.info(type(current_user))
 
     user_home_folder = "/home/%s" % (current_user)
     local_profab_config_folder = "%s/.profab/%s" % (user_home_folder, client_name)
