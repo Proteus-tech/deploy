@@ -36,8 +36,9 @@ setup(
         , 'project_template.project_name_project'
         , 'project_template.project_name_project.settings'
         , 'project_template.buildbot_config.slaves_svn'
-        , 'utilities'
+#        , 'utilities'
         , 'proteus'
+        , 'templates'
         , '.'
     ],
     package_data = {
@@ -51,6 +52,9 @@ setup(
         'utilities': ['*.py'
             ,'*.template'
         ],
+        'templates': [
+            '*'
+        ]
     },
     install_requires = [
         'profab',
