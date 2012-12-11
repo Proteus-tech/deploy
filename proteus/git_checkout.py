@@ -5,8 +5,13 @@ from profab.role import Role
 from proteus import buildbot
 
 def root_folder(git_url):
-    git_folder = git_url.split('/')[-1]
-    return git_folder.split('.git')[0]
+    if git_url[:3]=='ssh':
+        git_folder = git_url.split('/')[-1]
+        return git_folder
+    else:
+        git_folder = git_url.split('/')[-1]
+        return git_folder.split('.git')[0]
+
 
 def git_checkout(server, path, git_url):
     with cd(path):

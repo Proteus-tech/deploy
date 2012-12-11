@@ -13,11 +13,18 @@ from profab import _logger
 def _get_project_name(url):
     git_url = url
     project_name = None
-    if git_url.endswith('/'):
-        project_name = git_url.rstrip('/').split('/')[-1].split('.')[0]
-    else:
-        project_name = git_url.split('/')[-1].split('.')[0]
+    if git_url[:3]=='git':
+        if git_url.endswith('/'):
+            project_name = git_url.rstrip('/').split('/')[-1].split('.')[0]
+        else:
+            project_name = git_url.split('/')[-1].split('.')[0]
+    elif git_url[:3]=='ssh':
+        if git_url.endswith('/'):
+            project_name = git_url.rstrip('/').split('/')[-1]
+        else:
+            project_name = git_url.split('/')[-1]
     return project_name
+
 
 def get_build_package_name(server, url):
     project_name = _get_project_name(url)
