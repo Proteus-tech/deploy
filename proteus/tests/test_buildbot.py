@@ -1,4 +1,5 @@
 from proteus import buildbot
+from proteus.buildbot import split_private_git_url
 from unittest import TestCase
 
 class TestBuildbotCommonFunctions(TestCase):
@@ -28,4 +29,18 @@ class TestBuildbotCommonFunctions(TestCase):
         project_base_folder = buildbot.project_base_folder(project_name)
         self.assertEqual('/home/www-data/dotto', project_base_folder)
 
- 
+    def test_split_private_git_url(self):
+        user, host, path = split_private_git_url('git@github.com:Proteus-tech/deploy.git')
+        self.assertEqual('git', user)
+        self.assertEqual('github.com', host)
+        self.assertEqual('Proteus-tech/deploy.git', path)
+
+    def test_split_private_git_url_inside_server(self):
+        user, host, path = split_private_git_url('ssh://git@zeppelin:222/home/git/playable_admin_service')
+        self.assertEqual('git', user)
+        self.assertEqual('zeppelin.proteus-tech.com', host)
+        self.assertEqual('playable_admin_service', path)
+
+
+        
+

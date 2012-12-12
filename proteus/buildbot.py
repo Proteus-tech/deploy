@@ -17,9 +17,17 @@ def splitter(parameters):
     return parameters.split(',')
 
 def split_private_git_url(git_url):
-    user, remains = git_url.rsplit('@')
-    host, path = remains.rsplit(':')
-    return (user, host, path)
+    if git_url[:3]=='ssh':
+        user, remains = git_url.rsplit('@')
+        user = user.split('//')[1]
+        host, path = remains.rsplit(':')
+        path = path.split('/')[-1]
+        host = '%s.proteus-tech.com' % host
+        return (user, host, path)
+    else:
+        user, remains = git_url.rsplit('@')
+        host, path = remains.rsplit(':')
+        return (user, host, path)
 
 def master_virtual_env_path(root):
     virtenv_path = virtual_env_path(root)
