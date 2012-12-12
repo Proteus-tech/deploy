@@ -13,6 +13,8 @@ def slave_virtual_env_path(root):
 def slave_location(root):
     return '%s/buildslave1' % (root)
 
+def slave_location_pg(root):
+    return '%s/buildslave2' % (root)
 
 class Configure(Role):
     """

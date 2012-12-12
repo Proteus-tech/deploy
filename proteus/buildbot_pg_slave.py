@@ -5,7 +5,7 @@ from proteus.install_buildbot_slave_env import install_buildbot_slave_env
 from proteus.setup_buildbot_pg_slave import setup_buildbot_pg_slave
 from proteus.tag import tag
 from proteus.setup_library import setup_library
-from proteus.buildbot_slave import slave_virtual_env_path, slave_location
+from proteus.buildbot_slave import slave_virtual_env_path, slave_location_pg
 from proteus.setup_psycopg2_on_slave import setup_psycopg2_on_slave
 
 class Configure(Role):
@@ -36,7 +36,7 @@ class Configure(Role):
         setup_buildbot_pg_slave(server, root, 'slave-pg', ec2_master_host)
 
         # Checkout code from repository.
-        slave_path = slave_location(root)
+        slave_path = slave_location_pg(root)
         slave_checkout_path = "%s/builder-pg" % (slave_path)
         git_checkout(server, slave_checkout_path, repository)
         setup_library(server, '%s/src/setup/requirelibs.txt' % (slave_checkout_path))

@@ -4,7 +4,7 @@ from fabric.contrib.files import exists
 from profab.role import Role
 from fabric.context_managers import prefix
 from buildbot import home
-from buildbot_slave import slave_virtual_env_path, slave_location
+from buildbot_slave import slave_virtual_env_path, slave_location_pg
 from profab import _logger
 from proteus import buildbot
 
