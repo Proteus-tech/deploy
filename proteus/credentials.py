@@ -9,6 +9,8 @@ def credentials(server, repository):
     user, host, path = split_private_git_url(repository)
     www_home(server)
     ssh_key_gen(server)
+    if repository[:3]=='ssh':
+        repository = repository.rsplit('//')[1].split('/')[0]
     authorize_key(server, repository)
     trust_host(server, host)
 
