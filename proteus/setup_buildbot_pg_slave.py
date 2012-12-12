@@ -12,7 +12,7 @@ def setup_buildbot_pg_slave(slave, root, name, master_host):
     with prefix("source %s/bin/activate" % (virtenv_path)):
         with cd(root):
             sudo("buildslave create-slave %s" % parameters, user="www-data")
-            sudo("mkdir -p %s/buildslave1/builder-pg" % (root), user="www-data")
+            sudo("mkdir -p %s/buildslave2/builder-pg" % (root), user="www-data")
 
 class Configure(Role):
     """
