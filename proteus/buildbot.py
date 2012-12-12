@@ -22,7 +22,6 @@ def split_private_git_url(git_url):
         user = user.split('//')[1]
         host, path = remains.rsplit(':')
         path = path.split('/')[-1]
-        host = '%s.proteus-tech.com' % host
         return (user, host, path)
     else:
         user, remains = git_url.rsplit('@')

@@ -36,7 +36,7 @@ class TestBuildbotCommonFunctions(TestCase):
         self.assertEqual('Proteus-tech/deploy.git', path)
 
     def test_split_private_git_url_inside_server(self):
-        user, host, path = split_private_git_url('ssh://git@zeppelin:222/home/git/playable_admin_service')
+        user, host, path = split_private_git_url('ssh://git@zeppelin.proteus-tech.com:222/home/git/playable_admin_service')
         self.assertEqual('git', user)
         self.assertEqual('zeppelin.proteus-tech.com', host)
         self.assertEqual('playable_admin_service', path)
