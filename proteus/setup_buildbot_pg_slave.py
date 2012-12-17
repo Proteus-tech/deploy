@@ -6,7 +6,7 @@ from proteus import buildbot
 
 def setup_buildbot_pg_slave(slave, root, name, master_host):
     virtenv_path = '%s-slave' % virtual_env_path(root)
-    base_dir = 'buildslave1'
+    base_dir = 'buildslave2'
     password = '%spassword' % name 
     parameters = "%s %s %s %s" % (base_dir, master_host, name, password)
     with prefix("source %s/bin/activate" % (virtenv_path)):
