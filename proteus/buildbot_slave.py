@@ -30,7 +30,7 @@ class Configure(Role):
         try:
             repository, ec2_master_host, project_name, buildslave_name = splitter(self.parameter)
         except ValueError:
-            repository, project_name = splitter(self.parameter) 
+            repository, project_name, buildslave_name = splitter(self.parameter) 
             ec2_master_host = 'localhost'
 
         root = home(project_name) 
