@@ -7,7 +7,7 @@ from proteus.buildbot_slave import slave_virtual_env_path, slave_location_pg
 
 def control_buildbot_slave(server, project_name, command):
     root = home(project_name) 
-    buildbot_slave_path = slave_location(root) 
+    buildbot_slave_path = slave_location_pg(root) 
     buildbot_slave_virtenv = slave_virtual_env_path(root)
     if not exists(buildbot_slave_path):
         raise Exception('Buildbot slave not found: %s' % buildbot_slave_path)
