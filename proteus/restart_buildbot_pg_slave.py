@@ -4,7 +4,7 @@ from fabric.contrib.files import exists
 from profab.role import Role
 from proteus.buildbot import home
 from proteus.buildbot_slave import slave_virtual_env_path, slave_location_pg
-from proteus.start_buildbot_slave import control_buildbot_slave
+from proteus.start_buildbot_pg_slave import control_buildbot_slave
 
 def restart_buildbot_slave(server, project_name):
     control_buildbot_slave(server, project_name, 'restart')
