@@ -7,6 +7,7 @@ def install_buildbot_master_env(server, virtenv_path):
     sudo('easy_install virtualenv')
     sudo("virtualenv --no-site-packages %s" % (virtenv_path), user="www-data")
     with prefix("source %s/bin/activate" % (virtenv_path)):
+        sudo("pip install SQLAlchemy==0.7.9", user="www-data")
         sudo("pip install twisted==12.0.0", user="www-data")
         sudo("pip install buildbot==0.8.4", user="www-data")
  
