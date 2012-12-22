@@ -24,7 +24,7 @@ elif [ $# -eq 4 ]; then
     buildslave_name="pg"
     privacy="public"
 elif [ $# -eq 6 ]; then
-    if [[ $5 = "public" || $5 = "private" ]]; then
+    if [[ $6 = "public" || $6 = "private" ]]; then
         string=$4
         string=${string%.*}
         string=${string##*/}
