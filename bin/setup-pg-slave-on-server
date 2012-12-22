@@ -8,6 +8,7 @@ if [ $# -lt 4 ]; then
     echo "    if setup buildbot-slave in same server as buildbot-master"
     echo "<optional>project_name: name of the project that buildbot run against"
     echo "repository: URL to the repository"
+    echo "buildslave name : name for buildslave (example: pg-2)"
     echo "<optional>privacy: privacy of repository (public|private)"
     exit 1
 elif [ $# -eq 4 ]; then
@@ -20,8 +21,9 @@ elif [ $# -eq 4 ]; then
     ec2_host=$2
     ec2_master_host=$3
     repository=$4
+    buildslave_name="pg"
     privacy="public"
-elif [ $# -eq 5 ]; then
+elif [ $# -eq 6 ]; then
     if [[ $5 = "public" || $5 = "private" ]]; then
         string=$4
         string=${string%.*}
@@ -32,13 +34,15 @@ elif [ $# -eq 5 ]; then
         ec2_host=$2
         ec2_master_host=$3
         repository=$4
-        privacy=$5
+        buildslave_name=$5
+        privacy=$6
     else
         client=$1
         ec2_host=$2
         ec2_master_host=$3
         project_name=$4
         repository=$5
+        buildslave_name=$6
         privacy="public"
     fi
 else
@@ -47,7 +51,8 @@ else
     ec2_master_host=$3
     project_name=$4
     repository=$5
-    privacy=${6-public}
+    buildslave_name=$6
+    privacy=${7-public}
 
 fi
 
@@ -59,9 +64,9 @@ if [ $privacy = "private" ]; then
 fi
 
 roles="${roles} postgres 
-            --proteus.buildbot_pg_slave $repository,$ec2_master_host,$project_name 
+            --proteus.buildbot_pg_slave $repository,$ec2_master_host,$project_name,$buildslave_name 
             proteus.replace_pg_hba_conf 
-            --proteus.create_pg_db $project_name,$repository"
+            --proteus.create_pg_db $project_name,$repository,$buildslave_name"
 
 pf-server-role-add $client $ec2_host $roles
 

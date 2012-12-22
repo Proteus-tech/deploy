@@ -8,7 +8,7 @@ if [ $# -lt 4 ]; then
     echo "    if setup buildbot-slave in same server as buildbot-master"
     echo "<optional>project_name: name of the project that buildbot run against"
     echo "repository: URL to the repository"
-    echo "buildslave name : name for buildslave"
+    echo "buildslave name : name for buildslave (example: sqlite-2)"
     echo "<optional>privacy: privacy of repository (public|private)"
     exit 1
 elif [ $# -eq 4 ]; then
@@ -21,7 +21,7 @@ elif [ $# -eq 4 ]; then
     ec2_host=$2
     ec2_master_host=$3
     repository=$4
-    buildslave_name="slave"
+    buildslave_name="sqlite"
     privacy="public"
 
 elif [ $# -eq 6 ]; then

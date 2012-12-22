@@ -17,11 +17,11 @@ def create_db(server, dict_data):
     sudo('createdb %s -O %s -U postgres' % (name, user))
 
 def setup(server, param):
-    project_name, repository = buildbot.splitter(param)
+    project_name, repository, buildslave_name = buildbot.splitter(param)
     project_path = '/home/www-data/Buildbot/%s' % project_name
     root_folder_name = git_checkout.root_folder(repository)
     if exists(project_path):
-        src_path = '%s/buildslave2/builder-pg/src' % project_path
+        src_path = '%s/buildslave2/builder-%s/src' % (project_path, buildslave_name)
         with cd(src_path):
             dict_data = sudo('python -c "project = \'%s_project\''
                  ';pg_buildbot = '

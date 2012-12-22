@@ -8,11 +8,12 @@ def setup_buildbot_slave(slave, root, name, master_host):
     virtenv_path = '%s-slave' % virtual_env_path(root)
     base_dir = 'buildslave1'
     password = '%spassword' % name 
+    buildslave_name = name[6:]
     parameters = "%s %s %s %s" % (base_dir, master_host, name, password)
     with prefix("source %s/bin/activate" % (virtenv_path)):
         with cd(root):
             sudo("buildslave create-slave %s" % parameters, user="www-data")
-            sudo("mkdir -p %s/buildslave1/builder-sqlite" % (root), user="www-data")
+            sudo("mkdir -p %s/buildslave1/builder-%s" % (root, buildslave_name), user="www-data")
 
 class Configure(Role):
     """
