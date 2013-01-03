@@ -53,7 +53,7 @@ if [ $privacy = "private" ]; then
     roles="${roles} --proteus.credentials_svn $repository"
 fi
                             
-roles="${roles} --proteus.buildbot_master_svn $repository,$project_name --proteus.buildbot_slave_svn $repository,$project_name --proteus.start_buildbot_master $project_name --proteus.start_buildbot_slave $project_name smarthost --proteus.tag mta,exim4 --proteus.tag buildbot,combo-$project_name --proteus.tag Name,buildbot-$project_name"
+roles="${roles} --proteus.buildbot_master_svn $repository,$project_name --proteus.buildbot_slave_svn $repository,$project_name,'sqlite' --proteus.start_buildbot_master $project_name --proteus.start_buildbot_slave $project_name smarthost --proteus.tag mta,exim4 --proteus.tag buildbot,combo-$project_name --proteus.tag Name,buildbot-$project_name"
 
 pf-server-role-add $client $ec2_host $roles
 

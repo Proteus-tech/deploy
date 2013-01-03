@@ -42,7 +42,7 @@ class Configure(Role):
         setup_buildbot_slave(server, root, 'slave-%s' % buildslave_name, ec2_master_host)
 
         slave_path = slave_location(root)
-        slave_checkout_path = "%s/builder-%s" % (slave_path,buildslave_name)
+        slave_checkout_path = "%s/builder-%s" % (slave_path, buildslave_name)
         git_checkout(server, slave_checkout_path, repository)
         setup_library(server, '%s/src/setup/requirelibs.txt' % (slave_checkout_path))
         tag(server, 'slave', 'ready')

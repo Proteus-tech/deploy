@@ -13,6 +13,9 @@ def slave_virtual_env_path(root):
 def slave_location(root):
     return '%s/buildslave1' % (root)
 
+def slave_location_pg(root):
+    return '%s/buildslave2' % (root)
+
 
 class Configure(Role):
     """
@@ -26,9 +29,9 @@ class Configure(Role):
 
     def configure(self, server):
         try:
-            repository, ec2_master_host, project_name = splitter(self.parameter)
+            repository, ec2_master_host, project_name, buildslave_name = splitter(self.parameter)
         except ValueError:
-            repository, project_name = splitter(self.parameter) 
+            repository, project_name, buildslave_name = splitter(self.parameter) 
             ec2_master_host = 'localhost'
 
         root = home(project_name) 
@@ -37,10 +40,10 @@ class Configure(Role):
         install_buildbot_slave_env(server, slave_virtenv)
         tag(server, 'slave', 'env-installed')
 
-        setup_buildbot_slave(server, root, 'slave-sqlite', ec2_master_host)
+        setup_buildbot_slave(server, root, 'slave-%s' % buildslave_name, ec2_master_host)
 
         slave_path = slave_location(root)
-        slave_checkout_path = "%s/builder-sqlite" % (slave_path)
+        slave_checkout_path = "%s/builder-%s" % (slave_path, buildslave_name)
         svn_checkout(server, slave_checkout_path, repository)
         setup_library(server, '%s/src/setup/requirelibs.txt' % (slave_checkout_path))
         tag(server, 'slave', 'ready')
