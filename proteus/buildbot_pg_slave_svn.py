@@ -5,7 +5,7 @@ from proteus.install_buildbot_slave_env import install_buildbot_slave_env
 from proteus.setup_buildbot_pg_slave import setup_buildbot_pg_slave
 from proteus.tag import tag
 from proteus.setup_library import setup_library
-from proteus.buildbot_slave import slave_virtual_env_path, slave_location
+from proteus.buildbot_slave import slave_virtual_env_path, slave_location_pg
 from proteus.setup_psycopg2_on_slave import setup_psycopg2_on_slave
 
 class Configure(Role):
@@ -20,9 +20,9 @@ class Configure(Role):
 
     def configure(self, server):
         try:
-            repository, ec2_master_host, project_name = splitter(self.parameter)
+            repository, ec2_master_host, project_name, buildslave_name = splitter(self.parameter)
         except ValueError:
-            repository, project_name = splitter(self.parameter) 
+            repository, project_name, buildslave_name = splitter(self.parameter) 
             ec2_master_host = 'localhost'
 
         root = home(project_name) 
@@ -33,11 +33,11 @@ class Configure(Role):
         tag(server, 'slave', 'env-installed')
 
         # Setup buildbot-slave with postgres and create buildslave folder.
-        setup_buildbot_pg_slave(server, root, 'slave-pg', ec2_master_host)
+        setup_buildbot_pg_slave(server, root, 'slave-%s' % buildslave_name, ec2_master_host)
 
         # Checkout code from repository.
-        slave_path = slave_location(root)
-        slave_checkout_path = "%s/builder-pg" % (slave_path)
+        slave_path = slave_location_pg(root)
+        slave_checkout_path = "%s/builder-%s" % (slave_path, buildslave_name)
         svn_checkout(server, slave_checkout_path, repository)
         setup_library(server, '%s/src/setup/requirelibs.txt' % (slave_checkout_path))
 
