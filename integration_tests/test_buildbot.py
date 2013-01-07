@@ -165,10 +165,10 @@ class TestBuildbot(TestCase):
         # Assert
         with settings(host_string=self.host_string):
             # test directory is created
-            output = sudo('ls /home/www-data/Buildbot/hobby/buildslave1')
+            output = sudo('ls /home/www-data/Buildbot/hobby/buildslave2')
             self.assertTrue('builder-pg' in output)
             # test file is changed
-            output = sudo('cat /home/www-data/Buildbot/hobby/buildslave1/buildbot.tac')
+            output = sudo('cat /home/www-data/Buildbot/hobby/buildslave2/buildbot.tac')
             self.assertTrue("slavename = 'slave-pg'" in output)
             self.assertTrue("passwd = 'slave-pgpassword'" in output)
         
@@ -179,13 +179,13 @@ class TestBuildbot(TestCase):
             , 'proteus'
             , self.ec2_host
             , '--proteus.git_checkout'
-            , '/home/www-data/Buildbot/hobby/buildslave1/builder-pg,git://github.com/juacompe/hobby.git']) 
+            , '/home/www-data/Buildbot/hobby/buildslave2/builder-pg,git://github.com/juacompe/hobby.git']) 
         # Assert
         with settings(host_string=self.host_string):
             # test directory is created
-            output = sudo('ls /home/www-data/Buildbot/hobby/buildslave1/builder-pg')
+            output = sudo('ls /home/www-data/Buildbot/hobby/buildslave2/builder-pg')
             self.assertTrue('src' in output)
-            output = sudo('ls /home/www-data/Buildbot/hobby/buildslave1/builder-pg/bin')
+            output = sudo('ls /home/www-data/Buildbot/hobby/buildslave2/builder-pg/bin')
             self.assertTrue('update_master_config' in output)
         
         ''' 4.run role setup_library
@@ -194,7 +194,7 @@ class TestBuildbot(TestCase):
             , 'proteus'
             , self.ec2_host
             , '--proteus.setup_library'
-            , '/home/www-data/Buildbot/hobby/buildslave1/builder-pg/src/setup/requirelibs.txt']) 
+            , '/home/www-data/Buildbot/hobby/buildslave2/builder-pg/src/setup/requirelibs.txt']) 
         # Assert
         with settings(host_string=self.host_string):
             # test package is installed
@@ -218,7 +218,7 @@ class TestBuildbot(TestCase):
             , 'proteus'
             , self.ec2_host
             , '--proteus.setup_psycopg2_on_slave'
-            , 'hobby,/home/www-data/Buildbot/hobby/buildslave1/builder-pg']) 
+            , 'hobby,/home/www-data/Buildbot/hobby/buildslave2/builder-pg']) 
         # Assert
         with settings(host_string=self.host_string):
             # test have psycopg2 in server
@@ -301,7 +301,7 @@ class TestBuildbot(TestCase):
                 self.assertTrue('buildbot-slave' in output)
 
                 # check if buildbot slave was installed and git check out work correctly.
-                self.assertTrue(exists('/home/www-data/Buildbot/hobby/buildslave1/builder-pg/src'))
+                self.assertTrue(exists('/home/www-data/Buildbot/hobby/buildslave2/builder-pg/src'))
 
                 # check if needed libraries were installed.
                 output = sudo('aptitude search libpq-dev')
