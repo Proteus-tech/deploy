@@ -15,8 +15,8 @@ setup(
         , 'bin/setup-buildbot-slave-on-server'
         , 'bin/restart-buildbot-master'
         , 'bin/complete_master_config'
-        , 'bin/restart-buildbot-slave' 
-        , 'bin/restart-buildbot-pg-slave' 
+        , 'bin/restart-buildbot-slave'
+        , 'bin/restart-buildbot-pg-slave'
         , 'bin/add-pg-slave-to-master-cfg'
         , 'bin/add-pg-slave-to-master-svn-cfg'
         , 'bin/setup-pg-slave-on-server'
@@ -48,7 +48,7 @@ setup(
             , 'buildbot_config/master_svn.cfg'
             , 'runtests'
             , 'runserver'
-            , 'reset_db' 
+            , 'reset_db'
         ],
         'utilities': ['*.py'
             ,'*.template'
@@ -59,6 +59,6 @@ setup(
     },
     install_requires = [
         'profab',
-        'django'
+        'django < 1.5'
     ],
 )
