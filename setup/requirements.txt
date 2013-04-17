@@ -1,7 +1,6 @@
-django==1.4
-profab==0.4.7
+django < 1.5
+profab
 nose==1.1.2
 mock==0.8.0
 coverage==3.5.1
 buildbot==0.8.4
-
