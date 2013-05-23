@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+dropdb {{ project_name }}
+createdb {{ project_name }}
+python manage.py syncdb --setting={{ project_name }}_project.settings.pgident --noinput $*
