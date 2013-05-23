@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name = 'proteus-deploy',
-    version = '0.0.7.1',
+    version = '0.0.7.2',
     author = 'Proteus Technologies',
     author_email = 'dev-team@proteus-tech.com',
     zip_safe = False, # for project_template
@@ -49,6 +49,7 @@ setup(
             , 'runtests'
             , 'runserver'
             , 'reset_db'
+            , 'reset_pg'
         ],
         'utilities': ['*.py'
             ,'*.template'
