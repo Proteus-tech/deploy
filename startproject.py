@@ -85,7 +85,7 @@ def move_files_into_build(template_path):
 def move_files_out_of_build(project_dir):
     unpythonify(project_dir, 'runtests', ['build'], [])
     unpythonify(project_dir, 'reset_db', ['build'], [])
-    unpythonify(project_dir, 'reset_db', ['build'], [])
+    unpythonify(project_dir, 'reset_pg', ['build'], [])
 
 
 def replace_secret_key(path_to_replace):
