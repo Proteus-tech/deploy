@@ -53,7 +53,7 @@ def cleanup(project_dir):
 
 
 def chmod_scripts(project_dir):
-    scripts = ['runtests', 'runserver', 'reset_db']
+    scripts = ['runtests', 'runserver', 'reset_db', 'reset_pg']
     for script in scripts:
         script_path = os.path.join(project_dir, script)
         os.chmod(script_path, 0744)
