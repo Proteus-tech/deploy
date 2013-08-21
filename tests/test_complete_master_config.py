@@ -4,13 +4,13 @@ import os, shutil
 class TestCompleteMasterConfig(TestCase):
     def tearDown(self):
         if os.path.exists('settings.tmp'):
-            shutil.copyfile('settings.tmp', 'buildbot_config/settings.py')
+            shutil.copyfile('settings.tmp', 'buildbot_config/settings/settings.py')
             os.remove('settings.tmp')
         os.chdir('../')
     
     def setUp(self):
         os.chdir('project_template')
-        shutil.copyfile('buildbot_config/settings.py', 'settings.tmp')
+        shutil.copyfile('buildbot_config/settings/settings.py', 'settings.tmp')
     
     def test_complete_master_config(self):
         # Arrange
@@ -20,7 +20,7 @@ class TestCompleteMasterConfig(TestCase):
         os.system('../bin/complete_master_config %s %s' % (ec2_host, repository))
         # Assert
         try:
-            with open('buildbot_config/settings.py') as stream:
+            with open('buildbot_config/settings/settings.py') as stream:
                 content = stream.read()
                 self.assertTrue('ec2-50-18-236-118.us-west-1.compute.amazonaws.com' in content)
                 self.assertTrue('git://github.com/juacompe/fluffy.git' in content)
