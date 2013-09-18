@@ -5,7 +5,7 @@ from buildbot.steps.shell import ShellCommand
 
 from buildbot_config.settings.settings import BRANCH, PROJECT_NAME, PROJECT_CODE_URL
 
-nickname = 'sqlite'
+nickname = 'pg'
 name = 'slave-%s' % nickname
 builder_name = 'builder-%s' % nickname
 # slave
@@ -17,9 +17,8 @@ factory.addStep(ShellCommand(command="git pull origin develop", workdir=PROJECT_
 factory.addStep(ShellCommand(command=["pip", "install", "--upgrade", "--requirement=setup/requirements.txt"],workdir=PROJECT_CODE_URL))
 factory.addStep(ShellCommand(command=["pip", "freeze"], workdir=PROJECT_CODE_URL))
 factory.addStep(ShellCommand(command=["/bin/bash","reset_db"], workdir=PROJECT_CODE_URL))
-factory.addStep(ShellCommand(command=["/bin/bash","runtests"], workdir=PROJECT_CODE_URL))
+factory.addStep(ShellCommand(command=["/bin/bash","runtests", "--settings=%s_project.settings.pg_buildbot" % PROJECT_NAME, "--noinput"], workdir=PROJECT_CODE_URL))
 
 builder = BuilderConfig(name=builder_name
             , slavenames=[name]
             , factory=factory)
-
